@@ -174,7 +174,9 @@ dialog::backdrop { background: #061e18a3; backdrop-filter: blur(4px); }
 .dialog-head button { border: 1px solid var(--line); background: #244f40; color: var(--ink); border-radius: 50%; }
 .dialog-body { padding: 24px 25px; color: #dae6c8; }
 .dialog-body p, .small-note, .record-date, .album-lead, .help-copy p { color: #c5dabd; }
-.dialog-body input:not([type=range]) { background: #092d24; color: var(--ink); border: 1px solid #83a184; }
+#dialog input:not([type=range]) { background: #092d24; color: var(--ink); border: 1px solid #83a184; }
+#dialog input::placeholder { color: #aec5ad; }
+#dialog .small-note { color: #c5dabd; }
 .journal-entry, .ending-card, .album-nav button, .replay-buttons button, .account-actions button, .login-tabs button { border: 1px solid var(--line); background: #22483c; color: var(--ink); box-shadow: none; }
 .album-nav button:hover:not(:disabled) { background: #365f49; }
 .journal-entry p, .ending-card small { color: #bfd5b5; }
