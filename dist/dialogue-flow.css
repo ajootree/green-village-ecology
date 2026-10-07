@@ -1,0 +1,44 @@
+/* A chapter presents one thing at a time: calendar, speech, choices, then work. */
+.calendar-active #app{visibility:hidden}
+.chapter-screen .quest[hidden]{display:none}
+.calendar-overlay{background:radial-gradient(ellipse at center,#31563b,#0d2a24 80%)}
+.chapter-screen .quest.dialogue-panel{
+  top:auto;bottom:max(24px,env(safe-area-inset-bottom));width:min(1000px,calc(100% - 44px));
+  max-height:calc(100dvh - 185px);display:grid;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-rows:auto auto;gap:9px 24px;padding:24px 28px;
+}
+.friend-name{grid-column:1;grid-row:1;color:var(--gold);font-size:15px;font-weight:800}
+.dialogue-panel #villager-line{grid-column:1;grid-row:2;min-height:64px;font-size:19px;line-height:1.8;word-break:keep-all;color:var(--ink)}
+.dialogue-panel #read-line{grid-column:2;grid-row:1/3;align-self:end;min-width:145px;padding:12px 18px}
+.chapter-screen .quest.choice-panel{display:block;width:min(880px,calc(100% - 44px));padding:20px;bottom:24px;max-height:calc(100dvh - 185px)}
+.choice-panel .choices{gap:12px}
+.chapter-screen .quest.mission-panel.task-only{
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
+  gap:10px;width:min(1000px,calc(100% - 44px));
+}
+.task-only .quest-heading{grid-column:1;grid-row:1;align-items:center}
+.task-only .mission-plan-name{margin-top:2px}
+.task-only .task-area{grid-column:1;grid-row:2}
+.task-only .quest-footer{grid-column:1;grid-row:3;gap:4px}
+.task-only .quest-footer>div{display:flex;gap:8px}
+.task-only .quest-footer button{flex:1}
+.task-only .quest-footer p:empty{display:none}
+@media(max-height:600px){
+  .chapter-screen .quest.dialogue-panel{bottom:14px;width:calc(100% - 26px);padding:17px 20px;gap:6px 16px;max-height:calc(100dvh - 134px)}
+  .dialogue-panel #villager-line{font-size:16px;min-height:50px;line-height:1.75}
+  .friend-name{font-size:13px}
+  .dialogue-panel #read-line{min-width:125px;font-size:12px;padding:10px 12px}
+  .chapter-screen .quest.choice-panel{width:calc(100% - 26px);padding:14px;bottom:14px;max-height:calc(100dvh - 134px)}
+  .chapter-screen .quest.mission-panel.task-only{width:calc(100% - 26px);gap:7px}
+  .task-only .quest-heading h2{font-size:17px}
+  .task-only .mission-plan-name{font-size:10px}
+  .task-only .speaker-badge{width:30px;height:30px;font-size:18px}
+}
+@media(max-width:700px){
+  .chapter-screen .quest.dialogue-panel{width:calc(100% - 20px);padding:18px;grid-template-columns:1fr;grid-template-rows:auto auto auto;gap:8px;bottom:15px;max-height:calc(100dvh - 152px)}
+  .dialogue-panel #villager-line{font-size:16px;min-height:56px}
+  .dialogue-panel #read-line{grid-column:1;grid-row:3;justify-self:end;min-width:125px}
+  .chapter-screen .quest.choice-panel{width:calc(100% - 20px);bottom:15px;max-height:calc(100dvh - 152px);padding:14px}
+  .choice-panel .choices{gap:8px}
+  .chapter-screen .quest.mission-panel.task-only{width:calc(100% - 20px)}
+}

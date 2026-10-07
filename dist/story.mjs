@@ -31,7 +31,9 @@ export async function transition(action){
   try{await wait(40);cover.classList.add('covered');await wait(430);await action();await wait(160);cover.classList.remove('covered');await wait(450);}finally{cover.remove();transitioning=false;}
 }
 export function calendar(season,index,onEnd){
-  const o=document.createElement('section');o.className='calendar-overlay';o.setAttribute('role','dialog');o.setAttribute('aria-label',season.name+' 챕터');const month=parseInt(season.month),old=month===4?1:month===7?4:month===10?7:10;
+  const app=document.querySelector('#app'),wasInert=app?.inert;if(app)app.inert=true;document.body.classList.add('calendar-active');
+  const o=document.createElement('section');o.className='calendar-overlay';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label',season.name+' 챕터');const month=parseInt(season.month),old=month===4?1:month===7?4:month===10?7:10;
   o.innerHTML=`<div class="chapter-film"><small>CHAPTER ${index+1}</small><div class="calendar-book"><div class="calendar-page next-page"><small>초록마을 달력</small><strong>${month}</strong><span>${season.name}</span></div><div class="calendar-page turning-page"><small>초록마을 달력</small><strong>${old}</strong><span>${index?'지난 계절':'새로운 해'}</span></div><i></i><i></i></div><h1>${season.name} · ${season.title}</h1><p>${season.area}</p><button class="secondary">이야기 시작 →</button></div>`;document.body.append(o);
-  const button=o.querySelector('button');button.disabled=true;const timer=setTimeout(()=>{button.disabled=false;button.focus();},1100);button.onclick=()=>{clearTimeout(timer);o.remove();onEnd();};return ()=>{clearTimeout(timer);o.remove();};
+  const clean=()=>{clearTimeout(timer);o.remove();document.body.classList.remove('calendar-active');if(app)app.inert=wasInert;};
+  const button=o.querySelector('button');button.disabled=true;const timer=setTimeout(()=>{button.disabled=false;button.focus();},1100);button.onclick=()=>{clean();onEnd();};return clean;
 }

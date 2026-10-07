@@ -5,20 +5,21 @@ import * as music from './music.mjs';
 import {regions,worldSVG,paintedWorldAssets} from './world.mjs';
 import {createMission,mountMission,missionInfo} from './missions.mjs';
 import {destinations,homePoint,project,route,directionalTarget,pathSVG,distance} from './navigation.mjs';
-import {setting,arrivals,storyCards,calendar,transition,typeText} from './story.mjs';
+import {setting,storyCards,calendar,transition,typeText} from './story.mjs';
 import {photo} from './effects.mjs';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const H=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const spots=destinations,icons=['🌳','💧','🌾','🏮'];
 const planSentences=[['도로를 짧게 연결해서 숲을 가로지른다.','새 도로 대신 원래 있던 길로 돌아간다.','동물의 이동을 조사하고 안전한 통로를 만든다.','숲 일부를 정리하고 꽃밭으로 꾸민다.'],['작업장의 물 처리 시설을 고치고 계속 점검한다.','하천에 떠 있는 쓰레기를 건져 낸다.','가림막과 조명을 설치해서 물가를 꾸민다.','시설 수리·청소·꾸미기에 돈을 조금씩 나눈다.'],['전문가와 피해 입은 잎을 살피고 필요한 곳만 관리한다.','농장 전체에 농약을 뿌린다.','작물과 풀을 없애고 한 종류의 꽃을 심는다.','작물 사진을 찍으며 관리하지 않고 기다린다.'],['컵을 돌려받고 쓰레기를 분리하며 낮 조명을 끈다.','행사가 끝난 뒤 바닥을 한 번 청소한다.','일회용 컵을 넉넉히 쌓고 축제 조명을 켠다.','모은 쓰레기를 불에 태워 처리한다.']];
 const planText=(i,id)=>planSentences[i][seasons[i].choices.findIndex(c=>c.id===id)];
-let walkFrame=0,stopStory=()=>{},dialogueTyping=null,arrivalSeen=new Set(),titleSeen=new Set(),travelBusy=false;
+let walkFrame=0,stopStory=()=>{},dialogueTyping=null,arrivalSeen=new Set(),titleSeen=new Set(),travelBusy=false,chapterIntro=false,missionBriefed=false;
+const spokenSeasons=new Set();
 let key='eco-village-guest-v2',state=readLocal(),selected=null,mission=null,stopMission=()=>{},toastTimer,cinemaTimer,cloudStatus='guest',booting=cloud.configured,viewMode='auto',pastChapter=null;
 function readLocal(){try{return cleanState(JSON.parse(localStorage.getItem(key)||'null'));}catch{return freshState();}}
 function writeLocal(){try{localStorage.setItem(key,JSON.stringify(state));if(cloud.account())localStorage.setItem(key+'-base',String(cloud.version()));}catch{toast('기기 저장 공간이 부족해요.');}}
 function save(){state.updatedAt=Date.now();writeLocal();cloud.queueCloud(state);}
 function toast(s){$('#toast').textContent=s;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2400);}
-function reset(){stopMission();stopMission=()=>{};selected=null;mission=null;}
+function reset(){stopMission();stopMission=()=>{};selected=null;mission=null;missionBriefed=false;}
 const g=()=>state.game, count=()=>Object.keys(state.album).length;
 function header(){const a=cloud.account(),stage=g()?.stage;return `<header class="topbar"><button class="logo" id="home" aria-label="처음 화면"><span class="brand-star">✦</span><span><b>초록마을</b><small>네 계절의 생태 이야기</small></span></button><nav class="seasons" aria-label="계절 진행"><small class="season-caption">${stage===4?'다음 봄을 앞두고':stage===undefined?'FOUR SEASONS':seasons[stage].month+' · '+seasons[stage].title}</small><div>${seasons.map((s,i)=>`<span class="season ${stage===i?'active':''} ${g()?.choices[i]?'complete':''}" ${stage===i?'aria-current="step"':''}>${s.name}${g()?.choices[i]?' ✓':''}</span>`).join('')}</div></nav><div class="top-actions">${musicUI()}<button id="save-cloud" class="save-state" title="진행 기록 저장">${cloudLabel()}</button><button id="account" class="icon-button" aria-label="학교 계정">${a?H(a.nickname||'주민'):'학교 계정'}</button><button id="album" class="icon-button" aria-label="엔딩 앨범">▤ ${count()}/10</button><button id="help" class="icon-button" aria-label="게임 방법">?</button></div></header>`;}
 function cloudLabel(){return ({guest:'기기에 저장',online:'온라인 연결',saved:'☁ 저장 완료',pending:'☁ 저장 대기',saving:'☁ 저장 중',error:'☁ 다시 저장',conflict:'☁ 다른 기기 기록'})[cloudStatus]||'기기에 저장';}
@@ -28,8 +29,8 @@ function bindMusic(){updateMusic();$$('[data-music-toggle]').forEach(b=>b.onclic
 function musicDialog(){const s=music.status();modal('♫ 마을의 배경음악',`<div class="music-panel"><p id="music-title">${s.enabled?s.title:'배경음악이 꺼져 있어요.'}</p><button class="secondary" data-music-toggle aria-label="배경음악 켜기"></button><label for="music-volume">음량 <strong id="music-volume-label">${Math.round(s.volume*100)}%</strong></label><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(s.volume*100)}" aria-label="배경음악 음량"><p class="small-note">소리 버튼으로 켜고 끌 수 있어요. 음량은 이 기기에 기억해요.<br>새로 열면 소리는 꺼져 있어요.</p><p class="small-note">마을과 엔딩을 위해 직접 만든 무료 곡이에요.<br>「초록마을 산책」 · 「우리의 다음 봄」 · 「돌아오지 않는 봄」</p></div>`);bindMusic();$('#music-volume').oninput=e=>music.setVolume(Number(e.target.value)/100);}
 music.subscribe(updateMusic);
 function bindHeader(){bindMusic();$('#home').onclick=home;$('#album').onclick=openAlbum;$('#help').onclick=help;$('#account').onclick=accountDialog;$('#save-cloud').onclick=async()=>{if(!cloud.account()){accountDialog();return;}if(cloudStatus==='conflict'){conflictDialog();return;}try{cloud.queueCloud(state);await cloud.flushCloud();toast('온라인에 저장했어요. 다른 기기에서도 이어 할 수 있어요.');}catch{toast('연결을 확인해 주세요. 기기 기록은 남아 있어요.');}};}
-function home(){document.body.dataset.screen='home';cancelAnimationFrame(walkFrame);stopStory();dialogueTyping?.stop();stopMission();pastChapter=null;viewMode='auto';music.setScene('village');clearInterval(cinemaTimer);$('.cinema')?.remove();$('#dialog').close();$('#app').innerHTML=header()+`<main class="home-screen"><div class="home-art"></div><section class="welcome parchment"><span class="eyebrow">GREEN VILLAGE · ECO ADVENTURE</span><h1>초록마을의<br><em>네 계절</em></h1><div class="title-rule"></div><p>작은 마을의 새 주민이 된 당신.<br>숲과 하천, 농장과 축제를 걸으며<br>우리의 다음 봄을 만들어 보세요.</p><div class="welcome-badges"><span>네 계절의 선택</span><span>10개의 엔딩</span></div><div class="welcome-actions">${g()?'<button class="primary" id="continue">모험 이어 하기</button>':''}<button class="${g()?'secondary':'primary'}" id="new-game">마을로 출발</button><button class="text-button" id="login-start">학교 계정으로 기록 남기기</button></div><small>길 클릭 · 방향키로 이동 &nbsp; E 대화 · J 수첩<br>다른 선택으로 새로운 엔딩을 모아 보세요.</small></section><div class="home-note">네 번의 계절, 당신이 바꿀 마을.</div></main>`;bindHeader();$('#new-game').onclick=()=>start(0);$('#login-start').onclick=accountDialog;if($('#continue'))$('#continue').onclick=()=>{if(g().stage<4&&g().phase==='task'&&!arrivalSeen.has(g().stage)){viewMode='map';render();enterChapter();}else render();};if(booting){$('#new-game').disabled=true;if($('#continue'))$('#continue').disabled=true;}}
-function start(stage){if(booting){toast('기록을 확인하고 있어요. 잠시만 기다려 주세요.');return;}clearInterval(cinemaTimer);$('.cinema')?.remove();$('#dialog').close();const previous=state.last;if(stage&& !previous){toast('먼저 한 판을 끝내 주세요.');return;}stopStory();arrivalSeen=new Set();titleSeen=new Set();viewMode='map';pastChapter=null;state.game={stage,choices:stage?previous.choices.map((v,i)=>i<stage?v:null):[null,null,null,null],phase:'explore',player:[...homePoint]};reset();save();render();if(stage===0)stopStory=storyCards(setting);}
+function home(){chapterIntro=false;document.body.dataset.screen='home';cancelAnimationFrame(walkFrame);stopStory();dialogueTyping?.stop();stopMission();pastChapter=null;viewMode='auto';music.setScene('village');clearInterval(cinemaTimer);$('.cinema')?.remove();$('#dialog').close();$('#app').innerHTML=header()+`<main class="home-screen"><div class="home-art"></div><section class="welcome parchment"><span class="eyebrow">GREEN VILLAGE · ECO ADVENTURE</span><h1>초록마을의<br><em>네 계절</em></h1><div class="title-rule"></div><p>작은 마을의 새 주민이 된 당신.<br>숲과 하천, 농장과 축제를 걸으며<br>우리의 다음 봄을 만들어 보세요.</p><div class="welcome-badges"><span>네 계절의 선택</span><span>10개의 엔딩</span></div><div class="welcome-actions">${g()?'<button class="primary" id="continue">모험 이어 하기</button>':''}<button class="${g()?'secondary':'primary'}" id="new-game">마을로 출발</button><button class="text-button" id="login-start">학교 계정으로 기록 남기기</button></div><small>길 클릭 · 방향키로 이동 &nbsp; E 대화 · J 수첩<br>다른 선택으로 새로운 엔딩을 모아 보세요.</small></section><div class="home-note">네 번의 계절, 당신이 바꿀 마을.</div></main>`;bindHeader();$('#new-game').onclick=()=>start(0);$('#login-start').onclick=accountDialog;if($('#continue'))$('#continue').onclick=()=>{if(g().stage<4&&g().phase==='task'&&!arrivalSeen.has(g().stage)){viewMode='map';render();enterChapter();}else render();};if(booting){$('#new-game').disabled=true;if($('#continue'))$('#continue').disabled=true;}}
+function start(stage){if(booting){toast('기록을 확인하고 있어요. 잠시만 기다려 주세요.');return;}clearInterval(cinemaTimer);$('.cinema')?.remove();$('#dialog').close();const previous=state.last;if(stage&& !previous){toast('먼저 한 판을 끝내 주세요.');return;}stopStory();arrivalSeen=new Set();titleSeen=new Set();spokenSeasons.clear();chapterIntro=false;viewMode='map';pastChapter=null;state.game={stage,choices:stage?previous.choices.map((v,i)=>i<stage?v:null):[null,null,null,null],phase:'explore',player:[...homePoint]};reset();save();render();if(stage===0)stopStory=storyCards(setting);}
 function playerHTML(){return `<div class="explorer" id="explorer" style="left:${g().player[0]}%;top:${g().player[1]}%" role="img" aria-label="내 캐릭터"><span class="explorer-hair"></span><span class="explorer-face"></span><span class="explorer-shirt"></span><span class="explorer-feet"></span><span class="explorer-name">${H(cloud.account()?.nickname||'나')}</span></div>`;}
 function mapHTML(){
   const current=Math.min(g().stage,3),s=seasons[current],done=g().stage===4,recorded=g().choices.filter(Boolean).length;
@@ -54,9 +55,10 @@ function chapterHTML(){
 async function enterChapter(i=g().stage,past=false){
   if(travelBusy)return;travelBusy=true;
   const first=!past&&g().stage<4&&g().phase!=='result'&&!arrivalSeen.has(i);
+  chapterIntro=first;
   await transition(()=>{pastChapter=past?i:null;viewMode='chapter';if(!past&&g().phase==='explore'){g().player=[...spots[i]];g().phase='task';save();}render();});
   travelBusy=false;
-  if(first){arrivalSeen.add(i);const tell=()=>{stopStory=storyCards(arrivals[i],()=>renderQuest());};if(titleSeen.has(i))tell();else{titleSeen.add(i);stopStory=calendar(seasons[i],i,tell);}}
+  if(first){arrivalSeen.add(i);const tell=()=>{chapterIntro=false;renderQuest();};if(titleSeen.has(i))tell();else{titleSeen.add(i);stopStory=calendar(seasons[i],i,tell);}}
 }
 function bindMap(){
   $$('[data-spot]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.spot);if(g().choices[i]||i===g().stage)moveTo(...spots[i],()=>enterChapter(i,!!g().choices[i]&&i!==g().stage));else toast('지금은 '+seasons[g().stage].name+'이에요. 기다리는 주민부터 만나 주세요.');});
@@ -76,8 +78,19 @@ function moveTo(x,y,onArrival){
 }
 function move(direction){if(g()&&viewMode!=='chapter'&&!travelBusy){const next=directionalTarget(g().player,direction);moveTo(...next);}}
 document.addEventListener('keydown',e=>{if($('#dialog').open||$('.cinema')||$('.story-overlay')||$('.calendar-overlay')||!g()||e.target.matches('input,textarea,select,[contenteditable]'))return;if(e.ctrlKey||e.metaKey||e.altKey)return;if(e.key.toLowerCase()==='j'){e.preventDefault();journal();return;}if(e.key.toLowerCase()==='e'&&viewMode!=='chapter'){e.preventDefault();const i=Math.min(g().stage,3);if(g().stage===4||distance(g().player,spots[i])<=6)enterChapter();else toast(seasons[i].area+'의 주민에게 다가가거나 아래 만나기 버튼을 눌러 주세요.');return;}const dir=({ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down',a:'left',d:'right',w:'up',s:'down'})[e.key];if(dir){e.preventDefault();move(dir);}});
+function friendLine(speaker,line,nextLabel,onNext){
+  const q=$('#quest');q.classList.add('dialogue-panel');q.setAttribute('aria-label',speaker+'의 말');
+  q.innerHTML=`<span class="friend-name">${H(speaker)}</span><p id="villager-line" aria-live="polite"></p><button class="primary" id="read-line">대사 펼치기 →</button>`;
+  const text=$('#villager-line'),button=$('#read-line');
+  dialogueTyping=typeText(text,line,()=>{button.textContent=nextLabel;});
+  button.onclick=()=>{if(text.classList.contains('typewriter'))dialogueTyping.finish();else onNext();};
+  button.focus();
+}
 function renderQuest(){
   const i=pastChapter??Math.min(g().stage,3),s=seasons[i],q=$('#quest');
+  dialogueTyping?.stop();
+  if(chapterIntro){q.hidden=true;q.replaceChildren();return;}
+  q.hidden=false;
   if(pastChapter!==null){const c=s.choices.find(c=>c.id===g().choices[i]);q.classList.add('result-panel');q.innerHTML=`<span class="quest-tag">${s.name}에 남긴 기록</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${H(c.result)}</p><button class="primary" id="return-map">전체 지도 보기</button>`;$('#return-map').onclick=()=>transition(()=>{viewMode='map';pastChapter=null;render();});return;}
   if(g().stage===4||g().phase==='final'){q.classList.add('final-panel');final();return;}
   if(g().phase==='result'){
@@ -85,25 +98,38 @@ function renderQuest(){
     q.innerHTML=`<span class="quest-tag">${s.speaker} · 선택이 남긴 변화</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${H(c.result)}</p><button class="secondary" id="see-world">바뀐 전체 지도 보기</button><button class="primary" id="next">${g().stage===3?'마을 회의로':'다음 계절로'}</button>`;
     $('#see-world').onclick=()=>transition(()=>{viewMode='map';render();});$('#next').onclick=()=>transition(()=>{g().stage++;g().phase=g().stage===4?'final':'explore';viewMode=g().stage===4?'chapter':'map';pastChapter=null;reset();save();render();if(g().stage<4){titleSeen.add(g().stage);stopStory=calendar(seasons[g().stage],g().stage,()=>{});}});return;
   }
-  stopMission();q.classList.remove('result-panel','final-panel','mission-panel');
+  stopMission();q.classList.remove('result-panel','final-panel','mission-panel','dialogue-panel','choice-panel','task-only');
   if(selected){
     mission ||= createMission(i,selected);const info=missionInfo(i,selected),plan=s.choices.find(c=>c.id===selected);
-    q.classList.add('mission-panel');
-    q.innerHTML=`<div class="quest-heading"><span class="speaker-badge">${info.icon}</span><div><span class="quest-tag">${s.speaker}</span><h2>${info.title}</h2><small class="mission-plan-name">${H(planText(i,plan.id))}</small></div></div><p class="dialogue"><span class="mission-character">${['🧑‍🌾','🧑‍🔧','🧑‍🌾','🧑‍🎤'][i]}</span>“${info.goal}”</p><div class="task-area"><div id="work"></div></div><div class="quest-footer"><p id="task-note"></p><div><button class="secondary" id="plan-back">다시 고르기</button><button class="secondary" id="reset-mission">미션 다시 하기</button><button class="primary" id="commit" disabled>작업 마치기</button></div></div>`;
+    if(!missionBriefed){friendLine(s.speaker,info.goal,'작업 시작 →',()=>{missionBriefed=true;renderQuest();});return;}
+    q.setAttribute('aria-label',info.title+' 작업');q.classList.add('mission-panel','task-only');
+    q.innerHTML=`<div class="quest-heading"><span class="speaker-badge">${info.icon}</span><div><h2>${info.title}</h2><small class="mission-plan-name">${H(planText(i,plan.id))}</small></div></div><div class="task-area"><div id="work"></div></div><div class="quest-footer"><p id="task-note"></p><div><button class="secondary" id="plan-back">다시 고르기</button><button class="secondary" id="reset-mission">미션 다시 하기</button><button class="primary" id="commit" disabled>작업 마치기</button></div></div>`;
     $('#plan-back').onclick=()=>{reset();renderQuest();};$('#reset-mission').onclick=()=>{stopMission();mission=createMission(i,selected);renderQuest();};$('#commit').onclick=commit;
     stopMission=mountMission($('#work'),mission,done=>{if(!$('#commit'))return;$('#commit').disabled=!done;$('#task-note').textContent=done?'일을 마쳤어요.':'';$('#reset-mission').hidden=done;});return;
   }
-    q.innerHTML=`<div class="quest-heading"><span class="speaker-badge">${icons[i]}</span><div><span class="quest-tag">${s.month} · ${s.speaker}</span><h2>${s.title}</h2></div></div><div class="dialogue villager-dialogue"><span class="dialogue-portrait"><span class="villager-head"></span><span class="villager-body"></span></span><p id="villager-line"></p><button class="text-button" id="read-line">대화 계속 →</button></div><div class="task-area"><div class="choices" hidden>${s.choices.map((c,j)=>`<button class="choice" data-plan="${c.id}"><span>${j+1}</span><strong>${planSentences[i][j]}</strong></button>`).join('')}</div></div>`;
-  const reveal=()=>{$('.choices').hidden=false;$('#read-line').hidden=true;};
-  dialogueTyping=typeText($('#villager-line'),s.line,reveal);$('#read-line').onclick=()=>dialogueTyping.finish();
-  $$('[data-plan]').forEach(b=>b.onclick=()=>{dialogueTyping?.stop();selected=b.dataset.plan;mission=createMission(i,selected);const painting=new Image();painting.src=paintedWorldAssets[i];renderQuest();});
+  if(!spokenSeasons.has(i)){friendLine(s.speaker,s.line,'방법 고르기 →',()=>{spokenSeasons.add(i);renderQuest();});return;}
+  q.classList.add('choice-panel');q.setAttribute('aria-label','방법 고르기');
+  q.innerHTML=`<div class="choices">${s.choices.map((c,j)=>`<button class="choice" data-plan="${c.id}"><span>${j+1}</span><strong>${planSentences[i][j]}</strong></button>`).join('')}</div>`;
+  $$('[data-plan]').forEach(b=>b.onclick=()=>{selected=b.dataset.plan;missionBriefed=false;mission=createMission(i,selected);const painting=new Image();painting.src=paintedWorldAssets[i];renderQuest();});
+  $('[data-plan]')?.focus();
 
 }
 function commit(){
   if(!mission?.done||mission.stage!==g().stage||mission.id!==selected||!seasons[g().stage].choices.some(c=>c.id===selected))return;
   const before=[...g().choices],i=g().stage;stopMission();g().choices[i]=selected;g().phase='result';save();render();const scene=$('.chapter-scene'),old=document.createElement('div');old.className='previous-scene';old.innerHTML=worldSVG({choices:before,chapter:i,stage:i,instance:'before'});scene.append(old);const buttons=$$('#quest button');buttons.forEach(b=>b.disabled=true);requestAnimationFrame(()=>requestAnimationFrame(()=>old.classList.add('dissolving')));setTimeout(()=>{old.remove();if(scene.isConnected)buttons.forEach(b=>b.disabled=false);},1900);
 }
-function final(){const q=$('#quest');q.classList.add('meeting-records');q.innerHTML=`<span class="quest-tag">冬 · 겨울의 마지막 기록</span><h2>우리가 고른 네 계절</h2><div class="meeting-journal">${seasons.map((s,i)=>`<p><b>${icons[i]} ${s.name}</b><span>${H(planText(i,g().choices[i]))}</span></p>`).join('')}</div><button class="primary" id="attend-meeting">마을 회의 참석하기 →</button>`;$('#attend-meeting').onclick=()=>{q.classList.remove('meeting-records');q.innerHTML=`<span class="quest-tag">겨울의 마지막 회의</span><h2>다음 봄을 앞두고</h2><p>“네 계절 동안 함께 준비해 주어서 고마워요.<br>우리가 고른 방법을 앞으로도 이어 갈까요?”</p><div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair"><strong>담당 어른들과 문제가 된 방법을 고친다.</strong></button></div><button class="text-button" id="final-journal">내 선택 기록 보기</button>`;$('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#final-journal').onclick=journal;};}
+function final(){
+  const q=$('#quest');q.classList.add('meeting-records');
+  q.innerHTML=`<span class="quest-tag">冬 · 겨울의 마지막 기록</span><h2>우리가 고른 네 계절</h2><div class="meeting-journal">${seasons.map((s,i)=>`<p><b>${icons[i]} ${s.name}</b><span>${H(planText(i,g().choices[i]))}</span></p>`).join('')}</div><button class="primary" id="attend-meeting">마을 회의 참석하기 →</button>`;
+  $('#attend-meeting').onclick=()=>{
+    q.classList.remove('meeting-records','final-panel');
+    friendLine(seasons[3].speaker,'네 계절 동안 함께 준비해 주어서 고마워요. 우리가 고른 방법을 앞으로도 이어 갈까요?','계획 고르기 →',()=>{
+      dialogueTyping?.stop();q.classList.remove('dialogue-panel');q.classList.add('choice-panel');q.setAttribute('aria-label','다음 봄의 계획 고르기');
+      q.innerHTML='<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair"><strong>담당 어른들과 문제가 된 방법을 고친다.</strong></button></div>';
+      $('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#keep').focus();
+    });
+  };
+}
 
 function finish(repair){const choices=[...g().choices],id=resolveEnding(choices,repair),fresh=!state.album[id];state.album[id]={choices,repair};state.last={choices,repair};state.game=null;save();cinema({id,choices,repair},fresh);}
 function modal(title,html){const d=$('#dialog');d.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button id="close" aria-label="닫기">×</button></div><div class="dialog-body">${html}</div>`;$('#close').onclick=()=>d.close();if(!d.open)d.showModal();return d;}
