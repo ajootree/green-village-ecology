@@ -31,6 +31,7 @@ jobs:
           node qa/check-model.mjs
           node qa/check-state.mjs
           node qa/check-world.mjs
+          node qa/check-missions.mjs
           node --experimental-vm-modules qa/check-save-schedule.mjs
 
   deploy:
