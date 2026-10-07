@@ -28,10 +28,13 @@ jobs:
         run: |
           node --check dist/app.mjs
           node --check dist/cloud.mjs
+          node --check dist/story.mjs
+          node --check dist/effects.mjs
           node qa/check-model.mjs
           node qa/check-state.mjs
           node qa/check-world.mjs
           node qa/check-missions.mjs
+          node qa/check-navigation.mjs
           node --experimental-vm-modules qa/check-save-schedule.mjs
 
   deploy:

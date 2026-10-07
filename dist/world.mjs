@@ -23,8 +23,8 @@ function paintedLayer(i,id,prefix,area=paintings[i].area){
   return `<g class="painted-change ${p.className} ${id}" aria-label="${detail}"><defs><filter id="${mask}-soft" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="6"/></filter><mask id="${mask}" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="40" fill="white" filter="url(#${mask}-soft)"/></mask></defs><g mask="url(#${mask})"><svg x="${fx}" y="${fy}" width="${fw}" height="${fh}" viewBox="${column*fw} ${row*fh} ${fw} ${fh}" overflow="hidden"><image href="${paintedWorldAssets[i]}" width="${fw*2}" height="${p.rows*fh}" preserveAspectRatio="none"/></svg></g></g>`;
 }
 export function worldChanges(choices){return seasons.map((s,i)=>valid(choices,i));}
-export function worldSVG({choices=[null,null,null,null],chapter=null,stage=0,ending=false,repair=false}={}){
-  const a=worldChanges(choices),prefix=`painted-${chapter??'all'}-${ending?'ending':'play'}`;
+export function worldSVG({choices=[null,null,null,null],chapter=null,stage=0,ending=false,repair=false,instance=''}={}){
+  const a=worldChanges(choices),prefix=`painted-${chapter??'all'}-${ending?'ending':'play'}${instance?'-'+instance:''}`;
   const layers=a.map((id,i)=>{
     if(!id)return i===1&&(chapter===1||stage>=1)?paintedLayer(i,'baseline',prefix):'';
     const harm=i===1&&ending&&id!=='treat'?paintedLayer(i,'harm',prefix,[745,375,110,80]):'';

@@ -11,7 +11,21 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
   const before=JSON.stringify(m);
   for(const bad of [-5,20,null,NaN])actMission(m,'turn',bad);
   assert.equal(JSON.stringify(m),before,'Invalid actions cannot prepare the plan.');
-  if(m.kind==='connect'){
+  if(m.kind==='plumb'){
+    actMission(m,'valve');assert.equal(m.values[0],0,'Do not open an unfinished pipeline.');
+    actMission(m,'fit',0,1);assert.equal(m.marks[0],0,'Wrong-shaped pipes do not fit.');
+    for(let i=0;i<3;i++)actMission(m,'fit',i,i);
+    assert(!m.done);actMission(m,'valve');
+  }else if(m.kind==='stack'){
+    actMission(m,'switch',0);assert(!m.lights[0]);
+    for(let i=0;i<5;i++)actMission(m,'cup');
+    assert(!m.done);for(let i=0;i<3;i++)actMission(m,'switch',i);
+  }else if(m.kind==='ignite'){
+    for(let i=0;i<39;i++)actMission(m,'rub');assert(!m.done);actMission(m,'rub');
+  }else if(m.kind==='spray'){
+    for(let i=0;i<12;i++)actMission(m,'spray',i);assert(!m.done);
+    for(let n=0;n<2;n++)for(let i=0;i<12;i++)actMission(m,'spray',i);
+  }else if(m.kind==='connect'){
     assert(!connectedTiles(m.tiles).includes(8)||!(m.tiles[8]&2));
     for(let i=0;i<9;i++)for(let n=0;n<4&&m.tiles[i]!==expected[i];n++)actMission(m,'turn',i);
     assert(connectedTiles(m.tiles).includes(8));
