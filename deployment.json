@@ -27,7 +27,7 @@
     "hostingPlan": "Vercel Hobby"
   },
   "published": "2026-10-07",
-  "deploymentUrl": "https://45e321f0.green-village-ecology.pages.dev/",
+  "deploymentUrl": "https://053ac987.green-village-ecology.pages.dev/",
   "automation": {
     "repository": "https://github.com/ajootree/green-village-ecology",
     "visibility": "private",
@@ -40,7 +40,7 @@
     "samePagesProject": true,
     "prepared": "2026-10-07",
     "enabled": "2026-10-07",
-    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37572945718",
+    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37575428416",
     "firstDeploymentSucceeded": true,
     "successfulRunAttempt": 1,
     "verified": "2026-10-07",
@@ -50,7 +50,7 @@
     "id": "3902b826-522b-402e-8330-18f983ab93f2",
     "url": "https://3902b826.green-village-ecology.pages.dev/"
   },
-  "deploymentAlias": "45e321f0",
+  "deploymentAlias": "053ac987",
   "chapterScenes": {
     "published": "2026-10-07",
     "codeCommit": "6cc830bc674eb94508ec9a81abbae1e1ea17dd20",
@@ -74,5 +74,31 @@
     "worldRoutesChecked": 256,
     "saveFormatUnchanged": true,
     "endingSpecificMapVerified": true
+  },
+  "interactiveMissions": {
+    "published": "2026-10-07",
+    "codeCommit": "ef44a516dde3aba45b0e291ba86fa561c9c15523",
+    "publicVerified": true,
+    "plansChecked": 16,
+    "mechanics": 9,
+    "verifiedFiles": [
+      "index.html",
+      "app.mjs",
+      "model.mjs",
+      "missions.mjs",
+      "missions.css"
+    ],
+    "tabletSizes": [
+      [
+        800,
+        480
+      ],
+      [
+        1024,
+        600
+      ]
+    ],
+    "saveFormatUnchanged": true,
+    "publicDragAndWrongInputVerified": true
   }
 }

@@ -8,9 +8,9 @@
 
 배포 관리: https://dash.cloudflare.com/3375959224884e815872d29033c3ded4/pages/view/green-village-ecology
 
-현재 공개 버전에는 전체 이동 지도, 장소별 챕터 배경과 대화, 선택을 실행한 뒤 남는 마을 변화, 엔딩의 전체 마을 표시가 들어 있습니다. 오리지널 BGM 3곡, 10분 간격 온라인 저장과 기존 수집 기록을 함께 사용합니다. 화면 개편 배포 뒤 `index.html`, `app.mjs`, `world.mjs`, `world.css`가 최종 수정본과 같은 내용이며 올바른 HTML/JavaScript/CSS 형식으로 제공되는 것을 확인했습니다. GitHub에서 정규화하는 줄바꿈 차이는 제외했습니다.
+현재 공개 버전에는 전체 이동 지도, 장소별 챕터 배경과 대화, 계획별 미니게임, 실행한 뒤 남는 마을 변화, 엔딩의 전체 마을 표시가 들어 있습니다. 오리지널 BGM 3곡, 10분 간격 온라인 저장과 기존 수집 기록을 함께 사용합니다. 미니게임 배포 뒤 `index.html`, `app.mjs`, `model.mjs`, `missions.mjs`, `missions.css`가 최종 수정본과 같은 내용이며 올바른 HTML/JavaScript/CSS 형식으로 제공되는 것을 확인했습니다. GitHub에서 정규화하는 줄바꿈 차이는 제외했습니다.
 
-화면 개편 및 태블릿 길 지점 보완의 자동 배포 성공 기록: https://github.com/ajootree/green-village-ecology/actions/runs/37572945718 . 공개판 800×480에서 길 연결을 실제 실행해 도로가 생기고 전체 지도에 반영되는 것을 확인했습니다. 공개판 브라우저 오류는 없었습니다.
+미니게임 자동 배포 성공 기록: https://github.com/ajootree/green-village-ecology/actions/runs/37575428416 . 공개판 800×480에서 돋보기를 실제로 끌어 흔적을 찾고 기록했으며, 낙엽을 잘못 기록하면 진행되지 않고 올바른 세 흔적을 기록하면 실행 버튼이 열리는 것을 확인했습니다. 이전 화면 개편의 지도·엔딩 검증 기록: https://github.com/ajootree/green-village-ecology/actions/runs/37572945718 .
 
 동일한 Firebase 프로젝트를 계속 사용하므로 학교 계정과 이미 온라인에 저장된 엔딩을 이관할 필요가 없습니다. 체험 모드 기록과 아직 온라인에 저장하지 않은 변경은 기존 주소의 기기에 남으므로 주소를 바꾸기 전에 기존 사이트에서 온라인 저장을 완료하세요. 기존 주소 https://green-village-ecology.vercel.app/ 는 삭제하지 않았지만 예전 버전이므로 수업 배포는 새 Pages 주소를 사용하세요.
 
