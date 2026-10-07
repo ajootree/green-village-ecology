@@ -27,18 +27,24 @@
     "hostingPlan": "Vercel Hobby"
   },
   "published": "2026-10-07",
-  "deploymentId": "83fc42ff-baa5-4ad9-928f-fdd99ff02807",
-  "deploymentUrl": "https://83fc42ff.green-village-ecology.pages.dev/",
+  "deploymentId": "3902b826-522b-402e-8330-18f983ab93f2",
+  "deploymentUrl": "https://3902b826.green-village-ecology.pages.dev/",
   "automation": {
     "repository": "https://github.com/ajootree/green-village-ecology",
     "visibility": "private",
     "branch": "main",
     "workflow": ".github/workflows/cloudflare-pages.yml",
     "provider": "GitHub Actions and Cloudflare Wrangler",
-    "status": "awaiting-cloudflare-deploy-authorization",
+    "status": "enabled-and-verified",
     "checksPassed": true,
     "checksRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37561810639",
     "samePagesProject": true,
-    "prepared": "2026-10-07"
+    "prepared": "2026-10-07",
+    "enabled": "2026-10-07",
+    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37570616893",
+    "firstDeploymentSucceeded": true,
+    "successfulRunAttempt": 3,
+    "verified": "2026-10-07",
+    "publicHomepageVerified": true
   }
 }

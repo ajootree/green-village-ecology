@@ -16,7 +16,7 @@
 
 `.github/workflows/cloudflare-pages.yml`은 `main`의 게임 파일·검증 파일·배포 설정을 변경해 푸시하면 게임과 저장 검사를 실행하고, 통과한 경우 기존 Cloudflare Pages 프로젝트에 `dist`를 배포하도록 구성했습니다. 로컬 파일을 저장하는 것만으로 푸시되지는 않습니다. 수정 사항을 커밋하고 GitHub에 푸시하는 단계가 필요합니다. 사이트 주소와 Firebase 저장 프로젝트는 그대로 사용합니다.
 
-현재 상태: GitHub 코드 업로드 및 자동 검사 통과. Cloudflare 배포 전용 권한 생성과 GitHub 저장소 연결에 대한 사용자 승인 대기 중이며, 실제 자동 배포는 아직 꺼져 있습니다.
+현재 상태: 자동 배포 연결 완료 (2026-10-07). Cloudflare Pages 배포 전용 키를 GitHub의 암호화된 Actions secret에 등록했고 자동 배포를 활성화했습니다. 게임·저장 검사와 실제 Cloudflare 배포가 모두 통과했으며 기존 공개 주소에서 첫 화면 표시, 화면 밖 스크롤 없음, 브라우저 오류 없음을 확인했습니다. 성공 기록: https://github.com/ajootree/green-village-ecology/actions/runs/37570616893 (세 번째 실행 시도). 배포는 약 30초였으며 파일 수동 업로드가 필요하지 않습니다.
 
 연결에는 이 Cloudflare 계정의 `Cloudflare Pages: Edit` 권한만 가진 토큰을 저장소의 암호화된 Actions secret `CLOUDFLARE_API_TOKEN`으로 등록하고, Actions variable `CLOUDFLARE_DEPLOY_ENABLED`를 `true`로 설정합니다. 토큰은 코드·공개 게임 파일에 넣지 않습니다. 배포 작업은 사이트 정적 파일만 갱신하며 Firebase 규칙이나 학생 기록을 변경하지 않습니다. 검사 기록: https://github.com/ajootree/green-village-ecology/actions
 
