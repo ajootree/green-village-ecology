@@ -10,7 +10,15 @@
 
 동일한 Firebase 프로젝트를 계속 사용하므로 학교 계정과 이미 온라인에 저장된 엔딩을 이관할 필요가 없습니다. 체험 모드 기록과 아직 온라인에 저장하지 않은 변경은 기존 주소의 기기에 남으므로 주소를 바꾸기 전에 기존 사이트에서 온라인 저장을 완료하세요. 기존 주소 https://green-village-ecology.vercel.app/ 는 삭제하지 않았지만 예전 버전이므로 수업 배포는 새 Pages 주소를 사용하세요.
 
-직접 업로드 ZIP은 약 2.72MB이며 HTML이 최상위에 있고 공개 게임 파일만 포함합니다. 이후 수정은 같은 Cloudflare 프로젝트의 Create deployment에서 해당 ZIP을 업로드합니다. `ajtr.kr` 연결은 사용자의 요청대로 나중에 진행합니다.
+첫 공개판은 약 2.72MB ZIP으로 직접 업로드했습니다. 이제 게임 전용 비공개 GitHub 저장소 https://github.com/ajootree/green-village-ecology 에 코드와 배포 설정을 보관합니다. `ajtr.kr` 연결은 사용자의 요청대로 나중에 진행합니다.
+
+## GitHub 자동 배포
+
+`.github/workflows/cloudflare-pages.yml`은 `main`의 게임 파일·검증 파일·배포 설정을 변경해 푸시하면 게임과 저장 검사를 실행하고, 통과한 경우 기존 Cloudflare Pages 프로젝트에 `dist`를 배포하도록 구성했습니다. 로컬 파일을 저장하는 것만으로 푸시되지는 않습니다. 수정 사항을 커밋하고 GitHub에 푸시하는 단계가 필요합니다. 사이트 주소와 Firebase 저장 프로젝트는 그대로 사용합니다.
+
+현재 상태: GitHub 코드 업로드 및 자동 검사 통과. Cloudflare 배포 전용 권한 생성과 GitHub 저장소 연결에 대한 사용자 승인 대기 중이며, 실제 자동 배포는 아직 꺼져 있습니다.
+
+연결에는 이 Cloudflare 계정의 `Cloudflare Pages: Edit` 권한만 가진 토큰을 저장소의 암호화된 Actions secret `CLOUDFLARE_API_TOKEN`으로 등록하고, Actions variable `CLOUDFLARE_DEPLOY_ENABLED`를 `true`로 설정합니다. 토큰은 코드·공개 게임 파일에 넣지 않습니다. 배포 작업은 사이트 정적 파일만 갱신하며 Firebase 규칙이나 학생 기록을 변경하지 않습니다. 검사 기록: https://github.com/ajootree/green-village-ecology/actions
 
 ## 오리지널 배경음악
 
@@ -82,4 +90,4 @@
 - 저장 권한: `firebase/firestore.rules` (Firebase 콘솔에 게시한 파일)
 - 로컬 미리보기: `node server.cjs` → `http://127.0.0.1:8767/`
 - 검증: `node qa/check-model.mjs`, `node qa/check-state.mjs`. `qa/check-cloud.mjs`는 실행할 때 실제 시험 계정 두 개를 생성하므로 필요한 때만 사용합니다.
-- 배포 파일: `scripts/package.py`로 `green-village-ecology.zip` 생성. Cloudflare Pages 직접 업로드 화면에 해당 ZIP을 업로드합니다. 사이트 수정 시 새 프로젝트보다 기존 프로젝트의 재배포를 이용하세요.
+- 배포: GitHub 자동 배포 연결 후 `main`에 수정 사항을 푸시합니다. 연결 전 또는 수동 복구가 필요한 경우 `scripts/package.py`로 `green-village-ecology.zip`을 만들어 기존 Cloudflare Pages 프로젝트에 직접 업로드할 수 있습니다.

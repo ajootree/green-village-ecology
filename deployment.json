@@ -28,5 +28,17 @@
   },
   "published": "2026-10-07",
   "deploymentId": "83fc42ff-baa5-4ad9-928f-fdd99ff02807",
-  "deploymentUrl": "https://83fc42ff.green-village-ecology.pages.dev/"
+  "deploymentUrl": "https://83fc42ff.green-village-ecology.pages.dev/",
+  "automation": {
+    "repository": "https://github.com/ajootree/green-village-ecology",
+    "visibility": "private",
+    "branch": "main",
+    "workflow": ".github/workflows/cloudflare-pages.yml",
+    "provider": "GitHub Actions and Cloudflare Wrangler",
+    "status": "awaiting-cloudflare-deploy-authorization",
+    "checksPassed": true,
+    "checksRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37561810639",
+    "samePagesProject": true,
+    "prepared": "2026-10-07"
+  }
 }
