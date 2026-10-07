@@ -27,7 +27,7 @@
     "hostingPlan": "Vercel Hobby"
   },
   "published": "2026-10-07",
-  "deploymentUrl": "https://053ac987.green-village-ecology.pages.dev/",
+  "deploymentUrl": "https://53025517.green-village-ecology.pages.dev/",
   "automation": {
     "repository": "https://github.com/ajootree/green-village-ecology",
     "visibility": "private",
@@ -40,7 +40,7 @@
     "samePagesProject": true,
     "prepared": "2026-10-07",
     "enabled": "2026-10-07",
-    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37575428416",
+    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37578495872",
     "firstDeploymentSucceeded": true,
     "successfulRunAttempt": 1,
     "verified": "2026-10-07",
@@ -50,7 +50,7 @@
     "id": "3902b826-522b-402e-8330-18f983ab93f2",
     "url": "https://3902b826.green-village-ecology.pages.dev/"
   },
-  "deploymentAlias": "053ac987",
+  "deploymentAlias": "53025517",
   "chapterScenes": {
     "published": "2026-10-07",
     "codeCommit": "6cc830bc674eb94508ec9a81abbae1e1ea17dd20",
@@ -100,5 +100,38 @@
     ],
     "saveFormatUnchanged": true,
     "publicDragAndWrongInputVerified": true
+  },
+  "paintedWorld": {
+    "published": "2026-10-07",
+    "codeCommit": "378cc74c8acefd66ba2add73b70545eacac1c8d4",
+    "publicVerified": true,
+    "verifiedFiles": [
+      "world.mjs",
+      "assets/world/forest-local-atlas-v3.webp",
+      "assets/world/river-local-atlas-v3.webp",
+      "assets/world/farm-local-atlas-v3.webp",
+      "assets/world/festival-local-atlas-v3.webp"
+    ],
+    "illustrationAtlasBytes": 2754252,
+    "worldRoutesChecked": 256,
+    "tabletSizes": [
+      [
+        800,
+        480
+      ],
+      [
+        1024,
+        600
+      ]
+    ],
+    "saveFormatUnchanged": true,
+    "publicCompleteRouteVerified": [
+      "cut",
+      "treat",
+      "care",
+      "reuse"
+    ],
+    "publicEnding": "E08",
+    "publicConsoleErrors": 0
   }
 }
