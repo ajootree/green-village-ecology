@@ -1,0 +1,32 @@
+{
+  "url": "https://green-village-ecology.pages.dev/",
+  "dashboard": "https://dash.cloudflare.com/3375959224884e815872d29033c3ded4/pages/view/green-village-ecology",
+  "firebaseProject": "green-village-ecology",
+  "firebaseConsole": "https://console.firebase.google.com/project/green-village-ecology/overview",
+  "hostingPlan": "Cloudflare Pages Free",
+  "databasePlan": "Firebase Spark",
+  "databaseLocation": "asia-northeast3",
+  "created": "2026-10-06",
+  "migration": {
+    "provider": "Cloudflare Pages",
+    "plan": "Free",
+    "project": "green-village-ecology",
+    "generatedHostname": "green-village-ecology.pages.dev",
+    "status": "published",
+    "uploadDashboard": "https://dash.cloudflare.com/3375959224884e815872d29033c3ded4/pages/new/upload",
+    "prepared": "2026-10-07",
+    "autoSaveMinutes": 10,
+    "firebaseProjectUnchanged": true,
+    "published": "2026-10-07",
+    "staticFilesVerified": 13,
+    "accountAndEndingRestoreVerified": true
+  },
+  "previousDeployment": {
+    "url": "https://green-village-ecology.vercel.app/",
+    "dashboard": "https://vercel.com/ajtr/green-village-ecology",
+    "hostingPlan": "Vercel Hobby"
+  },
+  "published": "2026-10-07",
+  "deploymentId": "83fc42ff-baa5-4ad9-928f-fdd99ff02807",
+  "deploymentUrl": "https://83fc42ff.green-village-ecology.pages.dev/"
+}

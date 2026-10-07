@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+    function choices(a) {
+      return a is list && a.size() == 4
+        && (a[0] == null || a[0] in ['cut','detour','corridor','garden'])
+        && (a[1] == null || a[1] in ['treat','clean','hide','share'])
+        && (a[2] == null || a[2] in ['care','spray','garden','wait'])
+        && (a[3] == null || a[3] in ['reuse','once','party','burn']);
+    }
+    function record(r) {
+      return r is map && r.keys().hasOnly(['choices','repair'])
+        && r.repair is bool && choices(r.choices)
+        && !(null in r.choices);
+    }
+    function game(g) {
+      return g == null || (g is map
+        && g.keys().hasOnly(['stage','phase','choices','player'])
+        && g.stage is int && g.stage >= 0 && g.stage <= 4
+        && g.phase in ['explore','task','result','final'] && choices(g.choices)
+        && g.player is list && g.player.size() == 2
+        && g.player[0] is number && g.player[1] is number
+        && g.player[0] >= 0 && g.player[0] <= 100
+        && g.player[1] >= 0 && g.player[1] <= 100
+        && (g.stage < 1 || g.choices[0] != null)
+        && (g.stage < 2 || g.choices[1] != null)
+        && (g.stage < 3 || g.choices[2] != null)
+        && (g.stage < 4 || g.choices[3] != null));
+    }
+    function album(a) {
+      return a is map && a.keys().hasOnly(['E01','E02','E03','E04','E05','E06','E07','E08','E09','E10'])
+        && (!('E01' in a) || record(a.E01)) && (!('E02' in a) || record(a.E02))
+        && (!('E03' in a) || record(a.E03)) && (!('E04' in a) || record(a.E04))
+        && (!('E05' in a) || record(a.E05)) && (!('E06' in a) || record(a.E06))
+        && (!('E07' in a) || record(a.E07)) && (!('E08' in a) || record(a.E08))
+        && (!('E09' in a) || record(a.E09)) && (!('E10' in a) || record(a.E10));
+    }
+    function valid(d) {
+      return d.keys().hasOnly(['school','nickname','revision','progress','updatedAt'])
+        && d.school is string && d.school.size() >= 2 && d.school.size() <= 60
+        && d.nickname is string && d.nickname.size() >= 2 && d.nickname.size() <= 16
+        && d.revision is int && d.revision >= 0
+        && d.updatedAt == request.time
+        && d.progress is map && d.progress.keys().hasOnly(['schema','album','game','last','updatedAt'])
+        && d.progress.schema == 2 && d.progress.updatedAt is number
+        && album(d.progress.album) && game(d.progress.game)
+        && (d.progress.last == null || record(d.progress.last));
+    }
+    match /ecoPlayers/{uid} {
+      allow get: if owner(uid);
+      allow list: if false;
+      allow create: if owner(uid) && valid(request.resource.data) && request.resource.data.revision == 0;
+      allow update: if owner(uid) && valid(request.resource.data)
+        && request.resource.data.school == resource.data.school
+        && request.resource.data.nickname == resource.data.nickname
+        && request.resource.data.revision == resource.data.revision + 1
+        && request.resource.data.progress.album.keys().hasAll(resource.data.progress.album.keys());
+      allow delete: if owner(uid);
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

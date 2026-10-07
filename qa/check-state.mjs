@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {freshState,cleanState,identityEmail,mergeAlbum} from '../dist/state.mjs';
+const a=await identityEmail(' 광주 초록초등학교 ', '새싹');
+assert.equal(a,await identityEmail('광주  초록초등학교','새싹'));
+assert.notEqual(a,await identityEmail('서울 초록초등학교','새싹'));
+const one=freshState();one.album.E08={choices:['cut','treat','care','reuse'],repair:false};
+assert.deepEqual(Object.keys(cleanState(one).album),['E08']);
+one.album.E01=one.album.E08;assert.deepEqual(Object.keys(cleanState(one).album),['E08']);
+const two=freshState();two.album.E10={choices:['cut','treat','care','reuse'],repair:true};
+assert.deepEqual(Object.keys(mergeAlbum(one,two)).sort(),['E08','E10']);
+assert.equal(cleanState({game:{stage:4,phase:'final',choices:[null,null,null,null]}}).game,null);
+assert.equal(cleanState({game:{stage:0,phase:'result',choices:[null,null,null,null]}}).game,null);
+assert.throws(()=>cleanState(null).album.E01.choices);
+console.log('Identity isolation, normalization, save validation and album merging: passed');
