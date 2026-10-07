@@ -30,6 +30,7 @@ jobs:
           node --check dist/cloud.mjs
           node qa/check-model.mjs
           node qa/check-state.mjs
+          node qa/check-world.mjs
           node --experimental-vm-modules qa/check-save-schedule.mjs
 
   deploy:
