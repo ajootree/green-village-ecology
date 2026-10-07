@@ -1,0 +1,141 @@
+/* Seasonal work scenes and interaction details. */
+.season-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.scene-caption{position:absolute;left:10px;bottom:8px;background:#335e47e8;color:#fff4d5;border-radius:18px;padding:5px 10px;font-size:11px;pointer-events:none;z-index:2}
+.floating-object,.ground-object,.crop-subject,.photo-zone{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:none;box-shadow:none;color:#365339;cursor:pointer}
+.floating-object,.ground-object{width:clamp(64px,13%,100px);height:clamp(62px,29%,102px)}
+.floating-object>svg,.ground-object>svg,.crop-subject>svg,.natural-bin>svg,.loose-pipe>svg,.pipe-socket>svg,.mission-lamp>svg,.festival-bulb>svg,.sort-item>svg,.mission-bin>svg{display:block;width:100%;height:100%;pointer-events:none}
+.floating-object>svg{filter:drop-shadow(1px 4px 2px #355e5640)}
+.floating-object:after{content:'';position:absolute;bottom:5px;left:8%;right:8%;height:10px;border:2px solid #cae3d078;border-top:0;border-radius:50%;pointer-events:none}
+.floating-object:hover,.ground-object:hover{filter:brightness(1.12)}
+.floating-object.removed,.ground-object.removed{visibility:hidden;pointer-events:none}
+.floating-object.carrying,.sort-item.carrying,.loose-pipe.carrying{background:transparent!important;outline:none!important;filter:drop-shadow(0 0 5px #ffe096)}
+.natural-bin{width:clamp(75px,15%,110px);background:none;border:0;box-shadow:none;padding:0;top:29%;right:2%;gap:0}
+.natural-bin>svg{height:90px}.natural-bin strong,.natural-bin small{background:#e7edcbd9;color:#32533d;border-radius:8px;padding:3px 8px;font-size:12px}
+.net-tool{position:absolute;right:16%;bottom:1%;width:100px;height:130px;pointer-events:none;opacity:.8}.net-tool svg{width:100%;height:100%}.dragging-cargo .net-tool{opacity:0}
+.mission-drag-ghost{width:90px;height:90px;filter:drop-shadow(2px 4px 3px #214b4266)}
+.mission-drag-ghost>svg{width:100%;height:100%}.mission-drag-ghost.net-carry{width:125px;height:155px;transform:translate(-40%,-28%)}
+.mission-drag-ghost.net-carry>.carried-art{position:absolute;left:6px;top:7px;width:75px;height:70px}
+.ground-object{transform:translate(calc(-50% + var(--swept)*3px),-50%) rotate(calc(var(--swept)*4deg));opacity:calc(1 - var(--swept)*.18)}
+.plaza-cleanup .real-broom{position:absolute;right:2%;top:60%;width:clamp(120px,25%,180px);height:clamp(120px,65%,180px);transform:translate(-25%,-78%);z-index:3;filter:drop-shadow(3px 4px 2px #3d4c3544)}
+.real-broom svg{width:100%;height:100%;overflow:visible}.real-broom.active svg{rotate:-12deg;transform-origin:65% 20%}
+
+/* Fitted parts follow one continuous route, with supplies kept below it. */
+.polished-plumbing{padding:12px;background:linear-gradient(130deg,#90a187,#5f7869);gap:8px;justify-content:flex-start}
+.pipe-network{position:relative;flex:1;min-height:0;isolation:isolate}
+.network-links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pipe-network .pipe-socket{position:absolute;width:12%;height:30%;min-width:0;min-height:0;padding:0;border:0;border-radius:0;background:transparent;opacity:1;box-shadow:none}
+.pipe-network .pipe-socket:after{content:'';position:absolute;inset:-7px;border-radius:8px}
+.pipe-network [data-fit="0"]{left:22%;top:16%}.pipe-network [data-fit="1"]{left:45%;top:20%}.pipe-network [data-fit="2"]{left:48.6%;top:50%}
+.pipe-network .pipe-socket.fitted{filter:drop-shadow(0 2px 2px #36544766)}
+.network-node{position:absolute;width:16%;display:flex;align-items:center;flex-direction:column;color:#f8f2d4;gap:2px}
+.network-node svg{width:100%;height:70px;pointer-events:none}.network-node strong{font-size:15px;font-weight:700;text-shadow:0 1px 2px #3b5b42}
+.network-node.source{left:1%;top:14%}.network-node.destination{right:1%;top:51%}
+.network-flow{position:absolute;right:5%;top:17%;color:#eefddb;font-size:12px;border-bottom:2px solid #b6e1d2;padding:5px}
+.water-running .network-links path:last-child{stroke:#82d1d0;stroke-dasharray:17 8;animation:flowing-pipe 1s linear infinite}
+.pipe-controls{display:flex;gap:15px;align-items:center;flex-shrink:0;justify-content:center}
+.polished-plumbing .pipe-supplies{gap:13px}.polished-plumbing .loose-pipe{width:70px;height:65px;padding:7px;border:1px solid #d1dfb880;border-radius:9px;background:#496859;box-shadow:0 3px 0 #3a5448;min-width:0;min-height:0}
+.polished-plumbing .valve{display:flex;align-items:center;gap:8px;font-size:13px;padding:10px;min-height:46px}
+.valve i{display:block;width:25px;height:25px;border:4px solid #697c56;border-radius:50%;position:relative}.valve i:before,.valve i:after{content:'';position:absolute;left:7px;top:0;width:3px;height:17px;background:#697c56}.valve i:after{rotate:90deg}
+@keyframes flowing-pipe{to{stroke-dashoffset:-50}}
+
+/* The player identifies damage from the leaves, rather than their captions. */
+.natural-observation .crop-subject{width:clamp(70px,20%,130px);height:clamp(72px,43%,140px);border-radius:50%}
+.crop-subject small{position:absolute;bottom:1px;left:43%;padding:1px 5px;border-radius:9px;background:#f1e9c9d9;font-size:10px;font-weight:700;color:#435e40;pointer-events:none}
+.crop-subject b,.photo-zone b{position:absolute;right:15%;top:8%;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#496f47;color:#fff5d2;font-size:14px;pointer-events:none}
+.crop-subject.recorded{filter:drop-shadow(0 0 3px #e4e5b4)}.crop-subject.in-focus{outline:2px solid #f4d176;outline-offset:-4px}
+.polished-console{background:#f8f0d6;gap:12px;padding:8px 12px;font-size:12px;line-height:1.6;flex-shrink:0;color:#355138}
+.inspection-detail-art{width:76px;height:76px;border:3px solid #72865a;border-radius:50%;background:#c9ad7e;flex-shrink:0;overflow:hidden}
+.inspection-detail-art svg{width:100%;height:100%;padding:2px}
+.polished-console button{font-size:12px;min-height:42px;white-space:normal;max-width:92px;flex-shrink:0}
+.natural-observation .inspection-cursor{border-color:#bb934c;background:#e4f3d31f;box-shadow:0 0 0 2px #6c623f,inset 0 0 10px #fff2c577}
+.natural-observation .inspection-cursor:after{content:'';position:absolute;right:-22px;bottom:-12px;width:34px;height:10px;border-radius:5px;rotate:45deg;background:#786340;border:2px solid #baa16b}
+.real-photo-field{background:url('assets/village.webp') 86.01% 25.18%/304% 376%}
+.photo-zone{width:31%;height:55%;min-width:58px;min-height:58px;border-radius:7px}
+.photo-zone .viewfinder-corners{position:absolute;inset:0;border:2px solid #f2f5d9aa;border-radius:7px;box-shadow:0 0 0 1px #41654588;pointer-events:none}
+.photo-zone small{position:absolute;bottom:6px;left:8px;border-radius:7px;background:#2e583fd9;color:#ffefca;padding:3px 6px;font-size:11px;pointer-events:none}
+.photo-zone.in-focus .viewfinder-corners{border:3px solid #ffe09a;background:#ffe7a90b}.photo-zone.recorded .viewfinder-corners{border-color:#c9eab6}
+.camera-work .camera-cursor{width:100px;height:77px;border-style:solid;border-color:#ead6a2}.camera-work .camera-cursor:after{display:none}
+.camera-work .photo-strip{height:62px;flex-shrink:0}.camera-work .photo-strip:empty{display:none}
+
+/* Actual plants and soil replace framed seedling icons. */
+.garden-work{padding:0;gap:0;background:#ad8559}.garden-work .plant-tool{background:#e7e8c7;color:#405b3b;padding:7px;font-size:12px;flex-shrink:0}
+.garden-bed{position:relative;flex:1;min-height:0}.garden-bed .season-land{opacity:.9}
+.garden-bed .soil-pot{position:absolute;transform:translate(-50%,-50%);width:26%;height:42%;border:0;box-shadow:none;border-radius:50%;background:none;overflow:visible;padding:3px;min-width:44px;min-height:44px;display:flex;flex-direction:column;justify-content:flex-end;color:#35543b}
+.garden-bed .soil-pot.watered{background:none;border:0}.garden-bed .soil-pot small{background:#efe4c2e0;color:#506042;font-size:10px;line-height:1.2;padding:3px 6px;position:relative;z-index:1}
+.garden-bed .growing-flower{display:flex;justify-content:center;align-items:flex-end;flex:1;min-height:0;width:100%;font-size:0}.growing-flower>svg{width:70px;height:70px;max-height:100%;pointer-events:none}
+.soil-dimple{display:block;width:42px;height:15px;border-radius:50%;background:#805f3e;box-shadow:inset 0 4px 0 #684b32,0 3px 0 #cfaa77}
+.garden-bed .water-drops{width:10px;height:15px;border-radius:50% 50% 60% 60%;background:#b6dfdb;box-shadow:17px -10px #b6dfdb,31px 3px #b6dfdb;rotate:-20deg;left:33%;top:10%}
+.garden-bed .flower-art{width:48px;height:58px}.garden-bed .seed-grains{pointer-events:none;left:32%}
+.planted-farm{padding:0;background:#ad8559}.planted-farm .crop-bed{position:absolute;inset:16% 3% 3%;height:auto;gap:4px;background:none;border-radius:0}
+.planted-farm .spray-crop{background:none;border:0;border-radius:50%;min-width:44px;min-height:0;overflow:visible;padding:0}
+.spray-crop>svg{position:relative;width:80%;height:100%;display:block;margin:auto;pointer-events:none}
+.spray-crop>i{border-radius:50%;background:radial-gradient(circle,#d8eecc99,transparent 70%)}.spray-crop>b{position:absolute;right:15%;top:8%;color:#edf4c8;background:#526c48;border-radius:50%;font-size:11px;width:17px;height:17px;pointer-events:none}
+.real-sprayer{width:115px;height:115px;right:2%;top:37%;transform:translate(-15%,-30%)}.real-sprayer>svg{width:100%;height:100%}.real-sprayer .mist{left:-30px;top:12px;width:70px;height:45px}
+
+/* Sorting takes place on a return desk, with legible material names. */
+.natural-sorting{padding:10px;gap:7px;background:#a8ba8a}
+.sorting-table{flex:1;min-height:0;background:repeating-linear-gradient(0deg,#ac8c5f 0 26px,#b89866 26px 29px);border-radius:8px;border-bottom:7px solid #7f6345;padding:5px 6px}
+.natural-sorting .sorting-items{height:100%;gap:4px}
+.natural-sorting .sort-item{padding:0;background:none;border:0;box-shadow:none;border-radius:0;overflow:hidden;min-width:0}
+.natural-sorting .sort-item>svg{flex:1;min-height:0;max-height:90px;filter:drop-shadow(1px 3px 1px #624c3144)}
+.natural-sorting .sort-item small{font-size:11px;color:#364f38;background:#eee6c9ed;border-radius:5px;padding:2px 3px;line-height:1.3;margin-top:1px;min-height:18px}
+.natural-sorting .sorting-bins{gap:15px;flex:1;min-height:0}
+.natural-sorting .mission-bin{background:none;border:0;box-shadow:none;padding:0;gap:0}
+.natural-sorting .mission-bin>svg{flex:1;min-height:0;max-height:105px}.natural-sorting .mission-bin strong{background:#f0ebcedd;color:#35543b;padding:3px 10px;border-radius:7px;white-space:nowrap;font-size:12px}
+.bin-paper>svg>path:first-child{fill:#cbb783}.bin-plastic>svg>path:first-child{fill:#8bb5b7}
+.natural-sorting .day-lights{gap:7px;flex-shrink:0;font-size:11px}.natural-sorting .day-lights.waiting{opacity:.6}
+.natural-sorting .day-lamp{width:46px;height:46px;display:flex;align-items:center;flex-direction:column;background:#eef1d4;border:1px solid #7c9670;border-radius:8px;padding:2px;gap:0;color:#dab86a;font-size:11px}
+.day-lamp>span{height:28px;width:28px;line-height:1}.day-lamp svg{width:100%;height:100%;display:block}.day-lamp b{font-size:9px;color:#3e5f42}.natural-sorting .day-lamp.off{color:#678773;background:#afc398}
+
+.hanging-lanterns{background:linear-gradient(145deg,#556e59,#304d42);gap:9px}
+.hanging-lanterns .mission-lamp{background:none;border:0;box-shadow:none;width:98px;height:140px;padding:0;position:relative;color:#92795b}
+.hanging-lanterns .mission-lamp svg{flex:1;min-height:0;opacity:.6}
+.hanging-lanterns .mission-lamp strong{font-size:12px;background:#213e33bf;border-radius:10px;padding:4px 10px;color:#d9e3c2}
+.hanging-lanterns .lamp-1{color:#64818a}.hanging-lanterns .lamp-2{color:#728a59}
+.hanging-lanterns .mission-lamp.lit{background:none;box-shadow:none;color:#f0b970;filter:drop-shadow(0 0 14px #f5dc8990)}
+.hanging-lanterns .lamp-1.lit{color:#98cfde;filter:drop-shadow(0 0 14px #9bd6e699)}.hanging-lanterns .lamp-2.lit{color:#b5d287;filter:drop-shadow(0 0 14px #b0da8499)}.hanging-lanterns .mission-lamp.lit svg{opacity:1}
+.illustrated-tuning .tuning-row{grid-template-columns:160px minmax(0,1fr) 24px;font-size:12px}
+.illustrated-tuning .tuning-row>span{display:flex;align-items:center;gap:7px}.tuning-row>span svg{width:44px;height:44px;flex-shrink:0;color:#b58b60}
+.tuning-row>span b{font-weight:500;line-height:1.5}.tuning-hint{font-size:11px;text-align:center;line-height:1.5;margin:0;color:#405d40}
+.illustrated-cups{position:relative;background:#bcaa87;gap:18px}.illustrated-cups .cup-stack,.illustrated-cups .cup-controls{z-index:1}
+.illustrated-cups .cup-stack{height:85%}.illustrated-cups .festival-bulb{color:#8c9b78;padding:5px;filter:none}.illustrated-cups .festival-bulb.lit{color:#f0d484;background:#476749;box-shadow:0 0 22px #f7de8c80}
+
+/* Observe a chosen process rather than rewarding repeated ignition taps. */
+.burn-observation{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:#e5dfc2}
+.burn-scene{position:relative;flex:1;min-height:75px;overflow:hidden}
+.burn-pile{position:absolute;left:22%;right:22%;bottom:8%;height:65%;display:flex;align-items:flex-end;justify-content:center}
+.burn-pile svg{width:38%;height:75%;filter:drop-shadow(1px 3px 2px #62553a44)}.burn-pile svg:nth-child(2){margin-left:-18%;rotate:-24deg}.burn-pile svg:nth-child(3){margin-left:-14%;rotate:12deg}
+.burn-fire{position:absolute;left:39%;bottom:12%;width:25%;height:66%;pointer-events:none}.burn-fire svg{width:100%;height:100%}
+.observed-smoke{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 48% 24%,#56615b40,transparent 48%)}.observed-smoke i{position:absolute;left:39%;bottom:29%;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#5d6d6690,#626d6200 69%);animation:observed-smoke-rise 4s ease-out infinite;animation-delay:-.4s}.observed-smoke i:nth-child(2){left:48%;animation-delay:-1.7s}.observed-smoke i:nth-child(3){left:43%;animation-delay:-3s}
+@keyframes observed-smoke-rise{from{translate:0 0;scale:.7;opacity:.9}to{translate:25px -80px;scale:1.5;opacity:.3}}
+.burn-steps{display:flex;gap:6px;padding:7px 9px;flex-shrink:0;background:#e7e8cc}
+.burn-steps button{flex:1;background:#365e48;color:#fff0cd;border:0;border-radius:8px;min-height:43px;padding:6px;font-size:11px;display:flex;gap:5px;align-items:center;justify-content:center}
+.burn-steps button b{display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#f3ddab;color:#476046;flex-shrink:0}
+.burn-steps button:disabled{background:#c4ceb3;color:#57664c;opacity:1}.burn-steps button.watched{background:#8fa582;color:#f5f1d9}
+.burn-caption{padding:7px 10px;font-size:12px;line-height:1.5;margin:0;color:#3c573e;flex-shrink:0}
+
+@media(max-height:600px){
+  .polished-plumbing{padding:6px;gap:5px}.network-node svg{height:46px}.network-node strong{font-size:12px}.polished-plumbing .loose-pipe{width:52px;height:48px;padding:5px}.pipe-controls{gap:8px}.polished-plumbing .pipe-supplies{gap:9px}.polished-plumbing .valve{font-size:11px;min-height:42px;padding:6px;gap:5px}.valve i{width:23px;height:23px}.network-flow{font-size:10px;padding:2px}
+  .natural-bin>svg{height:63px}.natural-bin strong,.natural-bin small{font-size:10px;padding:2px 6px}.net-tool{width:77px;height:95px}.scene-caption{font-size:10px;padding:4px 8px;bottom:5px}
+  .polished-console{padding:6px 8px;gap:7px;font-size:11px;line-height:1.5}.inspection-detail-art{width:54px;height:54px}.polished-console button{padding:6px 8px;font-size:11px;max-width:77px;min-height:38px}
+  .natural-observation .crop-subject{width:18%;height:44%;min-height:54px}.crop-subject small{font-size:9px}.camera-work .photo-strip{height:43px}
+  .garden-work .plant-tool{font-size:11px;padding:5px}.garden-bed .soil-pot small{font-size:9px;padding:2px 4px}.garden-bed .flower-art{scale:.85;transform-origin:bottom center}.real-sprayer{width:91px;height:91px}
+  .natural-sorting{padding:6px;gap:5px}.sorting-table{padding:3px;border-bottom-width:4px}.natural-sorting .sort-item small{font-size:10px;min-height:16px}.natural-sorting .mission-bin strong{font-size:11px;padding:2px 7px}.natural-sorting .day-lights{font-size:10px;gap:5px}.natural-sorting .day-lamp{width:39px;height:42px}.natural-sorting .day-lamp>span{width:25px;height:25px}
+  .hanging-lanterns .mission-lamp{width:76px;height:99px}.hanging-lanterns .mission-lamp strong{font-size:10px;padding:3px 8px}.hanging-lanterns{gap:7px}
+  .illustrated-tuning{padding:8px 10px;gap:6px}.illustrated-tuning .tuning-row{grid-template-columns:131px minmax(0,1fr) 20px;font-size:11px;gap:6px}.tuning-row>span svg{width:32px;height:34px}.illustrated-tuning .tuning-rail{height:39px}.tuning-hint{font-size:10px}
+  .burn-steps{padding:5px 7px;gap:5px}.burn-steps button{font-size:10px;min-height:37px;padding:4px}.burn-caption{font-size:11px;padding:5px 8px;line-height:1.4}
+}
+@media(max-width:700px) and (orientation:portrait){
+  .natural-sorting .sorting-items{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr)}.sorting-table{flex:1.4}.natural-sorting .day-lights>span{max-width:90px;font-size:10px}.natural-sorting .sorting-bins{gap:5px}.natural-sorting .mission-bin strong{font-size:11px;padding:3px 6px}
+  .natural-observation .crop-subject{width:29%;height:40%;min-height:70px}.polished-console{padding:8px;gap:8px;font-size:12px}.inspection-detail-art{width:57px;height:57px}.polished-console button{max-width:74px;font-size:11px;padding:7px}
+  .illustrated-tuning .tuning-row{grid-template-columns:118px minmax(0,1fr) 20px;font-size:11px;gap:6px}.tuning-row>span svg{width:31px;height:33px}.illustrated-tuning{padding:12px 10px}
+  .pipe-controls{flex-wrap:wrap;gap:8px}.polished-plumbing .loose-pipe{width:57px;height:53px}.polished-plumbing .valve{font-size:12px;min-height:40px}.network-node strong{font-size:12px}
+  .hanging-lanterns .mission-lamp{width:74px;height:120px}.hanging-lanterns .mission-lamps{gap:8px}
+  .illustrated-cups{gap:10px;padding:10px}.illustrated-cups .cup-stack{width:110px}.illustrated-cups .festival-switches{gap:6px}.illustrated-cups .festival-bulb{width:45px;height:55px}.illustrated-cups .cup-controls{gap:18px}
+  .burn-steps button{flex-direction:column;gap:4px;font-size:10px;min-height:57px}.burn-caption{font-size:12px}.natural-bin>svg{height:74px}
+}
+@media(prefers-reduced-motion:reduce){.observed-smoke i,.water-running .network-links path:last-child{animation:none}}
+
+.garden-work .plant-tool{display:flex;align-items:center;justify-content:center;gap:8px}.garden-work .plant-tool svg{width:32px;height:28px;flex-shrink:0}
+
+.observed-smoke>svg{position:absolute;inset:0;width:100%;height:100%;filter:blur(1px)}

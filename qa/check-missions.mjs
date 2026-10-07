@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {seasons,resolveEnding} from '../dist/model.mjs';
 import {createMission,actMission,missionInfo,missionProgress,connectedTiles} from '../dist/missions.mjs';
+import {inspectionTargets} from '../dist/mission-content.mjs';
 
 const expected=[10,12,0,6,9,0,3,10,10];
 let tested=0;
@@ -21,7 +22,10 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     for(let i=0;i<5;i++)actMission(m,'cup');
     assert(!m.done);for(let i=0;i<3;i++)actMission(m,'switch',i);
   }else if(m.kind==='ignite'){
-    for(let i=0;i<39;i++)actMission(m,'rub');assert(!m.done);actMission(m,'rub');
+    actMission(m,'watch',2);assert.equal(missionProgress(m)[0],0,'Later scenes cannot skip earlier observations.');
+    actMission(m,'rub');assert.equal(missionProgress(m)[0],0,'Rubbing is no longer an ignition mechanic.');
+    actMission(m,'watch',0);actMission(m,'watch',0);assert.equal(missionProgress(m)[0],1,'The same scene cannot count twice.');
+    actMission(m,'watch',1);assert(!m.done);actMission(m,'watch',2);
   }else if(m.kind==='spray'){
     for(let i=0;i<12;i++)actMission(m,'spray',i);assert(!m.done);
     for(let n=0;n<2;n++)for(let i=0;i<12;i++)actMission(m,'spray',i);
@@ -51,8 +55,10 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     for(const wrong of [0,2]){actMission(m,'route',wrong);assert(!m.done);assert.equal(m.values[0],0);assert(m.message);}
     actMission(m,'route',1);
   }else if(m.kind==='inspect'){
-    actMission(m,'record',4);assert(!m.done);
-    for(let i=0;i<3;i++)actMission(m,'record',i);
+    const targets=inspectionTargets(m);
+    actMission(m,'record',targets[0]);assert.equal(missionProgress(m)[0],0,'Record requires a focused observation.');
+    if(m.id==='care')for(const wrong of [0,2,5]){actMission(m,'observe',wrong);actMission(m,'record',wrong);assert.equal(m.marks[wrong],0,'Healthy leaves and nearby wildlife are not crop damage.');assert(m.message);}
+    for(const i of targets){actMission(m,'observe',i);actMission(m,'record',i);}
   }else if(m.kind==='haul'){
     for(let i=0;i<6;i++)actMission(m,'load',i);
   }else if(m.kind==='paint'){
