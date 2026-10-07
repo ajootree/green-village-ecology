@@ -1,10 +1,11 @@
 import {shutter,photo} from './effects.mjs';
+import {springLandscape,roadDebris,broomArt,traceArt,traceCloseups,surveySites} from './spring-art.mjs';
 // Each task rehearses the selected action; ecological consequences stay in the story.
 const definitions = [
   {
     cut:{kind:'connect',title:'도로 설계판 맞추기',icon:'🛣️',goal:'출발지에서 축제장까지 도로 조각을 이어 주세요.',how:'조각을 누르면 돌아가요. 길이 끊기지 않게 연결해요.',theme:'road'},
-    detour:{kind:'scrub',title:'기존 길 정비하기',icon:'🧹',goal:'원래 있던 길의 흙과 나뭇가지를 치워 주세요.',how:'솔을 누른 채 얼룩 위를 왕복해요. 여러 번 눌러도 돼요.',theme:'road'},
-    corridor:{kind:'inspect',title:'동물 이동 흔적 조사',icon:'🔎',goal:'돋보기로 토끼 발자국 세 곳을 찾아 기록해 주세요.',how:'돋보기를 끌어 살피고, 발자국 위에서 「흔적 기록」을 눌러요.',theme:'tracks'},
+    detour:{kind:'scrub',title:'기존 길 정비하기',icon:'🧹',goal:'원래 있던 흙길에 떨어진 가지와 낙엽, 흙더미를 치워 주세요.',how:'길 위의 물체를 누른 채 빗자루로 쓸어요. 네 번 눌러 치워도 돼요.',theme:'road'},
+    corridor:{kind:'survey',title:'동물 통로 자리 찾기',icon:'🔎',goal:'세 지점의 흔적을 비교하고, 동물이 길을 건너는 곳에 통로를 표시해 주세요.',how:'A·B·C 지점을 눌러 확대 관찰하고 기록해요. 길 양쪽에 이어지는 흔적을 비교해요.',theme:'tracks'},
     garden:{kind:'plant',title:'꽃밭 준비하기',icon:'🌷',goal:'고른 꽃의 씨앗을 여섯 칸에 심고 물을 주세요.',how:'씨앗을 누른 채 밭 위로 움직여요. 다 심으면 물뿌리개로 바뀌어요.',theme:'flowers'}
   },
   {
@@ -45,6 +46,7 @@ export function createMission(stage,id){
   return {stage,id,kind:info.kind,done:false,tiles,marks:Array(12).fill(0),water:Array(6).fill(0),focus:null,picked:null,round:0,index:0,showing:false,values:[0,0,0],lights:info.kind==='stack'?[false,false,false]:[true,true,true],cups:0,heat:0,photos:[],message:'',revision:0};
 }
 export function missionProgress(m){
+  if(m.kind==='survey')return [m.marks.slice(0,3).filter(Boolean).length+(m.values[0]?1:0),4];
   if(m.kind==='plumb')return [m.marks.slice(0,3).filter(Boolean).length+(m.values[0]?1:0),4];
   if(m.kind==='stack')return [m.cups+m.lights.filter(Boolean).length,8];
   if(m.kind==='ignite')return [m.heat,40];
@@ -74,6 +76,13 @@ export function actMission(m,action,value,extra){
   }else if(action==='plant'&&m.kind==='plant'&&Number.isInteger(value)&&value>=0&&value<6){
     if(m.marks.slice(0,6).every(Boolean))m.water[value]=Math.min(2,m.water[value]+1);else m.marks[value]=1;m.activePlot=value;valid=true;
   }else if(action==='paint'&&m.kind==='paint'&&Number.isInteger(value)&&value>=0&&value<12){m.marks[value]=1;valid=true;
+  }else if(action==='observe'&&m.kind==='survey'&&Number.isInteger(value)&&value>=0&&value<3){m.focus=value;valid=true;
+  }else if(action==='record'&&m.kind==='survey'){
+    if(Number.isInteger(value)&&value>=0&&value<3&&m.focus===value&&!m.marks[value]){m.marks[value]=1;valid=true;}else m.message='먼저 조사 지점을 눌러 흔적을 자세히 살펴보세요.';
+  }else if(action==='route'&&m.kind==='survey'&&Number.isInteger(value)&&value>=0&&value<3){
+    if(!m.marks.slice(0,3).every(Boolean))m.message='세 지점을 모두 관찰하고 기록한 뒤 통로 위치를 골라요.';
+    else if(value===1){m.values[0]=1;valid=true;}
+    else m.message=value===0?'A의 신발 자국은 사람들이 길을 따라 걸은 흔적이에요. 길 양쪽 풀숲을 잇는 흔적을 찾아요.':'C의 줄무늬는 바퀴가 길을 따라 지나간 흔적이에요. 길 양쪽에 같은 발자국이 있는 곳을 찾아요.';
   }else if(action==='record'&&m.kind==='inspect'){
     if(Number.isInteger(value)&&value>=0&&value<3){m.marks[value]=1;valid=true;}else m.message=m.id==='corridor'?'발자국을 찾아 돋보기를 옮겨 주세요.':m.id==='wait'?'사진에 작물이 들어오도록 카메라를 옮겨 주세요.':'구멍 난 잎을 찾아 돋보기를 옮겨 주세요.';
   }else if(action==='load'&&m.kind==='haul'&&Number.isInteger(value)&&value>=0&&value<6){m.marks[value]=1;m.picked=null;valid=true;
@@ -91,16 +100,21 @@ export function actMission(m,action,value,extra){
 }
 const things=[['반납용 컵','☕'],['종이 안내지','📄'],['빈 페트병','🧴'],['반납용 음료잔','🥤'],['종이 상자','📦'],['플라스틱 뚜껑','🟦']];
 const locations=[[13,24],[37,20],[61,28],[17,72],[42,68],[63,73]];
-const observations=(m)=>m.id==='corridor'?[['토끼 발자국','🐾'],['토끼 발자국','🐾'],['토끼 발자국','🐾'],['낙엽','🍂'],['바위','🪨'],['풀','🌿']]:m.id==='wait'?[['작물','🌱'],['작물','🌾'],['작물','🥬'],['벌','🐝'],['거미','🕷️'],['바위','🪨']]:[['구멍 난 잎','leaf'],['구멍 난 잎','leaf'],['구멍 난 잎','leaf'],['벌','🐝'],['거미','🕷️'],['건강한 잎','🌿']];
+const observations=(m)=>m.id==='wait'?[['작물','🌱'],['작물','🌾'],['작물','🥬'],['벌','🐝'],['거미','🕷️'],['바위','🪨']]:[['구멍 난 잎','leaf'],['구멍 난 잎','leaf'],['구멍 난 잎','leaf'],['벌','🐝'],['거미','🕷️'],['건강한 잎','🌿']];
 const leaf=`<svg viewBox="0 0 70 65" aria-hidden="true"><path d="M10 52Q2 8 56 6Q76 39 20 56Z" fill="#78a65a" stroke="#45653b" stroke-width="3"/><path d="m5 61 48-47" stroke="#345b39" stroke-width="4"/><circle cx="31" cy="25" r="7" fill="#f2e5ba"/><circle cx="46" cy="38" r="6" fill="#f2e5ba"/></svg>`;
 const blossom=`<span class="flower-art" aria-hidden="true"><i class="flower-stem"></i><i class="flower-leaf"></i><span class="flower-head">${Array.from({length:5},(_,i)=>`<i class="petal" style="--petal:${i}"></i>`).join('')}<i class="flower-center"></i></span></span>`;
 const fieldBackdrop=`<svg class="mission-land" viewBox="0 0 600 240" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0h600v240H0Z" fill="#cad7a1"/><path d="M0 190Q120 128 230 170T600 128V240H0Z" fill="#91b679"/><path d="M0 105Q150 90 230 139T600 160" fill="none" stroke="#bba477" stroke-width="42"/><path d="M0 105Q150 90 230 139T600 160" fill="none" stroke="#e0ca94" stroke-width="32"/></svg>`;
 const riverBackdrop=`<svg class="mission-land" viewBox="0 0 600 240" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0h600v240H0Z" fill="#87bcc2"/><path d="M0 0h600v25Q450 2 345 25T0 16ZM0 228Q150 205 295 225T600 205V240H0Z" fill="#a3ba80"/><g fill="none" stroke="#d1e7d9" stroke-width="4" opacity=".65"><path d="M20 80q25-10 55 0m80-17q25-10 60 0m110 10q20-10 50 0M40 163q25-10 65 0m66 18q20-10 60 0m64-15q25-10 65 0"/></g><g fill="#729b88"><ellipse cx="45" cy="20" rx="20" ry="9"/><ellipse cx="310" cy="224" rx="22" ry="10"/></g></svg>`;
 function tilesHTML(m){
   const linked=connectedTiles(m.tiles);
-  return `<div class="connection-station ${m.id==='cut'?'road-station':'water-station'}"><div class="pipe-end source">${m.id==='cut'?'🚗 출발':'💧 작업장'}</div><div class="pipe-grid">${m.tiles.map((mask,i)=>`<button class="pipe-tile ${linked.includes(i)?'flowing':''} ${mask?'':'blocked'}" data-turn="${i}" ${mask?'':'disabled'} aria-label="${Math.floor(i/3)+1}행 ${i%3+1}열 ${m.id==='cut'?'도로':'배관'} 돌리기"><svg viewBox="0 0 100 100" aria-hidden="true">${mask?[1,2,4,8].map((bit,j)=>mask&bit?`<path d="M50 50L${[[50,0],[100,50],[50,100],[0,50]][j].join(' ')}"/>`:'').join('')+'<circle cx="50" cy="50" r="11"/>':'<text x="50" y="65" text-anchor="middle" font-size="45">🌿</text>'}</svg></button>`).join('')}</div><div class="pipe-end destination">${m.id==='cut'?'축제장 🏮':'처리 시설 ⚙️'}</div></div>`;
+  return `<div class="connection-station ${m.id==='cut'?'road-station':'water-station'}"><div class="pipe-end source">${m.id==='cut'?'<span aria-hidden="true">🚗</span><strong>출발지</strong>':'💧 작업장'}</div><div class="pipe-grid">${m.tiles.map((mask,i)=>`<button class="pipe-tile ${linked.includes(i)?'flowing':''} ${mask?'':'blocked'}" data-turn="${i}" ${mask?'':'disabled'} aria-label="${Math.floor(i/3)+1}행 ${i%3+1}열 ${m.id==='cut'?'도로':'배관'} 돌리기"><svg viewBox="0 0 100 100" aria-hidden="true">${mask?[1,2,4,8].map((bit,j)=>mask&bit?`<path d="M50 50L${[[50,0],[100,50],[50,100],[0,50]][j].join(' ')}"/>`:'').join('')+'<circle cx="50" cy="50" r="11"/>':'<text x="50" y="65" text-anchor="middle" font-size="45">🌿</text>'}</svg></button>`).join('')}</div><div class="pipe-end destination">${m.id==='cut'?'<span aria-hidden="true">🏮</span><strong>축제장</strong>':'처리 시설 ⚙️'}</div></div>`;
 }
 function boardHTML(m){
+  if(m.kind==='survey'){
+    const ready=m.marks.slice(0,3).every(Boolean),site=surveySites[m.focus];
+    return `<div class="survey-work"><div class="survey-scene">${springLandscape()}<span class="habitat-label north">덤불 쉼터</span><span class="habitat-label south">먹이 풀밭</span>${surveySites.map(({label,x},i)=>`<div class="ground-traces trace-${i}" style="left:${x}%">${traceArt[i]}</div>${i===1?`<div class="ground-traces across-traces" style="left:${x}%">${traceArt[i]}</div>`:''}<button class="survey-pin ${m.focus===i?'selected':''} ${m.marks[i]?'noted':''}" data-survey="${i}" style="left:${x}%;top:58%" aria-label="${label} 지점 확대 관찰" aria-pressed="${m.focus===i}">${m.marks[i]?'✓ ':''}${label}</button>`).join('')}${m.done?'<div class="animal-crossing"><span>동물 통로</span></div>':''}</div><div class="survey-observation"><div class="trace-lens">${site?traceCloseups[m.focus]:'<span aria-hidden="true">🔎</span>'}</div><div class="survey-evidence" aria-live="polite"><strong>${site?site.label+' 지점 · 확대 관찰':'흙에 남은 모양을 살펴봐요'}</strong><p>${site?site.description:'A·B·C를 눌러 모양과 흔적이 이어지는 방향을 비교해 보세요.'}</p></div><button id="survey-record" ${!site||m.marks[m.focus]?'disabled':''}>${site&&m.marks[m.focus]?'기록됨':'관찰 기록'}</button></div><div class="survey-decision"><span>${m.done?'B의 발자국이 쉼터와 먹이 풀밭을 이어요.':ready?'동물이 길을 건너는 곳은?':'관찰 기록 '+m.marks.slice(0,3).filter(Boolean).length+'/3 · 모두 기록한 뒤 통로를 골라요.'}</span><div>${surveySites.map(({label},i)=>`<button data-route="${i}" ${ready?'':'disabled'} aria-label="${label} 지점에 동물 통로 표시">${label}에 통로</button>`).join('')}</div></div></div>`;
+  }
+  if(m.stage===0&&m.id==='detour')return `<div class="mission-field spring-road-work" id="mission-field">${springLandscape()}${[[13,50],[29,54],[43,55],[58,61],[73,62],[87,66]].map(([x,y],i)=>`<button class="road-debris debris-${i} ${m.marks[i]>=4?'removed':''}" data-brush="${i}" style="left:${x}%;top:${y}%;--swept:${m.marks[i]}" aria-label="${['나뭇가지','낙엽','흙더미'][i%3]} ${Math.floor(i/3)+1} 쓸기">${roadDebris[i]}</button>`).join('')}<div class="brush-cursor spring-broom" id="brush-cursor">${broomArt}</div><span class="road-scene-caption">마을에서 축제장으로 이어지는 기존 흙길</span></div>`;
   if(m.kind==='plumb')return `<div class="plumbing-work ${m.values[0]?'water-running':''}"><div class="plumbing-route"><span>작업장 💧</span>${[0,1,2].map(i=>`<button class="pipe-socket ${m.marks[i]?'fitted':''}" data-fit="${i}" aria-label="${['직선','아래로 꺾인','위로 꺾인'][i]} 배관 자리"><span>${['━','┓','┗'][i]}</span></button>`).join('')}<span>⚙️ 처리 시설</span><div class="water-stream"></div></div><div class="pipe-supplies">${[2,0,1].map(i=>`<button class="loose-pipe ${m.marks[i]?'stored':''}" data-pipe="${i}" aria-label="${['직선','아래로 꺾인','위로 꺾인'][i]} 배관 집기">${['━','┓','┗'][i]}</button>`).join('')}</div><button class="valve" id="water-valve" ${m.marks.slice(0,3).every(Boolean)?'':'disabled'}>${m.values[0]?'💧 물이 흐르고 있어요':'✥ 밸브 열기'}</button></div>`;
   if(m.kind==='stack')return `<div class="cup-work"><div class="cup-stack">${Array.from({length:m.cups},(_,i)=>`<span class="paper-cup ${i===m.cups-1?'falling-cup':''}" style="--cup:${i}">▱</span>`).join('')}<div class="cup-table"></div></div><div class="cup-controls"><button id="drop-cup" ${m.cups===5?'disabled':''}>컵 떨어뜨리기 · ${m.cups}/5</button><div class="festival-switches">${m.lights.map((on,i)=>`<button class="festival-bulb ${on?'lit':''}" data-switch="${i}" ${m.cups===5?'':'disabled'} aria-label="축제 조명 ${i+1} 켜기">💡</button>`).join('')}</div></div></div>`;
   if(m.kind==='ignite')return `<div class="fire-work ${m.done?'burning':''}"><div class="fire-smoke"><i></i><i></i><i></i></div><button id="friction-area" aria-label="쓰레기 더미 문질러 불 붙이기"><span class="rubbish-pile">📦 📄 🛍️</span><span class="fire-flame">🔥</span><span class="friction-sparks">✦ ✧</span></button><div class="heat-meter"><span style="width:${m.heat/40*100}%"></span></div><p>${m.done?'불이 붙고 연기가 올라옵니다.':'손가락으로 빠르게 문질러요.'}</p></div>`;
@@ -149,6 +163,9 @@ export function mountMission(host,m,onChange){
     $$('[data-light]').forEach(b=>b.onclick=()=>act('light',Number(b.dataset.light)));
     $$('[data-brush]').forEach(b=>b.onclick=e=>{if(e.detail===0)act(m.kind,Number(b.dataset.brush));});
     $$('[data-observe]').forEach(b=>b.onclick=()=>focus(Number(b.dataset.observe)));
+    $$('[data-survey]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.survey);act('observe',i);(m.marks[i]?$(`[data-survey="${i}"]`):$('#survey-record'))?.focus();});
+    if($('#survey-record'))$('#survey-record').onclick=()=>{act('record',m.focus);const next=m.marks.slice(0,3).findIndex(v=>!v);(next<0?$('[data-route="0"]'):$(`[data-survey="${next}"]`))?.focus();};
+    $$('[data-route]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.route);act('route',i);if(!m.done)$(`[data-route="${i}"]`)?.focus();});
     if($('#record-observation'))$('#record-observation').disabled=m.focus===null||m.focus>=3||!!m.marks[m.focus];
     if($('#record-observation'))$('#record-observation').onclick=async()=>{const index=m.focus;if(m.id!=='wait'||!Number.isInteger(index)||index>=3){act('record',index);return;}if(m.marks[index])return;shutter();$('#mission-field').classList.add('taking-photo');$('#record-observation').disabled=true;try{const src=await photo(index);if(disposed)return;m.photos[index]=src;later(()=>act('record',index),220);}catch{if(!disposed){m.message='사진을 다시 찍어 주세요.';feedback();$('#record-observation').disabled=false;}}};
     $$('[data-carry]').forEach(b=>b.onclick=()=>{if(drag?.moved)return;m.picked=Number(b.dataset.carry);$$('[data-carry]').forEach(el=>el.classList.toggle('carrying',el===b));$('#mission-feedback').textContent=m.kind==='sort'?'물건을 골랐어요. 넣을 함을 눌러 주세요.':`집었어요. ${m.id==='burn'?'수거차':'수거통'}를 눌러 주세요.`;});

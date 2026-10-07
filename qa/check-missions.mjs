@@ -37,6 +37,19 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     for(let i=0;i<6;i++)actMission(m,'plant',i);
     assert(!m.done,'Sown seeds still need water.');
     for(let n=0;n<2;n++)for(let i=0;i<6;i++)actMission(m,'plant',i);
+  }else if(m.kind==='survey'){
+    actMission(m,'record',0);assert.equal(m.marks[0],0,'Evidence must be inspected before recording.');
+    actMission(m,'route',1);assert(!m.done,'A lucky guess cannot skip the survey.');
+    for(let i=0;i<3;i++){
+      const other=(i+1)%3,previous=m.marks[other];
+      actMission(m,'observe',i);actMission(m,'record',other);
+      assert.equal(m.marks[other],previous,'A different site cannot be recorded without inspecting it.');
+      actMission(m,'record',i);
+      const progress=missionProgress(m)[0];actMission(m,'record',i);assert.equal(missionProgress(m)[0],progress);
+    }
+    assert(!m.done,'Observations alone do not identify a crossing.');
+    for(const wrong of [0,2]){actMission(m,'route',wrong);assert(!m.done);assert.equal(m.values[0],0);assert(m.message);}
+    actMission(m,'route',1);
   }else if(m.kind==='inspect'){
     actMission(m,'record',4);assert(!m.done);
     for(let i=0;i<3;i++)actMission(m,'record',i);

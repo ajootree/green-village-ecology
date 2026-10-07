@@ -1,0 +1,46 @@
+/* Spring scenes use objects on the ground, with controls outside the artwork. */
+.road-station{padding:12px 100px}
+.road-station .pipe-end{width:90px;padding:12px 5px;line-height:1.3;background:#f5eed0;border:2px solid #6f8c59;display:grid;gap:7px}
+.road-station .pipe-end span{font-size:44px;line-height:1.1}
+.road-station .pipe-end strong{font-size:19px;color:#344f37}
+.road-station .pipe-end.source{left:5px;top:8%}
+.road-station .pipe-end.destination{right:5px;bottom:8%}
+.spring-landscape{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.spring-road-work{background:#92b67d}
+.road-debris{position:absolute;transform:translate(calc(-50% + var(--swept)*3px),-50%) rotate(calc(var(--swept)*-5deg));width:clamp(66px,13%,112px);height:clamp(58px,29%,90px);padding:0;border:0;background:none;box-shadow:none;border-radius:50%;opacity:calc(1 - var(--swept)*.18);cursor:grab}
+.road-debris svg{width:100%;height:100%;overflow:visible;pointer-events:none;filter:drop-shadow(1px 3px 1px #66573930)}
+.road-debris:hover{filter:brightness(1.12)}
+.road-debris:focus-visible{outline:3px solid #ffe085;background:#ffe08522}
+.road-debris.removed{visibility:hidden;pointer-events:none}
+.spring-road-work .spring-broom{width:clamp(115px,27%,180px);height:clamp(115px,65%,180px);right:1%;top:58%;z-index:3;transform:translate(-25%,-78%);display:block;filter:drop-shadow(3px 5px 2px #3a45363b)}
+.spring-broom svg{width:100%;height:100%;overflow:visible}
+.spring-road-work .spring-broom.active svg{transform:rotate(-12deg);transform-origin:65% 20%}
+.road-scene-caption{position:absolute;left:12px;bottom:10px;font-size:12px;color:#fff8de;background:#355d3ce6;border-radius:20px;padding:6px 12px;pointer-events:none}
+.survey-work{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;background:#f7f0d8;color:#334f39}
+.survey-scene{position:relative;flex:1;min-height:105px;overflow:hidden}
+.habitat-label{position:absolute;left:44%;font-size:11px;font-weight:700;background:#f1ecd6d9;border-radius:16px;padding:4px 9px}
+.habitat-label.north{top:5%}.habitat-label.south{bottom:5%}
+.ground-traces{position:absolute;top:43%;transform:translate(-50%,-50%);width:42px;height:50px;opacity:.65;pointer-events:none}
+.ground-traces.trace-1{top:26%}.ground-traces.across-traces{top:81%}.ground-traces svg{width:100%;height:100%}
+.survey-pin{position:absolute;transform:translate(-50%,-50%);min-width:44px;height:44px;border-radius:50%;border:3px solid #fff1c6;background:#355f49;color:#fff9dc;box-shadow:0 3px 8px #304d3c66;font-size:18px;font-weight:800;padding:0 6px}
+.survey-pin.selected{outline:3px solid #f5c85b;outline-offset:3px}.survey-pin.noted{background:#557443}
+.survey-observation{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fffae8;border-top:2px solid #c6bd95;flex-shrink:0}
+.trace-lens{width:82px;height:82px;border-radius:50%;border:4px solid #76825b;box-shadow:0 0 0 3px #d4b273;background:#cfb17d;flex-shrink:0;overflow:hidden;display:grid;place-items:center}
+.trace-lens svg{width:87%;height:87%}.trace-lens>span{font-size:35px}
+.survey-evidence{flex:1;min-width:0}.survey-evidence strong{font-size:13px}.survey-evidence p{font-size:12px;line-height:1.55;margin:5px 0 0}
+.survey-observation button,.survey-decision button{background:#355f49;color:#fff8dc;border:0;border-radius:8px;font-size:12px;min-height:40px;padding:8px 10px;flex-shrink:0}
+.survey-observation button:disabled,.survey-decision button:disabled{background:#d8dfce;color:#59664f;opacity:1}
+.survey-decision{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 12px;background:#e5e7cd;flex-shrink:0}
+.survey-decision>span{font-size:11px;line-height:1.5;flex:1}.survey-decision>div{display:flex;gap:5px}
+.animal-crossing{position:absolute;left:52%;top:0;bottom:0;width:50px;transform:translateX(-50%);border:3px dashed #faf5c7;background:#537d5070;pointer-events:none;display:grid;place-items:center}
+.animal-crossing span{background:#355f49;color:#fff8dc;font-size:11px;padding:7px;border-radius:8px;text-align:center}
+@media(max-height:600px){
+  .road-station{padding:7px 89px}.road-station .pipe-end{width:80px;padding:8px 4px;gap:4px}.road-station .pipe-end span{font-size:38px}.road-station .pipe-end strong{font-size:17px}
+  .survey-observation{padding:6px 9px;gap:8px}.trace-lens{width:58px;height:58px;border-width:3px}.survey-evidence strong{font-size:11px}.survey-evidence p{font-size:11px;line-height:1.45;margin-top:3px}.survey-observation button{font-size:11px;padding:7px}
+  .survey-decision{padding:5px 9px}.survey-decision button{font-size:11px;padding:7px;min-height:36px}.survey-decision>span{font-size:10px}.road-scene-caption{font-size:10px;padding:4px 8px;bottom:6px}
+}
+@media(max-width:700px) and (orientation:portrait){
+  .road-station{padding:8px 78px}.road-station .pipe-end{width:70px;padding:10px 3px}.road-station .pipe-end span{font-size:38px}.road-station .pipe-end strong{font-size:17px}
+  .survey-observation{flex-wrap:wrap;padding:10px;gap:9px}.trace-lens{width:64px;height:64px}.survey-evidence p{font-size:12px}.survey-observation button{margin-left:auto}
+  .survey-decision{flex-direction:column;align-items:stretch;gap:7px}.survey-decision>div{justify-content:space-between}.survey-decision button{flex:1}.road-debris{width:70px;height:65px}
+}
