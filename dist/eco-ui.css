@@ -176,13 +176,13 @@ dialog::backdrop { background: #061e18a3; backdrop-filter: blur(4px); }
 .dialog-body p, .small-note, .record-date, .album-lead, .help-copy p { color: #c5dabd; }
 #dialog input:not([type=range]) { background: #092d24; color: var(--ink); border: 1px solid #83a184; }
 #dialog input::placeholder { color: #aec5ad; }
-#dialog .small-note { color: #c5dabd; }
+#dialog .small-note { color: #c5dabd!important; }
 .journal-entry, .ending-card, .album-nav button, .replay-buttons button, .account-actions button, .login-tabs button { border: 1px solid var(--line); background: #22483c; color: var(--ink); box-shadow: none; }
 .album-nav button:hover:not(:disabled) { background: #365f49; }
 .journal-entry p, .ending-card small { color: #bfd5b5; }
 .journal-entry.written, .ending-card.found, .login-tabs button.active { background: #2c5542; border-color: #91b69d; }
 .ending-card.locked { background: #17392e; }
-.form-error { color: #ffbca5; }
+#dialog .form-error { color: #ffbca5; }
 .story-overlay { background: #061e1894; backdrop-filter: blur(4px); }
 .story-card { background: #133c31; color: var(--ink); border: 1px solid #96b98780; border-radius: 20px; box-shadow: 0 25px 100px #06191088; }
 .story-card h1 { color: var(--ink); }
