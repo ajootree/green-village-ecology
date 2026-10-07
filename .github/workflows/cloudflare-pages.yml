@@ -30,6 +30,8 @@ jobs:
           node --check dist/cloud.mjs
           node --check dist/story.mjs
           node --check dist/effects.mjs
+          node --check dist/learning-ui.mjs
+          node qa/check-learning.mjs
           node qa/check-model.mjs
           node qa/check-state.mjs
           node qa/check-world.mjs
