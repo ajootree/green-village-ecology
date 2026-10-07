@@ -9,3 +9,5 @@ qa-evidence/
 dist/assets/village.png
 dist/vercel.json
 .deploy/
+
+art-source/*.png

@@ -7,42 +7,30 @@ export const regions = [
   {name:'마을 축제장',box:'1010 370 590 500',color:'#8f6645',icon:'🏮'}
 ];
 const valid = (a,i) => seasons[i].choices.some(c=>c.id===a?.[i]) ? a[i] : null;
-const flower = (x,y,c='#e8a4bd') => `<g transform="translate(${x} ${y})"><path d="M0 18V-2M0 12l-9-5M0 8l8-5" stroke="#557b3c" stroke-width="4"/><g fill="${c}" stroke="#bd755e" stroke-width="1"><circle cy="-9" r="7"/><circle cx="-8" cy="-3" r="7"/><circle cx="8" cy="-3" r="7"/><circle cx="-5" cy="5" r="7"/><circle cx="5" cy="5" r="7"/></g><circle r="5" fill="#f9d36c"/></g>`;
-const stump = (x,y) => `<g transform="translate(${x} ${y})"><path d="M-18 0v22q18 13 36 0V0" fill="#996742" stroke="#694c34" stroke-width="4"/><ellipse rx="19" ry="9" fill="#dfb878" stroke="#694c34" stroke-width="4"/><ellipse rx="10" ry="4" fill="none" stroke="#ac7d47" stroke-width="2"/></g>`;
-const bag = (x,y) => `<g transform="translate(${x} ${y})"><path d="M-7-18l14 0-4 10q22 15 15 36q-18 11-36 0q-7-21 15-36Z" fill="#63756a" stroke="#354d42" stroke-width="4"/><path d="M-7-8h14" stroke="#efe0a0" stroke-width="3"/></g>`;
-const cup = (x,y) => `<g transform="translate(${x} ${y}) rotate(18)"><path d="M-10-12h20l-4 26h-12Z" fill="#f3e2b3" stroke="#93714b" stroke-width="3"/><path d="M-10-12h20" stroke="#fcf5d6" stroke-width="5"/></g>`;
-const bee = (x,y,dead=false) => `<g transform="translate(${x} ${y})${dead?' rotate(145)':''}"><ellipse cx="-4" cy="-10" rx="8" ry="12" fill="#eff9ed" stroke="#6c8265" stroke-width="2"/><ellipse cx="8" cy="-11" rx="8" ry="12" fill="#eff9ed" stroke="#6c8265" stroke-width="2"/><ellipse rx="16" ry="10" fill="${dead?'#b8aa77':'#f2c657'}" stroke="#624c30" stroke-width="3"/><path d="M-5-9v18M4-9v18" stroke="#6b5136" stroke-width="4"/><circle cx="12" cy="-2" r="2" fill="#42382a"/></g>`;
-const fish = (x,y,dead=false) => `<g transform="translate(${x} ${y})${dead?' rotate(160)':''}" fill="${dead?'#e4e0c8':'#79bec4'}" stroke="#4a7675" stroke-width="3"><path d="M-13 0l-15-13v26Z"/><ellipse rx="20" ry="10"/>${dead?'<path d="m8-4 6 6m0-6-6 6" fill="none"/>':'<circle cx="11" cy="-2" r="2" fill="#2e595a"/>'}</g>`;
-function road(id){
-  if(!['cut','corridor','detour'].includes(id)) return '';
-  if(id==='detour') return `<g class="change-road detour"><path d="M350 185Q405 350 360 450Q320 510 500 550Q640 605 760 640L1090 610" fill="none" stroke="#f7ce79" stroke-width="13" stroke-dasharray="18 13" stroke-linecap="round"/><g transform="translate(450 545)"><path d="M0 24V-25" stroke="#705336" stroke-width="7"/><path d="M-8-25h80l14 15-14 15H-8Z" fill="#e7c189" stroke="#795b35" stroke-width="4"/><text x="34" y="-6" text-anchor="middle" font-size="16" fill="#664f34">기존 길</text></g></g>`;
-  return `<g class="change-road ${id}"><path d="M305 190L515 325L730 462L1085 610" fill="none" stroke="#735f4d" stroke-width="67" stroke-linecap="round"/><path d="M305 190L515 325L730 462L1085 610" fill="none" stroke="#aaa894" stroke-width="54" stroke-linecap="round"/><path d="M305 190L515 325L730 462L1085 610" fill="none" stroke="#fff4c9" stroke-width="4" stroke-dasharray="24 19"/>${id==='cut'?stump(320,235)+stump(410,290)+stump(560,305):`<g transform="translate(510 325) rotate(32)"><path d="M-52-39h104v78H-52Z" fill="#597c44" stroke="#365736" stroke-width="7"/><path d="M-39-35h78v70h-78Z" fill="#8ba86a"/><path d="M-41-20h82M-41 20h82" stroke="#c8d39d" stroke-width="5"/><text x="0" y="5" text-anchor="middle" font-size="16" fill="#fff5cc">동물 통로</text></g>`}<g transform="translate(745 470) rotate(32)"><rect x="-23" y="-15" width="46" height="31" rx="9" fill="#e1ad62" stroke="#765438" stroke-width="4"/><rect x="-11" y="-12" width="18" height="24" rx="5" fill="#9fc4bc"/><path d="M-13-20v6M14-20v6M-13 16v6M14 16v6" stroke="#504b43" stroke-width="8"/></g></g>`;
-}
-function flowerPlot(x,y,w,h){
-  return `<g class="flower-plot"><path d="M${x} ${y+h*.12}Q${x+w*.5} ${y-h*.12} ${x+w} ${y+h*.1}L${x+w*.9} ${y+h}Q${x+w*.4} ${y+h*1.1} ${x} ${y+h*.85}Z" fill="#beab7e" stroke="#836941" stroke-width="7"/>${Array.from({length:18},(_,j)=>flower(x+30+(j%6)*(w-60)/5,y+40+Math.floor(j/6)*(h-55)/3)).join('')}</g>`;
-}
-function river(id,ending){
-  const dirty=id!=='treat';
-  return `<g class="change-river ${id||'baseline'}"><path d="M815 285h66v50h-89" fill="none" stroke="#797c68" stroke-width="26"/><path d="M815 285h66v50h-89" fill="none" stroke="#b3b6a0" stroke-width="16"/><path d="M790 337q-50 35-32 94q22 34-43 57" fill="none" stroke="${dirty?'#948958':'#8bd0c7'}" stroke-width="36" stroke-linecap="round" opacity=".85"/>${id==='treat'?`<g class="treatment-plant" transform="translate(855 270)"><rect x="-31" y="-44" width="115" height="77" rx="8" fill="#e4d8a5" stroke="#6b7c52" stroke-width="5"/><path d="M-43-44l67-35 74 35Z" fill="#688c67" stroke="#455f45" stroke-width="5"/><rect x="-15" y="-22" width="36" height="24" rx="4" fill="#9ac4b6"/><circle cx="51" cy="-8" r="22" fill="#81a476"/><path d="m39-8 9 10 16-21" fill="none" stroke="#edf0c7" stroke-width="5"/><text x="22" y="57" text-anchor="middle" fill="#385a3c" font-size="21" font-weight="bold">처리 시설</text></g>${fish(760,440)}${fish(714,491)}`:''}${['clean','share'].includes(id)?bag(813,465)+bag(862,453):''}${['hide','share'].includes(id)?`<g class="river-screen" transform="translate(891 345)"><path d="M-42-34v100M105-34v100" stroke="#79633f" stroke-width="8"/><path d="M-42-29h147v72H-42Z" fill="#d3ae90" stroke="#9b7658" stroke-width="4"/><path d="M-35-17h133v48H-35Z" fill="#eee0be"/><text x="32" y="14" text-anchor="middle" font-size="21" fill="#816847">봄 축제</text></g>`:''}${dirty&&ending?fish(756,420,true)+fish(724,473,true):''}</g>`;
-}
-function farm(id){
-  if(id==='garden') return `<g class="change-farm garden">${flowerPlot(987,171,364,170)}</g>`;
-  if(id==='spray'||id==='wait') return `<g class="change-farm ${id}"><path d="M1008 183l341 14-63 156-331-23Z" fill="${id==='spray'?'#acaa7a':'#a78351'}" stroke="#786845" stroke-width="6" opacity=".95"/>${Array.from({length:16},(_,j)=>`<path d="M${991+j%8*41} ${228+Math.floor(j/8)*70}l10-20 6 26 13-12" fill="none" stroke="#776e3f" stroke-width="6" stroke-linecap="round"/>`).join('')}${id==='spray'?`<path d="M997 215q43-90 120-23q69-60 126-5q85-24 121 58q-161 20-367-30Z" fill="#c4c3a4" opacity=".58"/>${bee(1095,338,true)}${bee(1232,305,true)}`:''}</g>`;
-  return `<g class="change-farm care"><path d="M1008 190h88l-20 67-85-6Z" fill="#d9c489" opacity=".8" stroke="#688650" stroke-width="5"/><g transform="translate(1065 244)"><path d="M0 20v-30M-25-29h75v32h-75Z" fill="#e9d1a0" stroke="#6f7544" stroke-width="5"/><text x="12" y="-7" text-anchor="middle" font-size="14" fill="#567340">관리 구역</text></g>${bee(1232,246)}${bee(1150,337)}<path d="M1338 274l16-7 16 7m-16-7v35m-15-10 30 0" fill="none" stroke="#596751" stroke-width="3"/></g>`;
-}
-function festival(id){
-  const bins=`<g class="return-station" transform="translate(1325 650)"><path d="M-42-40h155v35H-42Z" fill="#d8e3ac" stroke="#5c7a46" stroke-width="5"/><text x="35" y="-16" text-anchor="middle" fill="#4d713e" font-size="18">컵 반납 · 분리배출</text>${['#d6a34e','#6b9b78','#6692a4'].map((c,j)=>`<g transform="translate(${j*47-30} 12)"><rect x="-18" y="-12" width="39" height="48" rx="6" fill="${c}" stroke="#51634a" stroke-width="4"/><rect x="-20" y="-18" width="43" height="12" rx="3" fill="#dbe5bd"/></g>`).join('')}</g>`;
-  const trash=Array.from({length:id==='party'?12:4},(_,j)=>cup(1230+j%6*46,601+Math.floor(j/6)*54)).join('');
-  return `<g class="change-festival ${id}">${id==='reuse'?bins:id==='once'?bag(1360,655)+bag(1400,666)+bag(1440,660)+cup(1270,603):id==='party'?trash+`<g stroke="#eebd63" stroke-width="5" fill="#ffe48c"><circle cx="1250" cy="521" r="11"/><circle cx="1340" cy="519" r="11"/><circle cx="1430" cy="522" r="11"/></g>`:`${bag(1433,653)}<path d="M1400 670l35-55 31 57Z" fill="#ce8647" stroke="#8d643d" stroke-width="4"/><g class="smoke-cloud" fill="#717267" opacity=".78"><ellipse cx="1428" cy="597" rx="35" ry="42"/><ellipse cx="1395" cy="544" rx="57" ry="40"/><ellipse cx="1323" cy="506" rx="71" ry="42"/><ellipse cx="1212" cy="479" rx="95" ry="48"/></g>`}</g>`;
+// Each atlas panel is a painted version of the same village. SVG only positions
+// and softly masks the paintings; roads, buildings and damage are raster art.
+const paintings = [
+  {file:'forest-local',version:3,frame:[75,55,680,540],rows:2,panels:{cut:0,detour:1,corridor:2,garden:3},area:[90,75,640,500],className:'change-road'},
+  {file:'river-local',version:3,frame:[670,210,315,300],rows:3,panels:{baseline:0,treat:1,clean:2,hide:3,share:4,harm:5},area:[690,300,270,185],className:'change-river'},
+  {file:'farm-local',version:3,frame:[880,100,670,390],rows:2,panels:{care:0,spray:1,garden:2,wait:3},area:[930,145,565,250],className:'change-farm'},
+  {file:'festival-local',version:3,frame:[1080,390,520,420],rows:2,panels:{reuse:0,once:1,party:2,burn:3},area:[1120,470,475,300],className:'change-festival'}
+];
+export const paintedWorldAssets=paintings.map(p=>`assets/world/${p.file}-atlas-v${p.version||2}.webp`);
+function paintedLayer(i,id,prefix,area=paintings[i].area){
+  const p=paintings[i],panel=p.panels[id],column=panel%2,row=Math.floor(panel/2);
+  const mask=`${prefix}-${i}-${id}`, [x,y,w,h]=area,[fx,fy,fw,fh]=p.frame||[0,0,1600,900];
+  const detail=i===0&&id==='corridor'?'동물 통로':i===1&&id==='treat'?'처리 시설':i===3&&id==='reuse'?'컵 반납과 분리배출':id==='baseline'?'작업장에서 흘러드는 오염된 물':id==='harm'?'오염으로 피해를 입은 하천':seasons[i].choices.find(c=>c.id===id)?.name;
+  return `<g class="painted-change ${p.className} ${id}" aria-label="${detail}"><defs><filter id="${mask}-soft" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="6"/></filter><mask id="${mask}" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="40" fill="white" filter="url(#${mask}-soft)"/></mask></defs><g mask="url(#${mask})"><svg x="${fx}" y="${fy}" width="${fw}" height="${fh}" viewBox="${column*fw} ${row*fh} ${fw} ${fh}" overflow="hidden"><image href="${paintedWorldAssets[i]}" width="${fw*2}" height="${p.rows*fh}" preserveAspectRatio="none"/></svg></g></g>`;
 }
 export function worldChanges(choices){return seasons.map((s,i)=>valid(choices,i));}
 export function worldSVG({choices=[null,null,null,null],chapter=null,stage=0,ending=false,repair=false}={}){
-  const a=worldChanges(choices), regionsToShow=[0,1,2,3];
-  const layers=regionsToShow.map(i=>{const id=a[i];if(!id) return i===1&&(chapter===1||stage>=1)?river(null,false):'';
-    const art=i===0?(id==='garden'?flowerPlot(153,128,360,205):road(id)):i===1?river(id,ending):i===2?farm(id):festival(id);
-    return `<g data-world-change="${i}:${id}">${art}</g>`;
+  const a=worldChanges(choices),prefix=`painted-${chapter??'all'}-${ending?'ending':'play'}`;
+  const layers=a.map((id,i)=>{
+    if(!id)return i===1&&(chapter===1||stage>=1)?paintedLayer(i,'baseline',prefix):'';
+    const harm=i===1&&ending&&id!=='treat'?paintedLayer(i,'harm',prefix,[745,375,110,80]):'';
+    return `<g data-world-change="${i}:${id}">${paintedLayer(i,id,prefix)}${harm}</g>`;
   }).join('');
-  const pendingRepair=repair?regionsToShow.filter(i=>a[i]&&!['detour','corridor','treat','care','reuse'].includes(a[i])).map(i=>{const [x,y]=[[545,285],[849,450],[1170,360],[1390,692]][i];return `<g class="late-repair" transform="translate(${x} ${y})"><path d="M-23 18h46l-7-34h-32Z" fill="#edc96d" stroke="#927345" stroke-width="4"/><path d="M-19-8h36M-21 4h40" stroke="#967e52" stroke-width="4"/></g>`;}).join(''):'';
+  const pendingRepair=repair?'<desc class="late-repair">복원 작업을 시작했지만 네 계절 동안 생긴 도로와 피해는 아직 남아 있습니다.</desc>':'';
   return `<svg class="world-art" viewBox="${chapter===null?'0 0 1600 900':regions[chapter].box}" preserveAspectRatio="${chapter===null?'xMidYMid meet':'xMidYMid slice'}" role="img" aria-label="${chapter===null?'네 계절의 선택이 남은 초록마을 전체 지도':regions[chapter].name+'의 풍경'}"><image href="assets/village.webp" width="1600" height="900"/>${layers}${pendingRepair}</svg>`;
 }
 export function changeCaption(choices,i){return valid(choices,i)?statusFor(choices)[i]:'';}
