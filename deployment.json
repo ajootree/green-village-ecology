@@ -27,7 +27,7 @@
     "hostingPlan": "Vercel Hobby"
   },
   "published": "2026-10-07",
-  "deploymentUrl": "https://53025517.green-village-ecology.pages.dev/",
+  "deploymentUrl": "https://green-village-ecology.pages.dev/",
   "automation": {
     "repository": "https://github.com/ajootree/green-village-ecology",
     "visibility": "private",
@@ -36,11 +36,11 @@
     "provider": "GitHub Actions and Cloudflare Wrangler",
     "status": "enabled-and-verified",
     "checksPassed": true,
-    "checksRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37561810639",
+    "checksRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37604884775",
     "samePagesProject": true,
     "prepared": "2026-10-07",
     "enabled": "2026-10-07",
-    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37578495872",
+    "deploymentRun": "https://github.com/ajootree/green-village-ecology/actions/runs/37604884775",
     "firstDeploymentSucceeded": true,
     "successfulRunAttempt": 1,
     "verified": "2026-10-07",
@@ -50,7 +50,7 @@
     "id": "3902b826-522b-402e-8330-18f983ab93f2",
     "url": "https://3902b826.green-village-ecology.pages.dev/"
   },
-  "deploymentAlias": "53025517",
+  "deploymentAlias": null,
   "chapterScenes": {
     "published": "2026-10-07",
     "codeCommit": "6cc830bc674eb94508ec9a81abbae1e1ea17dd20",
@@ -133,5 +133,60 @@
     ],
     "publicEnding": "E08",
     "publicConsoleErrors": 0
+  },
+  "previousExperienceDeployment": {
+    "url": "https://53025517.green-village-ecology.pages.dev/",
+    "alias": "53025517"
+  },
+  "experienceUpdate": {
+    "published": "2026-10-07",
+    "implementationCommit": "aa01f7670fba6f0119b2c611cd9025c2bb62bede",
+    "codeCommit": "ba5fd6c69e8a7a613de52397ea08feab69dd34b8",
+    "url": "https://green-village-ecology.pages.dev/",
+    "publicVerified": true,
+    "files": 26,
+    "bytes": 5765190,
+    "introductionCards": 5,
+    "routedJourneysChecked": 42,
+    "plansChecked": 16,
+    "endings": 10,
+    "viewportChecks": [
+      [
+        800,
+        480
+      ],
+      [
+        1024,
+        600
+      ]
+    ],
+    "localCompleteRoute": [
+      "garden",
+      "treat",
+      "wait",
+      "party",
+      "keep"
+    ],
+    "localEnding": "E07",
+    "publicChecks": [
+      "introduction",
+      "path-walking",
+      "calendar-turn",
+      "arrival-context",
+      "sentence-choices",
+      "road-rotation",
+      "retry-hidden-after-completion",
+      "scene-dissolve",
+      "map-without-result-classification",
+      "E08-credit-scroll"
+    ],
+    "nativePointerChecks": [
+      "brush-alignment",
+      "pipe-fitting",
+      "spray-drag"
+    ],
+    "publicConsoleErrors": 0,
+    "saveFormatUnchanged": true,
+    "firebaseRulesUnchanged": true
   }
 }
