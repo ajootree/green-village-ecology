@@ -1,0 +1,15 @@
+/* Read the ending first; the village fades in only after the last line. */
+.cinema .cinema-body{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:0}
+.cinema .ending-world,.cinema .credits-window{grid-area:1/1;min-width:0;min-height:0}
+.cinema .ending-world{opacity:0;visibility:hidden;pointer-events:none;transition:none}
+.cinema .credits-window{width:min(760px,100%);height:100%;margin:0 auto;border:0;border-radius:0;background:none;opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s}
+.cinema .credits{position:relative;max-width:720px;margin:auto;padding:30px 28px 80px}
+.cinema.credits-finished .ending-world{opacity:1;visibility:visible;pointer-events:auto;transition:opacity 1.8s ease,visibility 0s}
+.cinema.credits-finished .credits-window{opacity:0;visibility:hidden;pointer-events:none}
+.cinema.credits-finished .credits-window:after{content:none}
+.cinema.reading-all .credits-window{mask-image:none}
+.cinema #reveal-ending{display:block;margin:32px auto 0;padding:12px 20px;background:var(--gold);color:#19372b;font-weight:700}
+.cinema #reveal-ending[hidden]{display:none}
+@media(max-height:550px){.cinema .credits{padding:20px 22px 60px}}
+@media(max-width:700px){.cinema .credits{padding:24px 18px 60px}}
+@media(prefers-reduced-motion:reduce){.cinema .ending-world,.cinema .credits-window{transition:none}}
