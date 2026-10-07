@@ -1,0 +1,335 @@
+/* Eco Village's floating field UI, with Green Village's story and world. */
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+
+:root {
+  color-scheme: dark;
+  --ink: #f6f5da;
+  --gold: #f6d37d;
+  --green: #b6e5b2;
+  --panel: #11352eee;
+  --line: #96c3a438;
+  font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  color: var(--ink);
+}
+body { background: #0f2d27; }
+button { transition: background .15s, border-color .15s, transform .15s; }
+button:active { transform: translateY(1px); }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+button:disabled { cursor: not-allowed; }
+.primary, .secondary, .icon-button, .save-state, .text-button {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: #22483c; color: var(--ink); box-shadow: none;
+}
+.primary { background: var(--gold); color: #19372b; border-color: var(--gold); font-weight: 800; }
+.primary:hover { background: #ffe4a3; }
+.secondary:hover, .icon-button:hover, .save-state:hover { background: #365f49; }
+.text-button { background: transparent; border-color: transparent; color: #b6d3b6; }
+.eyebrow, .quest-tag { color: var(--gold); font-weight: 800; }
+.parchment { background: var(--panel); border: 1px solid var(--line); box-shadow: 0 12px 40px #06251c55; }
+.parchment:before, .parchment:after { display: none; }
+
+/* Three compact HUD islands float above the world. */
+.topbar {
+  position: absolute; top: max(18px, env(safe-area-inset-top)); left: 22px; right: 22px;
+  height: auto; padding: 0; display: flex; justify-content: space-between; gap: 14px;
+  background: none; border: 0; box-shadow: none; pointer-events: none; z-index: 8;
+}
+.topbar > * { pointer-events: auto; }
+.logo, .seasons, .top-actions {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: 0 6px 20px #08231c33; backdrop-filter: blur(12px);
+}
+.logo { display: flex; align-items: center; text-align: left; gap: 12px; padding: 12px 18px; color: var(--ink); letter-spacing: 0; }
+.logo .brand-star { color: var(--gold); font-size: 32px; }
+.logo b { display: block; font-size: 17px; }
+.logo small { display: block; font-size: 11px; color: #bbd2b6; margin-top: 3px; }
+.logo > span:not(.brand-star) { display: block; }
+.seasons { display: flex; flex: none; flex-direction: column; gap: 6px; padding: 10px 18px; align-items: center; }
+.season-caption { color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: .07em; }
+.seasons > div { display: flex; gap: 12px; }
+.season { border: 0; border-radius: 0; background: none; padding: 0; opacity: 1; color: #99b5a1; font-size: 12px; }
+.season.active { color: var(--gold); background: none; border: 0; box-shadow: none; font-weight: 800; }
+.season.complete { color: #c5e4b5; }
+.top-actions { display: flex; gap: 6px; padding: 9px; align-self: flex-start; }
+.icon-button, .save-state { padding: 8px 10px; font-size: 12px; min-height: 36px; }
+.save-state { font-size: 11px; color: #c5ddb9; }
+.music-toggle[aria-pressed=true] { background: #365f49; border-color: #829d71; }
+[data-screen=home] .topbar { justify-content: flex-end; }
+[data-screen=home] .topbar .logo, [data-screen=home] .topbar .seasons { display: none; }
+
+/* Open title treatment, cream and gold on the existing village painting. */
+.home-screen { height: 100dvh; padding: 75px 7vw 45px; }
+.home-art { background: linear-gradient(90deg,#0a2d28f5 0%,#12382cdf 33%,#12382c44 65%,#14392c15),url('assets/village.webp') center/cover; }
+.welcome { max-width: 475px; padding: 0; transform: none; border: 0; background: none; box-shadow: none; gap: 18px; }
+.welcome .eyebrow { font-size: 11px; letter-spacing: .17em; }
+.welcome h1 { font-family: 'Gowun Batang', Batang, serif; font-size: clamp(48px,5.5vw,80px); line-height: 1.25; letter-spacing: -.045em; color: var(--ink); }
+.welcome h1 em { color: var(--gold); font-style: normal; }
+.title-rule { width: 45px; height: 3px; background: var(--gold); margin: 2px 0; }
+.welcome > p { color: #c9dbc0; line-height: 1.9; font-size: 16px; }
+.welcome-badges { gap: 16px; color: #bdd4b9; font-size: 12px; }
+.welcome-badges span { background: none; border: 0; padding: 0; border-radius: 0; }
+.welcome-actions { align-items: flex-start; gap: 12px; margin-top: 4px; }
+.welcome-actions > .primary, .welcome-actions > .secondary { font-size: 17px; padding: 15px 28px; min-width: 195px; }
+.welcome-actions > .primary { box-shadow: 0 5px 0 #ad8644; }
+.welcome-actions .text-button { padding: 4px 0; font-size: 12px; }
+.welcome > small { color: #afc4ac; font-size: 12px; line-height: 1.9; }
+.home-note { bottom: 30px; right: 35px; border: 0; background: none; padding: 0; font-family: 'Gowun Batang',serif; font-size: 18px; color: var(--ink); text-shadow: 0 2px 10px #173a28; }
+
+/* The world retains its coordinates, art, and persistent choice layers. */
+.travel-screen, .chapter-screen { height: 100dvh; padding: 0; background: #173c2e; }
+.travel-screen > .map-frame { height: 100%; border: 0; border-radius: 0; box-shadow: none; background: #244d3d; }
+.travel-screen .world-plane { border-radius: 0; }
+.travel-screen .map-glow { box-shadow: inset 0 0 100px #092b2738; }
+.walking-paths g { opacity: .14; }
+.walking-paths #walk-route { stroke: #f6d37d; opacity: .85; stroke-width: .3; }
+.travel-screen .village-spot {
+  width: auto; min-width: 90px; max-width: 140px; padding: 5px 9px;
+  border: 1px solid var(--line); border-radius: 7px; background: #12392edb;
+  color: var(--ink); box-shadow: 0 3px 10px #08251c44; gap: 2px;
+}
+.travel-screen .village-spot strong { font-size: 12px; font-weight: 700; }
+.travel-screen .village-spot small { font-size: 10px; color: #b4d1b3; }
+.travel-screen .village-spot.current { background: #173e30ed; border-color: var(--gold); box-shadow: 0 0 0 3px #f6d37d22; animation: none; }
+.travel-screen .village-spot.recorded { border-color: #91b69d; }
+.travel-screen .village-spot:disabled { opacity: .7; }
+.travel-screen .village-spot i { background: var(--gold); color: #19372b; border: 1px solid #f8e6b2; width: 19px; height: 19px; right: -6px; top: -10px; font-size: 12px; }
+.travel-screen .village-spot.recorded i { background: #a4ce9b; }
+.travel-screen .village-spot[data-spot="0"] { transform: translate(0,-50%); }
+.explorer-name { background: #14392ee8; color: var(--ink); border-color: var(--line); font-size: 11px; padding: 3px 8px; }
+.field-journal {
+  position: absolute; top: 110px; left: 22px; z-index: 5; width: 265px; padding: 18px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--panel);
+  box-shadow: 0 10px 30px #06251c33; backdrop-filter: blur(10px);
+}
+.field-journal .eyebrow { font-size: 10px; letter-spacing: .12em; }
+.field-journal h2 { margin: 10px 0; font-size: 18px; line-height: 1.55; }
+.field-journal p { margin-bottom: 14px; font-size: 13px; line-height: 1.85; color: #cbdcbd; word-break: keep-all; }
+.field-progress { color: #accbad; font-size: 11px; margin-bottom: 14px; display: flex; justify-content: space-between; }
+.field-progress b { color: #c5e4b5; }
+.journal-button { width: 100%; padding: 11px 12px; background: #22483c; color: var(--ink); border: 1px solid var(--line); border-radius: 9px; box-shadow: none; text-align: left; font-size: 13px; }
+.journal-button span { float: right; background: #537553; border-radius: 5px; padding: 0 7px; color: var(--ink); }
+.travel-screen .map-name { display: block; top: auto; left: 22px; bottom: 90px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; background: #11352ecf; color: var(--ink); box-shadow: none; }
+.map-name b { font-size: 13px; }
+.map-name small { display: block; color: #b0c9b0; font-size: 11px; margin-top: 4px; font-weight: 400; }
+.village-mini { position: absolute; right: 22px; bottom: 94px; z-index: 5; width: 176px; padding: 6px; border: 1px solid #a5c4a256; background: var(--panel); border-radius: 12px; text-align: center; }
+.mini-world { position: relative; aspect-ratio: 16/9; overflow: hidden; border-radius: 7px; }
+.mini-player { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); border: 1px solid #fff3c4; transform: translate(-50%,-50%); box-shadow: 0 0 0 2px #12352e; }
+.village-mini > small { display: block; padding-top: 4px; color: #c2d7b3; font-size: 10px; letter-spacing: .14em; }
+.travel-screen .map-dock { left: 22px; right: auto; bottom: 22px; border: 0; background: none; border-radius: 0; padding: 0; gap: 12px; }
+.travel-screen .movement-tip { color: #d7e0c6; background: #11352ebd; border-radius: 10px; padding: 11px 14px; font-size: 11px; }
+kbd { display: inline-block; background: #ffffff19; border: 1px solid #c9d7b33d; padding: 2px 4px; border-radius: 4px; font: inherit; font-weight: 700; }
+.arrows { background: #11352ecc; padding: 4px; border: 1px solid var(--line); box-shadow: none; }
+.arrows button { background: #22483c; color: var(--ink); border-color: #8dad7955; }
+.travel-guide { top: auto; left: auto; right: 22px; bottom: 22px; border: 0; background: none; padding: 0; box-shadow: none; display: flex; flex-direction: column; align-items: stretch; gap: 7px; max-width: 280px; }
+.travel-guide > small { text-align: right; color: var(--ink); font-size: 11px; text-shadow: 0 2px 4px #082a22; }
+.travel-guide .primary { font-size: 15px; padding: 13px 22px; color: #19372b; background: var(--gold); border: 0; box-shadow: 0 4px 0 #ac8644; }
+
+/* Places open a dialogue/workbench over the scene instead of a paper sheet. */
+.chapter-banner { top: 105px; left: 22px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: none; }
+.chapter-banner small { color: var(--gold); font-size: 10px; }
+.chapter-banner h1 { color: var(--ink); font-size: 20px; }
+.chapter-banner p { color: #b8cfb6; font-size: 12px; }
+.chapter-back { top: 108px; right: 22px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); box-shadow: none; font-size: 12px; }
+.chapter-scene:after { background: linear-gradient(0deg,#0b2c25aa,transparent 75%); }
+.chapter-screen .quest {
+  top: auto; left: 50%; right: auto; bottom: 25px; transform: translateX(-50%);
+  width: min(950px,calc(100% - 44px)); max-height: calc(100dvh - 185px); padding: 25px 28px;
+  background: #133c31f5; color: var(--ink); border: 1px solid #96b98780; border-radius: 20px;
+  box-shadow: 0 20px 70px #06191077; grid-template-columns: minmax(230px,.85fr) minmax(0,1.35fr); gap: 15px 28px;
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.chapter-screen .quest-heading h2 { color: var(--ink); font-size: 23px; line-height: 1.5; }
+.speaker-badge { background: #264e3e; border: 1px solid var(--line); }
+.chapter-screen .dialogue { font-size: 16px; line-height: 1.85; color: #dae6c8; }
+.villager-dialogue > p { min-height: 100px; }
+.villager-dialogue .text-button { font-size: 12px; }
+.chapter-screen .choice { background: #1c493c; color: var(--ink); border: 1px solid #8cac794a; box-shadow: none; border-radius: 10px; min-height: 82px; padding: 12px; }
+.chapter-screen .choice:hover { background: #2a5744; border-color: #b7d399; }
+.chapter-screen .choice strong { font-size: 15px; line-height: 1.65; }
+.choice > span { background: #365f49; color: var(--gold); }
+.instruction, .mission-plan-name { color: #bcd4b8; }
+.chapter-screen .quest.mission-panel {
+  top: 183px; bottom: 22px; max-height: none; width: min(1080px,calc(100% - 44px));
+  grid-template-columns: minmax(225px,.7fr) minmax(0,1.6fr); padding: 20px; gap: 12px 22px;
+}
+.chapter-screen .quest-footer button { font-size: 13px; padding: 10px 8px; }
+.chapter-screen #task-note { color: #c4e3b1; font-size: 12px; }
+.mission-device { box-shadow: none; border: 1px solid #8da778; border-radius: 12px; }
+.mission-device-top { background: #1c3d30; border-bottom: 1px solid var(--line); }
+.mission-feedback { background: #1c3d30; }
+.chapter-screen .result-panel, .chapter-screen .final-panel { width: min(620px,calc(100% - 44px)); max-width: none; max-height: calc(100dvh - 185px); padding: 25px 28px; gap: 15px; }
+.chapter-screen .result-panel p, .chapter-screen .final-panel p { font-size: 16px; color: #dae6c8; }
+.chapter-screen .quest.final-panel { width: min(660px,calc(100% - 44px)); max-height: calc(100dvh - 185px); }
+.meeting-journal { gap: 10px; }
+.meeting-journal p { font-size: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.meeting-journal b { color: var(--gold); }
+.final-choices button { border: 1px solid var(--line); background: #22483c; color: var(--ink); }
+.final-choices button:hover { background: #365f49; }
+
+/* Shared overlays, albums and accounts use the same field palette. */
+dialog { border: 1px solid #96b98780; border-radius: 20px; background: #133c31; color: var(--ink); box-shadow: 0 25px 100px #061910bb; }
+dialog::backdrop { background: #061e18a3; backdrop-filter: blur(4px); }
+.dialog-head { border-bottom: 1px solid var(--line); padding: 20px 25px; }
+.dialog-head h2 { font-size: 22px; }
+.dialog-head button { border: 1px solid var(--line); background: #244f40; color: var(--ink); border-radius: 50%; }
+.dialog-body { padding: 24px 25px; color: #dae6c8; }
+.dialog-body p, .small-note, .record-date, .album-lead, .help-copy p { color: #c5dabd; }
+.dialog-body input:not([type=range]) { background: #092d24; color: var(--ink); border: 1px solid #83a184; }
+.journal-entry, .ending-card, .album-nav button, .replay-buttons button, .account-actions button, .login-tabs button { border: 1px solid var(--line); background: #22483c; color: var(--ink); box-shadow: none; }
+.album-nav button:hover:not(:disabled) { background: #365f49; }
+.journal-entry p, .ending-card small { color: #bfd5b5; }
+.journal-entry.written, .ending-card.found, .login-tabs button.active { background: #2c5542; border-color: #91b69d; }
+.ending-card.locked { background: #17392e; }
+.form-error { color: #ffbca5; }
+.story-overlay { background: #061e1894; backdrop-filter: blur(4px); }
+.story-card { background: #133c31; color: var(--ink); border: 1px solid #96b98780; border-radius: 20px; box-shadow: 0 25px 100px #06191088; }
+.story-card h1 { color: var(--ink); }
+.story-card small { color: var(--gold); }
+.story-card p { color: #dae6c8; }
+.story-portrait { background: #264e3e; border-color: var(--line); }
+.story-portrait b { color: var(--gold); }
+.calendar-overlay { background: #102e27ed; }
+.chapter-film { color: var(--ink); }
+.chapter-film > small { color: var(--gold); }
+#toast { background: #163c31f5; border: 1px solid var(--gold); color: var(--ink); border-radius: 12px; }
+.cinema .primary { background: var(--gold); color: #19372b; }
+.ending-world { border: 1px solid var(--line); background: #244d3d; }
+.ending-world-records { background: #173c2e; }
+
+@media (max-width:1050px) {
+  .topbar { left: 14px; right: 14px; top: 14px; gap: 8px; }
+  .logo { padding: 10px 12px; gap: 8px; }
+  .logo b { font-size: 14px; }
+  .logo small { font-size: 10px; }
+  .logo .brand-star { font-size: 24px; }
+  .seasons { padding: 10px 12px; }
+  .top-actions { gap: 4px; padding: 7px; }
+  .icon-button, .save-state { padding: 7px; font-size: 11px; }
+  .field-journal { left: 14px; top: 97px; width: 235px; padding: 15px; }
+  .field-journal h2 { font-size: 16px; }
+  .field-journal p { font-size: 12px; }
+  .village-mini { right: 14px; width: 145px; }
+  .chapter-screen .quest { gap: 12px 18px; padding: 20px; }
+}
+@media (max-width:850px) {
+  .logo small, .logo .brand-star { display: none; }
+  .seasons { padding: 8px 10px; }
+  .season-caption { font-size: 10px; letter-spacing: 0; }
+  .seasons > div { gap: 10px; }
+  .top-actions .save-state { display: none; }
+  .travel-screen .movement-tip { display: none; }
+  .travel-screen .map-dock { bottom: 22px; }
+  .travel-screen .map-name { left: 140px; bottom: 24px; padding: 8px 12px; }
+  .arrows { grid-template-columns: repeat(3,34px); grid-template-rows: repeat(2,32px); }
+}
+@media (max-height:600px) and (min-width:701px) {
+  .topbar { top: 10px; left: 12px; right: 12px; }
+  .logo { padding: 8px 12px; }
+  .logo small { display: none; }
+  .seasons { padding: 7px 12px; gap: 4px; }
+  .top-actions { padding: 6px; }
+  .home-screen { padding-top: 65px; padding-bottom: 20px; }
+  .welcome { gap: 10px; }
+  .welcome h1 { font-size: 46px; }
+  .welcome > p { font-size: 13px; line-height: 1.7; }
+  .welcome .eyebrow { font-size: 10px; }
+  .welcome-actions { gap: 9px; }
+  .welcome-actions > .primary, .welcome-actions > .secondary { padding: 10px 24px; font-size: 15px; }
+  .welcome > small { font-size: 10px; }
+  .field-journal { top: 76px; left: 12px; padding: 12px; width: 215px; }
+  .field-journal h2 { margin: 7px 0; font-size: 15px; }
+  .field-journal p { font-size: 11px; line-height: 1.65; margin-bottom: 9px; }
+  .field-progress { margin-bottom: 9px; }
+  .journal-button { padding: 8px 10px; font-size: 12px; }
+  .village-mini { bottom: 80px; width: 125px; }
+  .chapter-banner { top: 74px; left: 12px; padding: 7px 12px; }
+  .chapter-banner h1 { font-size: 16px; }
+  .chapter-banner p { display: none; }
+  .chapter-back { top: 76px; right: 12px; padding: 8px 10px; font-size: 11px; }
+  .chapter-screen .quest { bottom: 13px; max-height: calc(100dvh - 134px); width: calc(100% - 26px); padding: 16px; gap: 9px 18px; grid-template-columns: minmax(190px,.8fr) minmax(0,1.6fr); }
+  .chapter-screen .quest-heading h2 { font-size: 18px; }
+  .chapter-screen .dialogue { font-size: 14px; line-height: 1.7; }
+  .chapter-screen .choice { min-height: 70px; padding: 9px; }
+  .chapter-screen .choice strong { font-size: 13px; }
+  .chapter-screen .quest.mission-panel { top: 134px; bottom: 12px; width: calc(100% - 26px); padding: 12px; gap: 9px 16px; grid-template-columns: minmax(190px,.8fr) minmax(0,1.6fr); }
+  .mission-character { font-size: 26px; margin-bottom: 3px; }
+  .mission-plan-name { font-size: 11px; }
+  .chapter-screen .quest-footer button { padding: 8px 5px; font-size: 12px; }
+  .chapter-screen .result-panel, .chapter-screen .quest.final-panel { width: min(600px,calc(100% - 26px)); max-height: calc(100dvh - 134px); padding: 16px 22px; }
+  .chapter-screen .result-panel p, .chapter-screen .final-panel p { font-size: 14px; }
+  .meeting-journal { gap: 6px; }
+  .meeting-journal p { padding-bottom: 6px; font-size: 12px; }
+}
+@media (max-width:700px) {
+  .topbar { top: max(10px,env(safe-area-inset-top)); left: 10px; right: 10px; flex-wrap: wrap; gap: 6px; }
+  .logo { display: none; }
+  .seasons { display: flex; flex: 1; min-width: 155px; padding: 8px; gap: 4px; }
+  .season-caption { font-size: 9px; }
+  .season { font-size: 10px; }
+  .top-actions { padding: 5px; gap: 3px; }
+  .top-actions .music-controls .music-settings { display: none; }
+  .icon-button { font-size: 10px; padding: 6px; min-height: 32px; }
+  [data-screen=home] .topbar .music-controls .music-settings { display: block; }
+  .home-screen { padding: 80px 8vw 45px; }
+  .home-art { background: linear-gradient(90deg,#0c2d27ed,#0c2d2788),url('assets/village.webp') center/cover; }
+  .welcome { gap: 16px; }
+  .welcome h1 { font-size: 52px; }
+  .welcome .eyebrow { font-size: 9px; letter-spacing: .1em; }
+  .welcome > p { font-size: 14px; }
+  .home-note { display: none; }
+  .field-journal { top: 83px; left: 10px; width: 190px; padding: 12px; }
+  .field-journal .eyebrow { font-size: 9px; }
+  .field-journal h2 { font-size: 15px; margin: 7px 0; }
+  .field-journal p { font-size: 11px; line-height: 1.7; margin-bottom: 10px; }
+  .field-progress { font-size: 10px; margin-bottom: 9px; }
+  .journal-button { font-size: 12px; padding: 8px; }
+  .travel-screen .map-name { left: 10px; bottom: 108px; padding: 8px 11px; }
+  .travel-screen .map-name b { font-size: 11px; }
+  .map-name small { font-size: 10px; }
+  .travel-screen .map-dock { left: 10px; right: auto; bottom: max(20px,env(safe-area-inset-bottom)); }
+  .travel-guide { right: 10px; left: auto; bottom: max(22px,env(safe-area-inset-bottom)); max-width: 205px; }
+  .travel-guide > small { font-size: 10px; }
+  .travel-guide .primary { font-size: 12px; padding: 12px 15px; }
+  .village-mini { right: 10px; bottom: 110px; width: 110px; padding: 5px; }
+  .village-mini > small { font-size: 9px; }
+  .travel-screen .village-spot { min-width: 70px; padding: 4px 6px; }
+  .travel-screen .village-spot strong { font-size: 10px; }
+  .travel-screen .village-spot small { font-size: 9px; }
+  .chapter-banner { top: 82px; left: 10px; padding: 8px 10px; }
+  .chapter-banner h1 { font-size: 16px; }
+  .chapter-banner p { display: none; }
+  .chapter-back { top: 84px; right: 10px; font-size: 10px; padding: 9px; }
+  .chapter-screen .quest { width: calc(100% - 20px); max-height: calc(100dvh - 152px); bottom: 15px; display: flex; flex-direction: column; padding: 16px; gap: 12px; }
+  .chapter-screen .quest-heading h2 { font-size: 19px; }
+  .chapter-screen .dialogue { font-size: 14px; line-height: 1.7; }
+  .villager-dialogue > p { min-height: 70px; }
+  .chapter-screen .task-area { flex: none; }
+  .chapter-screen .choices { grid-template-columns: 1fr; gap: 8px; }
+  .chapter-screen .choice { min-height: 60px; padding: 10px; }
+  .chapter-screen .choice strong { font-size: 14px; }
+  .chapter-screen .quest.mission-panel { top: 150px; bottom: 15px; width: calc(100% - 20px); max-height: none; padding: 12px; display: grid; grid-template-columns: 1fr; grid-template-rows: auto minmax(0,1fr) auto; gap: 9px; }
+  .chapter-screen .quest.mission-panel .dialogue { display: none; }
+  .chapter-screen .quest.mission-panel .task-area { min-height: 0; }
+  .chapter-screen .quest-footer button { font-size: 12px; }
+  .chapter-screen .result-panel, .chapter-screen .quest.final-panel { width: calc(100% - 20px); max-height: calc(100dvh - 152px); padding: 18px; }
+  .chapter-screen .result-panel p, .chapter-screen .final-panel p { font-size: 14px; }
+  .dialog-head { padding: 15px 18px; }
+  .dialog-head h2 { font-size: 18px; }
+  .dialog-body { padding: 18px; }
+  .story-overlay { padding: 15px; }
+  .story-card { width: 100%; max-height: calc(100dvh - 30px); overflow-y: auto; padding: 22px; grid-template-columns: 56px minmax(0,1fr); gap: 15px; }
+  .story-card .story-portrait { grid-column: 1; grid-row: 1; width: 56px; height: 65px; font-size: 35px; }
+  .story-card .story-portrait.villager { display: none; }
+  .story-card > small { grid-column: 2; grid-row: 1; font-size: 11px; align-self: center; }
+  .story-card h1 { grid-column: 1/-1; font-size: 23px; }
+  .story-card p { grid-column: 1/-1; min-height: 0; font-size: 16px; line-height: 1.9; }
+  .story-card > button { grid-column: 1/-1; font-size: 14px; padding: 11px 18px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  button { transition: none; }
+}
+/* Keep every panel centered despite the legacy per-panel breakpoint offsets. */
+.chapter-screen .quest, .chapter-screen .quest.mission-panel,
+.chapter-screen .quest.result-panel, .chapter-screen .quest.final-panel {
+  left: 50%; right: auto; transform: translateX(-50%);
+}
