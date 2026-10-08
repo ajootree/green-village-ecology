@@ -1,0 +1,31 @@
+/* Painted cutouts replace the old shape-built figures. */
+.explorer{width:48px;height:72px;transform:translate(-50%,-100%);filter:none}
+.explorer:before{display:none}
+.explorer-image{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 2px 1px #253b2940)}
+.explorer-name{top:calc(100% + 2px);font-size:12px;padding:3px 8px}
+.walking .explorer-image{animation:painted-walk .36s ease-in-out infinite}
+@keyframes painted-walk{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+.story-card .story-portrait.villager{display:flex;flex-direction:column;align-items:center;justify-content:center;height:auto;min-height:0;background:none;border:0;box-shadow:none;position:static}
+.story-character{display:block;max-width:100%;width:110px;height:172px;object-fit:contain;object-position:center bottom}
+.story-portrait.villager b{position:static;font-size:15px;line-height:1.4;margin-top:8px;color:var(--gold)}
+.chapter-screen .quest.dialogue-panel{grid-template-columns:94px minmax(0,1fr) auto;column-gap:20px}
+.friend-character{grid-column:1;grid-row:1/3;align-self:end;display:block;width:94px;height:140px;object-fit:contain;object-position:center bottom;pointer-events:none}
+.dialogue-panel .friend-name{grid-column:2;grid-row:1;font-size:16px}
+.dialogue-panel #villager-line{grid-column:2;grid-row:2}
+.dialogue-panel #read-line{grid-column:3;grid-row:1/3}
+@media(max-height:600px){
+ .chapter-screen .quest.dialogue-panel{grid-template-columns:86px minmax(0,1fr) auto;column-gap:14px}
+ .friend-character{width:86px;height:128px}
+ .story-character{width:85px;height:126px}
+}
+@media(max-width:700px){
+ .chapter-screen .quest.dialogue-panel{grid-template-columns:56px minmax(0,1fr);grid-template-rows:auto auto auto;gap:8px 12px}
+ .friend-character{width:56px;height:84px;grid-row:1/3}
+ .dialogue-panel .friend-name{grid-column:2;grid-row:1}
+ .dialogue-panel #villager-line{grid-column:2;grid-row:2}
+ .dialogue-panel #read-line{grid-column:2;grid-row:3;justify-self:end}
+ .story-card .story-portrait.villager{display:flex;width:56px;height:auto}
+ .story-character{width:56px;height:84px}
+ .story-portrait.villager b{font-size:12px;margin-top:4px}
+}
+@media(prefers-reduced-motion:reduce){.walking .explorer-image{animation:none}}
