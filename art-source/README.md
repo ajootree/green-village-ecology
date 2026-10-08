@@ -2,9 +2,11 @@
 
 내장 image_gen으로 기존 지도 구역을 참조해 다시 그렸습니다. 도로·건물·작물·수거함·연기는 그림에 포함되어 있으며, SVG는 구역 위치와 가장자리 연결에만 사용합니다. 기존 지도·계정·엔딩 판정은 유지했습니다.
 
-최종 배포 그림: `dist/assets/world/forest-local-atlas-v3.webp`, `river-local-atlas-v3.webp`, `farm-local-atlas-v3.webp`, `festival-local-atlas-v3.webp`.
+최종 배포 그림: `dist/assets/world/forest-local-atlas-v3.webp`, `river-local-atlas-v3.webp`, `farm-local-atlas-v4.webp`, `festival-local-atlas-v3.webp`, `river-farm-runoff-v1.webp`.
 
-원본 구역과 생성 PNG는 이 폴더에 보관합니다. PNG는 공개 배포와 Git 저장에서 제외하고, 크기를 변경하지 않은 WebP 변환본만 배포합니다. 처음 만든 전체 지도 묶음은 확대 시 선명도가 달라 최종판에서 사용하지 않습니다.
+2026-10-08 공기·물·흙 보강: [생성 문구와 파일 기록](pollution-prompts.md). 아래 v3 문구는 기존 그림의 제작 이력입니다.
+
+원본 구역과 생성 PNG는 이 폴더에 보관합니다. PNG는 공개 배포와 Git 저장에서 제외하고, 게임 표시 크기에 맞춘 WebP만 배포합니다. 처음 만든 전체 지도 묶음은 확대 시 선명도가 달라 최종판에서 사용하지 않습니다.
 
 ## forest
 
@@ -71,4 +73,3 @@ BOTTOM LEFT party: extra softly glowing daytime lantern string across plaza, lit
 BOTTOM RIGHT burn: small waste-burning pile beside bins with dark charcoal and modest orange embers, irregular wispy semitransparent gray smoke drifting over one side of plaza. Real painterly smoke, not circles, no giant campfire.
 No injury/gore, no instructional fire diagram. Every cup, bin, lantern and sack must be a small real painted object, not an oversized UI icon.
 ```
-

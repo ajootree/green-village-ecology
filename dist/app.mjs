@@ -11,8 +11,9 @@ import {humanConsequences} from './learning.mjs';
 import {openLearning} from './learning-ui.mjs';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const H=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const resultCopy=s=>H(s).replace(/(?:토양|수질|대기)오염/g,term=>`<strong>${term}</strong>`);
 const spots=destinations,icons=['🌳','💧','🌾','🏮'];
-const planSentences=[['도로를 짧게 연결해서 숲을 가로지른다.','새 도로 대신 원래 있던 길로 돌아간다.','동물의 이동을 조사하고 안전한 통로를 만든다.','숲 일부를 정리하고 꽃밭으로 꾸민다.'],['작업장의 물 처리 시설을 고치고 계속 점검한다.','하천에 떠 있는 쓰레기를 건져 낸다.','가림막과 조명을 설치해서 물가를 꾸민다.','시설 수리·청소·꾸미기에 돈을 조금씩 나눈다.'],['전문가와 피해 입은 잎을 살피고 필요한 곳만 관리한다.','농장 전체에 농약을 뿌린다.','작물과 풀을 없애고 한 종류의 꽃을 심는다.','작물 사진을 찍으며 관리하지 않고 기다린다.'],['컵을 돌려받고 쓰레기를 분리하며 낮 조명을 끈다.','행사가 끝난 뒤 바닥을 한 번 청소한다.','일회용 컵을 넉넉히 쌓고 축제 조명을 켠다.','모은 쓰레기를 불에 태워 처리한다.']];
+const planSentences=[['도로를 짧게 연결해서 숲을 가로지른다.','새 도로 대신 원래 있던 길로 돌아간다.','동물의 이동을 조사하고 안전한 통로를 만든다.','숲 일부를 정리하고 꽃밭으로 꾸민다.'],['작업장의 물 처리 시설을 고치고 계속 점검한다.','하천에 떠 있는 쓰레기를 건져 낸다.','가림막과 조명을 설치해서 물가를 꾸민다.','시설 수리·청소·꾸미기에 돈을 조금씩 나눈다.'],['전문가와 피해 입은 잎을 살피고 필요한 곳만 관리한다.','정해진 양보다 많은 농약을 농장 전체에 뿌린다.','작물과 풀을 없애고 한 종류의 꽃을 심는다.','작물 사진을 찍으며 관리하지 않고 기다린다.'],['컵을 돌려받고 쓰레기를 분리하며 낮 조명을 끈다.','행사가 끝난 뒤 바닥을 한 번 청소한다.','일회용 컵을 넉넉히 쌓고 축제 조명을 켠다.','모은 쓰레기를 불에 태워 처리한다.']];
 const planText=(i,id)=>planSentences[i][seasons[i].choices.findIndex(c=>c.id===id)];
 let walkFrame=0,stopStory=()=>{},dialogueTyping=null,arrivalSeen=new Set(),titleSeen=new Set(),travelBusy=false,chapterIntro=false,missionBriefed=false;
 const spokenSeasons=new Set();
@@ -93,11 +94,11 @@ function renderQuest(){
   dialogueTyping?.stop();
   if(chapterIntro){q.hidden=true;q.replaceChildren();return;}
   q.hidden=false;
-  if(pastChapter!==null){const c=s.choices.find(c=>c.id===g().choices[i]);q.classList.add('result-panel');q.innerHTML=`<span class="quest-tag">${s.name}에 남긴 기록</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${H(c.result)}</p><button class="primary" id="return-map">전체 지도 보기</button>`;$('#return-map').onclick=()=>transition(()=>{viewMode='map';pastChapter=null;render();});return;}
+  if(pastChapter!==null){const c=s.choices.find(c=>c.id===g().choices[i]);q.classList.add('result-panel');q.innerHTML=`<span class="quest-tag">${s.name}에 남긴 기록</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${resultCopy(c.result)}</p><button class="primary" id="return-map">전체 지도 보기</button>`;$('#return-map').onclick=()=>transition(()=>{viewMode='map';pastChapter=null;render();});return;}
   if(g().stage===4||g().phase==='final'){q.classList.add('final-panel');final();return;}
   if(g().phase==='result'){
     const c=s.choices.find(c=>c.id===g().choices[g().stage]);q.classList.add('result-panel');
-    q.innerHTML=`<span class="quest-tag">${s.speaker} · 선택이 남긴 변화</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${H(c.result)}</p><button class="secondary" id="see-world">바뀐 전체 지도 보기</button><button class="primary" id="next">${g().stage===3?'마을 회의로':'다음 계절로'}</button>`;
+    q.innerHTML=`<span class="quest-tag">${s.speaker} · 선택이 남긴 변화</span><h2>${H(planText(i,c.id))}</h2><p class="result-text">${resultCopy(c.result)}</p><button class="secondary" id="see-world">바뀐 전체 지도 보기</button><button class="primary" id="next">${g().stage===3?'마을 회의로':'다음 계절로'}</button>`;
     $('#see-world').onclick=()=>transition(()=>{viewMode='map';render();});$('#next').onclick=()=>transition(()=>{g().stage++;g().phase=g().stage===4?'final':'explore';viewMode=g().stage===4?'chapter':'map';pastChapter=null;reset();save();render();if(g().stage<4){titleSeen.add(g().stage);stopStory=calendar(seasons[g().stage],g().stage,()=>{});}});return;
   }
   stopMission();q.classList.remove('result-panel','final-panel','mission-panel','dialogue-panel','choice-panel','task-only');
@@ -112,7 +113,7 @@ function renderQuest(){
   if(!spokenSeasons.has(i)){friendLine(s.speaker,s.line,'방법 고르기 →',()=>{spokenSeasons.add(i);renderQuest();});return;}
   q.classList.add('choice-panel');q.setAttribute('aria-label','방법 고르기');
   q.innerHTML=`<div class="choices">${s.choices.map((c,j)=>`<button class="choice" data-plan="${c.id}"><span>${j+1}</span><strong>${planSentences[i][j]}</strong></button>`).join('')}</div>`;
-  $$('[data-plan]').forEach(b=>b.onclick=()=>{selected=b.dataset.plan;missionBriefed=false;mission=createMission(i,selected);const painting=new Image();painting.src=paintedWorldAssets[i];renderQuest();});
+  $$('[data-plan]').forEach(b=>b.onclick=()=>{selected=b.dataset.plan;missionBriefed=false;mission=createMission(i,selected);for(const asset of [paintedWorldAssets[i],...(i===2&&selected==='spray'?[paintedWorldAssets[4]]:[])]){const painting=new Image();painting.src=asset;}renderQuest();});
   $('[data-plan]')?.focus();
 
 }

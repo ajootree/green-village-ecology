@@ -19,7 +19,7 @@ const definitions = [
   },
   {
     care:{kind:'inspect',title:'작물 피해 구역 조사',icon:'🔎',goal:'잎과 주변 생물을 살펴 관리가 필요한 세 지점을 기록해 주세요.',how:'지점을 눌러 확대 관찰해요. 잎에 실제로 구멍이나 뜯긴 곳이 보이면 기록해요.',theme:'leaves'},
-    spray:{kind:'spray',title:'밭에 농약 뿌리기',icon:'💨',goal:'도윤이 분무기를 들었어요. 밭 위로 움직이며 농약을 뿌려 주세요.',how:'밭을 누른 채 쓸어 분무해요. 분무기를 움직여 열두 구역을 모두 적셔요.',theme:'coverage'},
+    spray:{kind:'spray',title:'밭에 농약 뿌리기',icon:'💨',goal:'도윤은 정해진 양보다 많은 농약을 쓰기로 했어요. 분무기를 밭 위로 움직여 주세요.',how:'밭을 누른 채 쓸어 분무해요. 분무기를 움직여 열두 구역을 모두 적셔요.',theme:'coverage'},
     garden:{kind:'plant',title:'한 종류 꽃밭 준비',icon:'🌷',goal:'한 종류의 꽃씨를 여섯 칸에 심고 물을 주세요.',how:'씨앗을 끌어 밭을 지나가요. 다 심으면 물뿌리개로 바뀌어요.',theme:'flowers'},
     wait:{kind:'inspect',title:'작물 관찰 사진 남기기',icon:'📷',goal:'관리 대신 작물 세 곳의 사진을 남겨 주세요.',how:'관찰 구역에 카메라를 맞추고 「사진 찍기」를 눌러요. 실제 작물 풍경이 사진에 남아요.',theme:'photos'}
   },

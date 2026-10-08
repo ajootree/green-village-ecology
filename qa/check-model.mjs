@@ -11,4 +11,11 @@ assert.equal(resolveEnding(['cut','treat','care','reuse']),'E08','Changing only 
 assert.equal(resolveEnding(['cut','treat','care','reuse'],true),'E10','Late repair cannot erase an earlier death.');
 assert(endingText('E10',['cut','treat','care','reuse']).join('').includes('죽은 토끼는 살릴 수 없었습니다'));
 assert.throws(()=>resolveEnding([null,'treat','care','reuse']));
+const result=(i,id)=>seasons[i].choices.find(c=>c.id===id).result;
+for(const id of ['treat','clean','hide','share'])assert(result(1,id).includes('수질오염'));
+assert(result(2,'spray').includes('토양오염')&&result(2,'spray').includes('수질오염'));
+assert(result(3,'burn').includes('대기오염')&&result(3,'burn').includes('학교'));
+assert(seasons[2].choices.find(c=>c.id==='spray').name.includes('정해진 양보다 많이'), 'The chosen action must disclose overuse, not punish normal pesticide use.');
+assert(endingText('E06',['corridor','treat','spray','reuse']).join('').includes('토양오염'));
+assert(endingText('E06',['corridor','treat','care','burn']).join('').includes('대기오염'));
 console.log(JSON.stringify({checked:512,reachableEndings:10,counts,examples},null,2));
