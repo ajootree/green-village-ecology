@@ -50,7 +50,27 @@ export const animals=[
  {id:'otter',name:'수달',icon:'🦦',grade:'멸종위기 야생생물 Ⅰ급',home:'강과 하천 등 물가에서 살아가는 동물이에요.',risk:'물가의 집과 먹이를 구할 환경을 지켜야 해요.',action:'물가에 쓰레기를 버리지 않고, 물의 오염을 줄일 방법을 함께 알려요.',source:'https://www.nie.re.kr/nie/pgm/edSearch/list.do?menuNo=200133'},
  {id:'spoonbill',name:'저어새',icon:'🪶',grade:'멸종위기 야생생물 Ⅰ급',home:'해안 갯벌과 강 하구에서 살아가는 새예요.',risk:'먹이를 찾는 갯벌과 번식할 장소를 보호해야 해요.',action:'새를 멀리서 관찰하고, 갯벌의 쓰레기와 서식지 문제를 함께 알려요.',source:'https://www.nie.re.kr/nie/bbs/BMSR00029/view.do?boardId=695963744&menuNo=200098'},
  {id:'turtle',name:'남생이',icon:'🐢',grade:'멸종위기 야생생물 Ⅱ급',home:'하천·연못과 주변 논·풀밭을 오가며 살아가요.',risk:'서식지 파괴와 외래종과의 경쟁 등이 생존을 위협해요.',action:'야생 남생이를 잡지 않고, 기르던 동물을 함부로 자연에 놓아주지 않아요.',source:'https://www.nie.re.kr/nie/pgm/edSpecies/view.do?menuNo=200133&speciesSn=86'}
+,
+ {id:'earthworm',name:'지렁이',icon:'🪱',grade:'흙 속에서 사는 생물',home:'흙 속에서 살아가요.',risk:'흙의 환경을 지켜야 해요.',action:'과도한 농약을 줄이고 흙을 돌봐요.'},
+ {id:'bee',name:'벌',icon:'🐝',grade:'꽃가루받이를 돕는 생물',home:'꽃을 찾아다녀요.',risk:'농약과 서식지 문제를 살펴요.',action:'꽃과 다양한 생물이 살 곳을 남겨요.'},
+ {id:'frog',name:'개구리',icon:'🐸',grade:'물가와 풀밭을 오가는 생물',home:'물가와 풀밭에서 살아가요.',risk:'물과 주변 서식지를 지켜야 해요.',action:'물가에 쓰레기를 버리지 않아요.'},
+ {id:'bird',name:'마을의 새',icon:'🐦',grade:'숲과 마을에서 사는 생물',home:'숲에서 쉬고 먹이를 구해요.',risk:'숲의 집과 맑은 공기를 지켜야 해요.',action:'나무와 둥지를 함부로 건드리지 않아요.'},
+ {id:'rabbit',name:'토끼',icon:'🐇',grade:'숲과 풀밭을 오가는 생물',home:'숲과 풀밭을 오가요.',risk:'안전하게 오갈 길을 지켜야 해요.',action:'동물 통로와 서식지를 함께 관리해요.'}
 ];
+const animalTopics={otter:['water'],spoonbill:['water','habitat'],turtle:['water','habitat'],earthworm:['soil'],bee:['soil','habitat'],frog:['water','soil'],bird:['air','habitat'],rabbit:['habitat']};
+export function animalsFor(choices){const remaining=learningReport(choices).remaining.map(r=>r.id);return [...animals].map(a=>({...a,related:animalTopics[a.id].filter(t=>remaining.includes(t))})).sort((a,b)=>animalTopics[b.id].filter(t=>remaining.includes(t)).length-animalTopics[a.id].filter(t=>remaining.includes(t)).length);}
+export function animalMessage(id,choices){
+ const [s,w,f,l]=choices;
+ if(id==='earthworm')return f==='spray'?'흙에 농약이 너무 많이 남으면, 그 흙 속에 사는 내가 피해를 받아.':'나는 흙 속에서 살아서, 쓰레기와 해로운 물질이 흙에 쌓이면 살기 어려워져.';
+ if(id==='bee')return f==='spray'?'밭 전체에 뿌린 많은 농약은 꽃을 찾아다니는 벌인 나에게도 피해를 줘.':'여러 꽃이 사라지면 꽃을 찾아다니는 나는 먹이를 구하기 어려워져.';
+ if(id==='bird')return l==='burn'?'쓰레기 연기가 퍼져 우리가 숨 쉬는 공기가 오염됐어.':'나무와 덤불이 사라져 둥지를 짓고 쉴 곳이 줄었어.';
+ if(id==='rabbit')return s==='cut'?'새 도로가 내가 오가던 길을 끊어서 풀밭과 쉼터를 안전하게 오가기 어려워.':'숲과 풀밭이 사라지면 먹이와 숨을 곳을 잃어.';
+ if(id==='frog')return w!=='treat'||f==='spray'?'더러운 물이나 빗물에 섞인 농약이 물가로 들어와, 그곳에 사는 내가 피해를 받아.':'나는 물가와 풀밭을 오가며 살아서, 두 곳이 사라지면 살기 어려워져.';
+ if(id==='otter')return w!=='treat'||f==='spray'?'물이 오염돼 물고기가 줄면, 나는 먹이를 구하기 어려워져.':'나는 물가에서 살며 먹이를 구해서, 하천과 물가의 집이 사라지면 살기 어려워져.';
+ if(id==='spoonbill')return '물가가 오염되거나 갯벌이 사라지면, 나는 먹이를 구하기 어려워져.';
+ return '나는 물가와 풀밭을 오가서, 물이 오염되거나 집이 사라지면 살기 어려워져.';
+}
+
 export function cleanEffort(raw){
  if(!raw||!['campaign','letter'].includes(raw.kind))return null;
  const text=k=>String(raw[k]||'').trim().slice(0,k==='message'?260:120);

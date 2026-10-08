@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {seasons} from '../dist/model.mjs';
-import {learningReport,humanConsequences,effortReady,cleanEffort,effortText} from '../dist/learning.mjs';
+import {learningReport,humanConsequences,effortReady,cleanEffort,effortText,animalsFor,animalMessage} from '../dist/learning.mjs';
+import {endingMemories} from '../dist/ending-memories.mjs';
 let routes=0;
 for(const s of seasons[0].choices)for(const w of seasons[1].choices)for(const f of seasons[2].choices)for(const l of seasons[3].choices)for(const repair of [false,true]){
  const a=[s.id,w.id,f.id,l.id],r=learningReport(a,repair);routes++;
@@ -12,6 +13,11 @@ for(const s of seasons[0].choices)for(const w of seasons[1].choices)for(const f 
  assert.equal(result('habitat').level==='remaining',s.id==='cut'||s.id==='garden'||f.id==='garden'||f.id==='spray');
  assert.equal(result('waste').level==='remaining',l.id!=='reuse');
  assert(r.results.every(x=>x.chain.length===4&&x.chain.every(Boolean)));
+ const related=animalsFor(a);assert.equal(related.length,8);
+ assert(related.every(an=>an.related.every(id=>r.remaining.some(t=>t.id===id))));
+ assert(related.every((an,i)=>i===0||related[i-1].related.length>=an.related.length));
+ assert(related.every(an=>animalMessage(an.id,a).length>0&&effortReady({kind:'letter',animal:an.id,message:'살 곳을 함께 지킬게.'})));
+ const memories=endingMemories(a,'별빛');assert.equal(memories.length,4);assert(memories.every(m=>m.text.startsWith('별빛, ')&&!m.text.includes('undefined')));
  assert.equal(Boolean(r.repairNote),repair);assert(humanConsequences(a).length>0);
  if(repair)assert.deepEqual(r.results,learningReport(a,false).results,'Late promises do not erase the observed harm.');
 }
@@ -29,4 +35,7 @@ const legacy={...valid,reason:'이전 까닭',partner:'이전 친구',when:'이�
 assert(!effortText(legacy).includes('이전'));assert.equal(cleanEffort(legacy).reason,'이전 까닭');
 assert.equal(cleanEffort({...valid,message:'x'.repeat(500)}).message.length,260);
 assert.equal(cleanEffort({kind:'unexpected'}),null);
+assert.equal(animalsFor(untouched).filter(a=>a.related.length).length,0);
+assert(animalMessage('bird',['detour','treat','care','burn']).includes('공기가 오염'));
+assert(endingMemories(['cut','hide','spray','burn'],'별빛').every(m=>!m.text.includes('고마워')),'Harmful choices must not receive a cheerful thank-you.');
 console.log(`Learning checked across ${routes} outcomes; pollution sources, habitat distinction, irreversible harm and writing validation passed.`);

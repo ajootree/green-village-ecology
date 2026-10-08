@@ -22,10 +22,11 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     for(let i=0;i<5;i++)actMission(m,'cup');
     assert(!m.done);for(let i=0;i<3;i++)actMission(m,'switch',i);
   }else if(m.kind==='ignite'){
-    actMission(m,'watch',2);assert.equal(missionProgress(m)[0],0,'Later scenes cannot skip earlier observations.');
-    actMission(m,'rub');assert.equal(missionProgress(m)[0],0,'Rubbing is no longer an ignition mechanic.');
-    actMission(m,'watch',0);actMission(m,'watch',0);assert.equal(missionProgress(m)[0],1,'The same scene cannot count twice.');
-    actMission(m,'watch',1);assert(!m.done);actMission(m,'watch',2);
+    for(const value of [undefined,0,-1,NaN,Infinity])actMission(m,'rub',value);
+    assert.equal(m.heat,0,'Only actual movement generates simulated heat.');
+    actMission(m,'watch',2);assert.equal(m.heat,0,'The old observation buttons cannot complete the task.');
+    for(let i=0;i<12;i++)actMission(m,'rub',8);
+    assert(!m.done,'Heat must reach the ignition threshold.');actMission(m,'rub',8);
   }else if(m.kind==='spray'){
     for(let i=0;i<12;i++)actMission(m,'spray',i);assert(!m.done);
     for(let n=0;n<2;n++)for(let i=0;i<12;i++)actMission(m,'spray',i);
@@ -68,8 +69,12 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
   }else if(m.kind==='paint'){
     for(let i=0;i<12;i++)actMission(m,'paint',i);
   }else if(m.kind==='tune'){
-    actMission(m,'tune',0,NaN);assert.equal(m.values[0],0);
-    [25,50,75].forEach((value,i)=>actMission(m,'tune',i,value));
+    actMission(m,'coin',0,NaN);assert.equal(m.values[0],0);
+    for(let i=0;i<9;i++){
+      if(i===3){actMission(m,'coin',i,0);assert.equal(m.marks[i],0,'A fourth coin cannot overfill a pouch.');}
+      actMission(m,'coin',i,Math.floor(i/3));
+      const before=[...m.values];actMission(m,'coin',i,2);assert.deepEqual(m.values,before,'One coin cannot be counted twice.');
+    }
   }else if(m.kind==='memory'){
     m.showing=true;actMission(m,'memory',1);assert.equal(m.index,0,'Switch input cannot skip the demonstration.');m.showing=false;
     const sequences=choice.id==='party'?[[0,2,1],[1,0,2,1]]:[[1,0,2],[2,1,0,2]];
