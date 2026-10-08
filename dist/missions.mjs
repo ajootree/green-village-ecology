@@ -8,7 +8,7 @@ const definitions = [
   {
     cut:{kind:'connect',title:'도로 설계판 맞추기',icon:'🛣️',goal:'출발지에서 축제장까지 도로 조각을 이어 주세요.',how:'조각을 누르면 돌아가요. 길이 끊기지 않게 연결해요.',theme:'road'},
     detour:{kind:'scrub',title:'기존 길 정비하기',icon:'🧹',goal:'원래 있던 흙길에 떨어진 가지와 낙엽, 흙더미를 치워 주세요.',how:'길 위의 물체를 누른 채 빗자루로 쓸어요. 네 번 눌러 치워도 돼요.',theme:'road'},
-    corridor:{kind:'survey',title:'동물 통로 자리 찾기',icon:'🔎',goal:'세 지점의 흔적을 비교하고, 동물이 길을 건너는 곳에 통로를 표시해 주세요.',how:'A·B·C 지점을 눌러 확대 관찰하고 기록해요. 길 양쪽에 이어지는 흔적을 비교해요.',theme:'tracks'},
+    corridor:{kind:'survey',title:'동물 통로 자리 찾기',icon:'🔎',goal:'세 지점의 흔적을 비교하고, 동물이 길을 건너는 곳에 통로를 표시해 주세요.',how:'돋보기를 흙길 위로 움직여 세 곳의 흔적을 살펴요. 동물이 길을 건너는 곳에 통로를 골라요.',theme:'tracks'},
     garden:{kind:'plant',title:'꽃밭 준비하기',icon:'🌷',goal:'흙밭 여섯 곳에 꽃씨를 심고 물을 주세요.',how:'심을 곳을 누르거나 씨앗을 끌어 심어요. 다 심으면 같은 곳에 두 번씩 물을 주세요.',theme:'flowers'}
   },
   {
@@ -18,15 +18,15 @@ const definitions = [
     share:{kind:'tune',title:'세 작업의 부분 정비',icon:'🛠️',goal:'세 작업의 조절 손잡이를 표시된 홈에 맞춰 주세요.',how:'손잡이를 끌어 초록 표시 안에 놓아요. 시설·청소·꾸미기를 조금씩 준비해요.',theme:'partial'}
   },
   {
-    care:{kind:'inspect',title:'작물 피해 구역 조사',icon:'🔎',goal:'잎과 주변 생물을 살펴 관리가 필요한 세 지점을 기록해 주세요.',how:'지점을 눌러 확대 관찰해요. 잎에 실제로 구멍이나 뜯긴 곳이 보이면 기록해요.',theme:'leaves'},
-    spray:{kind:'spray',title:'밭에 농약 뿌리기',icon:'💨',goal:'도윤은 정해진 양보다 많은 농약을 쓰기로 했어요. 분무기를 밭 위로 움직여 주세요.',how:'밭을 누른 채 쓸어 분무해요. 분무기를 움직여 열두 구역을 모두 적셔요.',theme:'coverage'},
+    care:{kind:'inspect',title:'작물 피해 구역 조사',icon:'🔎',goal:'돋보기로 잎을 살피고, 피해 입은 세 지점을 골라 제출해 주세요.',how:'돋보기를 잎에 갖다 대면 상태가 보여요. 1~6번 중 피해 입은 곳 세 개를 골라 제출해요.',theme:'leaves'},
+    spray:{kind:'spray',title:'밭에 농약 뿌리기',icon:'💨',goal:'밭지기은 정해진 양보다 많은 농약을 쓰기로 했어요. 분무기를 밭 위로 움직여 주세요.',how:'밭을 누른 채 쓸어 분무해요. 분무기를 움직여 열두 구역을 모두 적셔요.',theme:'coverage'},
     garden:{kind:'plant',title:'한 종류 꽃밭 준비',icon:'🌷',goal:'한 종류의 꽃씨를 여섯 칸에 심고 물을 주세요.',how:'씨앗을 끌어 밭을 지나가요. 다 심으면 물뿌리개로 바뀌어요.',theme:'flowers'},
     wait:{kind:'inspect',title:'작물 관찰 사진 남기기',icon:'📷',goal:'관리 대신 작물 세 곳의 사진을 남겨 주세요.',how:'관찰 구역에 카메라를 맞추고 「사진 찍기」를 눌러요. 실제 작물 풍경이 사진에 남아요.',theme:'photos'}
   },
   {
     reuse:{kind:'sort',title:'반납함과 분리배출 운영',icon:'♻️',goal:'물건을 알맞은 곳에 넣고 낮 조명을 꺼 주세요.',how:'물건을 끌어 반납함·종이함·플라스틱함에 넣어요. 물건 → 함 순서로 눌러도 돼요.',theme:'recycle'},
     once:{kind:'scrub',title:'행사 뒤 바닥 청소',icon:'🧹',goal:'광장 바닥에 남은 얼룩과 종이 조각을 치워 주세요.',how:'물체를 누른 채 빗자루로 쓸어요. 네 번 눌러 치워도 돼요.',theme:'plaza'},
-    party:{kind:'stack',title:'컵 쌓고 조명 켜기',icon:'💡',goal:'종이컵 다섯 개를 쌓고 축제 조명을 모두 켜 주세요.',how:'「컵 놓기」로 다섯 개를 쌓아요. 그다음 세 조명 스위치를 켜요.',theme:'party'},
+    party:{kind:'stack',title:'컵 받아 쌓고 꼬마전구 끄기',icon:'💡',goal:'받침을 좌우로 움직여 종이컵 다섯 개를 받고, 낮에 켜진 꼬마전구를 꺼 주세요.',how:'화면 아래 받침을 좌우로 끌어 떨어지는 컵을 받아요. 다섯 개를 받으면 꼬마전구 화면으로 바뀌어요.',theme:'party'},
     burn:{kind:'ignite',title:'쓰레기 처리 장면 관찰',icon:'👀',goal:'어른들이 쓰레기를 처리하는 세 장면을 순서대로 살펴보세요.',how:'모아 둔 더미, 불붙은 모습, 주변으로 퍼지는 연기를 차례로 확인해요.',theme:'cart'}
   }
 ];
@@ -46,14 +46,14 @@ export function connectedTiles(tiles){
 export function createMission(stage,id){
   const info=missionInfo(stage,id);if(!info)throw new Error('Unknown mission');
   const tiles=targetPipe.map((mask,i)=>{for(let n=0;n<[1,1,0,2,3,0,1,1,1][i];n++)mask=turnMask(mask);return mask;});
-  return {stage,id,kind:info.kind,done:false,tiles,marks:Array(12).fill(0),water:Array(6).fill(0),focus:null,picked:null,round:0,index:0,showing:false,values:[0,0,0],lights:info.kind==='stack'?[false,false,false]:[true,true,true],cups:0,photos:[],message:'',revision:0};
+  return {stage,id,kind:info.kind,done:false,tiles,marks:Array(12).fill(0),water:Array(6).fill(0),focus:null,picked:null,round:0,index:0,showing:false,values:[0,0,0],lights:[true,true,true],cups:0,seen:Array(6).fill(false),catcherX:50,photos:[],message:'',revision:0};
 }
 export function missionProgress(m){
   if(m.kind==='survey')return [m.marks.slice(0,3).filter(Boolean).length+(m.values[0]?1:0),4];
   if(m.kind==='plumb')return [m.marks.slice(0,3).filter(Boolean).length+(m.values[0]?1:0),4];
-  if(m.kind==='stack')return [m.cups+m.lights.filter(Boolean).length,8];
+  if(m.kind==='stack')return [m.cups+m.lights.filter(v=>!v).length,8];
   if(m.kind==='ignite')return [m.marks.slice(0,3).filter(Boolean).length,3];
-  if(m.kind==='inspect')return [inspectionTargets(m).filter(i=>m.marks[i]).length,3];
+  if(m.kind==='inspect')return [m.id==='care'?m.marks.slice(0,6).filter(Boolean).length:inspectionTargets(m).filter(i=>m.marks[i]).length,3];
   if(m.kind==='spray')return [m.marks.filter(v=>v>=3).length,12];
   if(m.kind==='connect')return [connectedTiles(m.tiles).length,7];
   if(m.kind==='memory')return [m.round,2];
@@ -70,7 +70,7 @@ export function actMission(m,action,value,extra){
   if(action==='fit'&&m.kind==='plumb'&&Number.isInteger(value)&&value>=0&&value<3){if(value===extra&&!m.marks[value]){m.marks[value]=1;m.picked=null;valid=true;}else m.message='모양이 달라요. 비어 있는 자리와 배관의 꺾인 방향을 살펴보세요.';
   }else if(action==='valve'&&m.kind==='plumb'&&m.marks.slice(0,3).every(Boolean)){m.values[0]=1;valid=true;
   }else if(action==='cup'&&m.kind==='stack'&&m.cups<5){m.cups++;valid=true;
-  }else if(action==='switch'&&m.kind==='stack'&&m.cups===5&&Number.isInteger(value)&&value>=0&&value<3){m.lights[value]=true;valid=true;
+  }else if(action==='switch'&&m.kind==='stack'&&m.cups===5&&Number.isInteger(value)&&value>=0&&value<3){m.lights[value]=false;valid=true;
   }else if(action==='watch'&&m.kind==='ignite'&&Number.isInteger(value)&&value>=0&&value<3&&value===m.marks.slice(0,3).filter(Boolean).length){m.marks[value]=1;valid=true;
   }else if(action==='spray'&&m.kind==='spray'&&Number.isInteger(value)&&value>=0&&value<12){m.marks[value]=Math.min(3,m.marks[value]+1);valid=true;
   }else if(action==='turn'&&m.kind==='connect'&&Number.isInteger(value)&&value>=0&&value<9&&m.tiles[value]){
@@ -80,14 +80,24 @@ export function actMission(m,action,value,extra){
   }else if(action==='plant'&&m.kind==='plant'&&Number.isInteger(value)&&value>=0&&value<6){
     if(m.marks.slice(0,6).every(Boolean))m.water[value]=Math.min(2,m.water[value]+1);else m.marks[value]=1;m.activePlot=value;valid=true;
   }else if(action==='paint'&&m.kind==='paint'&&Number.isInteger(value)&&value>=0&&value<12){m.marks[value]=1;valid=true;
-  }else if(action==='observe'&&['survey','inspect'].includes(m.kind)&&Number.isInteger(value)&&value>=0&&value<(m.kind==='survey'?3:inspectionSites(m).length)){m.focus=value;valid=true;
+  }else if(action==='observe'&&['survey','inspect'].includes(m.kind)&&Number.isInteger(value)&&value>=0&&value<(m.kind==='survey'?3:inspectionSites(m).length)){m.focus=value;m.seen[value]=true;if(m.kind==='survey')m.marks[value]=1;valid=true;
   }else if(action==='record'&&m.kind==='survey'){
     if(Number.isInteger(value)&&value>=0&&value<3&&m.focus===value&&!m.marks[value]){m.marks[value]=1;valid=true;}else m.message='먼저 조사 지점을 눌러 흔적을 자세히 살펴보세요.';
   }else if(action==='route'&&m.kind==='survey'&&Number.isInteger(value)&&value>=0&&value<3){
     if(!m.marks.slice(0,3).every(Boolean))m.message='세 지점을 모두 관찰하고 기록한 뒤 통로 위치를 골라요.';
     else if(value===1){m.values[0]=1;valid=true;}
     else m.message=value===0?'A의 신발 자국은 사람들이 길을 따라 걸은 흔적이에요. 길 양쪽 풀숲을 잇는 흔적을 찾아요.':'C의 줄무늬는 바퀴가 길을 따라 지나간 흔적이에요. 길 양쪽에 같은 발자국이 있는 곳을 찾아요.';
-  }else if(action==='record'&&m.kind==='inspect'){
+  }else if(action==='select'&&m.kind==='inspect'&&m.id==='care'&&Number.isInteger(value)&&value>=0&&value<6){
+    if(!m.seen[value])m.message='먼저 돋보기로 이 잎을 살펴보세요.';
+    else if(m.marks[value]){m.marks[value]=0;valid=true;}
+    else if(m.marks.slice(0,6).filter(Boolean).length<3){m.marks[value]=1;valid=true;}
+    else m.message='세 곳을 골랐어요. 바꾸려면 선택한 번호를 다시 눌러요.';
+  }else if(action==='submit'&&m.kind==='inspect'&&m.id==='care'){
+    const selected=m.marks.slice(0,6).flatMap((v,i)=>v?[i]:[]);
+    if(selected.length!==3)m.message='피해 입은 곳 세 개를 고른 뒤 제출해요.';
+    else if(inspectionTargets(m).every(i=>selected.includes(i))){m.done=true;valid=true;}
+    else m.message='피해가 없는 잎도 섞여 있어요. 잎의 구멍과 뜯긴 자리를 다시 살펴보세요.';
+  }else if(action==='record'&&m.kind==='inspect'&&m.id==='wait'){
     if(Number.isInteger(value)&&m.focus===value&&inspectionTargets(m).includes(value)&&!m.marks[value]){m.marks[value]=1;valid=true;}
     else m.message=m.focus!==value?'먼저 기록할 지점을 확대 관찰해 주세요.':m.id==='wait'?'사진에 작물이 들어오도록 카메라를 옮겨 주세요.':value===2||value===5?'주변 생물이 있다는 이유만으로 피해 구역은 아니에요. 잎의 상태를 살펴봐요.':'잎의 표면과 가장자리가 온전해요. 실제 피해가 있는 곳을 기록해요.';
   }else if(action==='load'&&m.kind==='haul'&&Number.isInteger(value)&&value>=0&&value<6){m.marks[value]=1;m.picked=null;valid=true;
@@ -100,7 +110,7 @@ export function actMission(m,action,value,extra){
     if(value===sequence(m)[m.index]){m.index++;if(m.index===sequence(m).length){m.round++;m.index=0;m.message=m.round===2?'점검 완료!':'첫 점검 완료! 다음 순서를 확인해요.';}}
     else{m.index=0;m.message='순서가 달랐어요. 처음부터 다시 눌러요. 「순서 보기」로 확인할 수 있어요.';}
   }
-  if(valid){m.revision++;const [done,total]=missionProgress(m);if(m.kind!=='connect')m.done=done===total;}
+  if(valid){m.revision++;const [done,total]=missionProgress(m);if(m.kind!=='connect'&&!(m.kind==='inspect'&&m.id==='care'))m.done=done===total;}
   return valid;
 }
 function tilesHTML(m){
@@ -109,15 +119,15 @@ function tilesHTML(m){
 }
 function boardHTML(m){
   if(m.kind==='survey'){
-    const ready=m.marks.slice(0,3).every(Boolean),site=surveySites[m.focus];
-    return `<div class="survey-work"><div class="survey-scene">${springLandscape()}<span class="habitat-label north">덤불 쉼터</span><span class="habitat-label south">먹이 풀밭</span>${surveySites.map(({label,x},i)=>`<div class="ground-traces trace-${i}" style="left:${x}%">${traceArt[i]}</div>${i===1?`<div class="ground-traces across-traces" style="left:${x}%">${traceArt[i]}</div>`:''}<button class="survey-pin ${m.focus===i?'selected':''} ${m.marks[i]?'noted':''}" data-survey="${i}" style="left:${x}%;top:58%" aria-label="${label} 지점 확대 관찰" aria-pressed="${m.focus===i}">${m.marks[i]?'✓ ':''}${label}</button>`).join('')}${m.done?'<div class="animal-crossing"><span>동물 통로</span></div>':''}</div><div class="survey-observation"><div class="trace-lens">${site?traceCloseups[m.focus]:'<span aria-hidden="true">🔎</span>'}</div><div class="survey-evidence" aria-live="polite"><strong>${site?site.label+' 지점 · 확대 관찰':'흙에 남은 모양을 살펴봐요'}</strong><p>${site?site.description:'A·B·C를 눌러 모양과 흔적이 이어지는 방향을 비교해 보세요.'}</p></div><button id="survey-record" ${!site||m.marks[m.focus]?'disabled':''}>${site&&m.marks[m.focus]?'기록됨':'관찰 기록'}</button></div><div class="survey-decision"><span>${m.done?'B의 발자국이 쉼터와 먹이 풀밭을 이어요.':ready?'동물이 길을 건너는 곳은?':'관찰 기록 '+m.marks.slice(0,3).filter(Boolean).length+'/3 · 모두 기록한 뒤 통로를 골라요.'}</span><div>${surveySites.map(({label},i)=>`<button data-route="${i}" ${ready?'':'disabled'} aria-label="${label} 지점에 동물 통로 표시">${label}에 통로</button>`).join('')}</div></div></div>`;
+    const ready=m.marks.slice(0,3).every(Boolean);
+    return `<div class="survey-work lens-survey"><div class="survey-scene" id="mission-field">${springLandscape()}<span class="habitat-label north">덤불 쉼터</span><span class="habitat-label south">먹이 풀밭</span>${surveySites.map(({label,x},i)=>`<button class="survey-pin ${m.marks[i]?'noted':''}" data-survey="${i}" style="left:${x}%;top:58%" aria-label="${label} 지점에 돋보기 대기">${label}</button>`).join('')}<div class="inspection-cursor trace-cursor" id="inspection-cursor" style="left:85%;top:37%"></div>${m.done?'<div class="animal-crossing"><span>동물 통로</span></div>':''}</div><div class="survey-observation"><p id="focus-name">돋보기를 흙길 위로 옮겨 흔적을 찾아요.</p></div><div class="survey-decision"><span id="survey-progress">${ready?'동물이 길을 건너는 곳에 통로를 만들어요.':'살펴본 곳 '+m.marks.slice(0,3).filter(Boolean).length+'/3'}</span><div>${surveySites.map(({label},i)=>`<button data-route="${i}" ${ready?'':'disabled'} aria-label="${label} 지점에 동물 통로 만들기">${label}에 통로 만들기</button>`).join('')}</div></div></div>`;
   }
   if(m.stage===0&&m.id==='detour')return `<div class="mission-field spring-road-work" id="mission-field">${springLandscape()}${[[13,50],[29,54],[43,55],[58,61],[73,62],[87,66]].map(([x,y],i)=>`<button class="road-debris debris-${i} ${m.marks[i]>=4?'removed':''}" data-brush="${i}" style="left:${x}%;top:${y}%;--swept:${m.marks[i]}" aria-label="${['나뭇가지','낙엽','흙더미'][i%3]} ${Math.floor(i/3)+1} 쓸기">${roadDebris[i]}</button>`).join('')}<div class="brush-cursor spring-broom" id="brush-cursor">${broomArt}</div><span class="road-scene-caption">마을에서 축제장으로 이어지는 기존 흙길</span></div>`;
   if(m.kind==='connect')return tilesHTML(m);
   return seasonalBoard(m);
 }
 export function mountMission(host,m,onChange){
-  const info=missionInfo(m.stage,m.id);let disposed=false,timers=[],drag=null,stroke=null,previewing=false,sprayTimer=null,cursorPoint=null,photographing=false,noticeTimer=null,lastNotice=null,lastMessage='',completionShown=false;
+  const info=missionInfo(m.stage,m.id);let disposed=false,timers=[],drag=null,stroke=null,previewing=false,sprayTimer=null,cursorPoint=null,photographing=false,cupFrame=0,cupLast=0,cupNext=0,cupDrop=null,cupNumber=0,noticeTimer=null,lastNotice=null,lastMessage='',completionShown=false;
   host.innerHTML=`<div class="mission-device ${info.theme}"><div class="mission-device-top"><span>${info.icon} 작업 도구</span><span id="mission-sequence-cue" role="status" aria-live="polite" hidden></span><strong id="mission-counter"></strong></div><div class="mission-play-area" id="mission-play-area">${boardHTML(m)}</div><div class="mission-feedback"><p id="mission-feedback"></p><button type="button" id="mission-notice-replay" aria-label="최근 작업 안내 다시 보기" disabled>🔔 알림</button></div><div class="mission-notice" id="mission-notice" role="status" aria-live="polite" aria-atomic="true" hidden><span class="mission-notice-icon" aria-hidden="true"></span><div><strong class="mission-notice-title"></strong><p class="mission-notice-text"></p></div></div></div>`;
   const $=s=>host.querySelector(s),$$=s=>[...host.querySelectorAll(s)],later=(fn,ms)=>{timers.push(setTimeout(()=>{if(!disposed)fn();},ms));};
   $('#mission-feedback').textContent=info.how;
@@ -135,8 +145,8 @@ export function mountMission(host,m,onChange){
     if(m.kind==='plumb'&&m.marks.slice(0,3).every(Boolean))return '배관을 모두 끼웠어요. 이제 물 밸브를 열어 주세요.';
     if(m.kind==='plant'&&m.marks.slice(0,6).every(Boolean))return '씨앗을 모두 심었어요. 이제 같은 곳에 두 번씩 물을 주세요.';
     if(m.kind==='sort'&&m.marks.slice(0,6).every(Boolean))return '물건을 모두 분류했어요. 이제 낮 조명 세 개를 꺼 주세요.';
-    if(m.kind==='stack'&&m.cups===5)return '컵 다섯 개를 쌓았어요. 이제 조명 스위치 세 개를 켜 주세요.';
-    if(m.kind==='survey'&&m.marks.slice(0,3).every(Boolean))return '세 지점을 모두 기록했어요. 흔적을 비교해 동물이 길을 건너는 곳에 통로를 표시해 주세요.';
+    if(m.kind==='stack'&&m.cups===5)return '컵 다섯 개를 받았어요. 이제 낮에 켜진 꼬마전구를 꺼 주세요.';
+    if(m.kind==='survey'&&m.marks.slice(0,3).every(Boolean))return '세 지점의 흔적을 살펴봤어요. 흔적을 비교해 동물이 길을 건너는 곳에 통로를 표시해 주세요.';
     return '';
   };
   let previousStep=stepPrompt();
@@ -151,7 +161,7 @@ export function mountMission(host,m,onChange){
     if(m.done)$$('.mission-play-area button,.mission-play-area input').forEach(b=>b.disabled=true);
   };
   function positionCursor(){const cursor=$('#brush-cursor'),field=$('#mission-field');if(cursor&&field&&cursorPoint){const r=field.getBoundingClientRect();cursor.style.left=cursorPoint[0]-r.left+'px';cursor.style.top=cursorPoint[1]-r.top+'px';cursor.style.right='auto';cursor.classList.toggle('active',!!stroke);}}
-  const refresh=()=>{if(disposed)return;$('#mission-play-area').innerHTML=boardHTML(m);bind();if(m.kind==='inspect'&&m.focus!==null)focus(m.focus);positionCursor();feedback();};
+  const refresh=()=>{if(disposed)return;$('#mission-play-area').innerHTML=boardHTML(m);bind();if(m.kind==='inspect'&&m.id==='wait'&&m.focus!==null)focus(m.focus);positionCursor();feedback();};
   const act=(a,v,e)=>{lastMessage='';actMission(m,a,v,e);refresh();};
   function preview(){
     if(previewing||m.done)return;previewing=true;m.showing=true;m.index=0;
@@ -166,6 +176,9 @@ export function mountMission(host,m,onChange){
     $$('[data-fit]').forEach(b=>b.onclick=()=>{if(m.picked!==null)act('fit',m.picked,Number(b.dataset.fit));else notify('먼저 아래에서 끼울 배관을 골라 주세요.','error');});
     if($('#water-valve'))$('#water-valve').onclick=()=>act('valve');
     if($('#drop-cup'))$('#drop-cup').onclick=()=>act('cup');
+    if($('#catcher-control'))$('#catcher-control').oninput=e=>moveCatcher(Number(e.target.value));
+    $$('[data-crop-select]').forEach(b=>b.onclick=()=>act('select',Number(b.dataset.cropSelect)));
+    if($('#submit-damage'))$('#submit-damage').onclick=()=>act('submit');
     $$('[data-switch]').forEach(b=>b.onclick=()=>act('switch',Number(b.dataset.switch)));
     $$('[data-watch]').forEach(b=>b.onclick=()=>act('watch',Number(b.dataset.watch)));
     $$('[data-turn]').forEach(b=>b.onclick=()=>act('turn',Number(b.dataset.turn)));
@@ -175,8 +188,7 @@ export function mountMission(host,m,onChange){
     $$('[data-light]').forEach(b=>b.onclick=()=>act('light',Number(b.dataset.light)));
     $$('[data-brush]').forEach(b=>b.onclick=e=>{if(e.detail===0)act(m.kind,Number(b.dataset.brush));});
     $$('[data-observe]').forEach(b=>b.onclick=()=>focus(Number(b.dataset.observe)));
-    $$('[data-survey]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.survey);act('observe',i);(m.marks[i]?$(`[data-survey="${i}"]`):$('#survey-record'))?.focus();});
-    if($('#survey-record'))$('#survey-record').onclick=()=>{act('record',m.focus);const next=m.marks.slice(0,3).findIndex(v=>!v);(next<0?$('[data-route="0"]'):$(`[data-survey="${next}"]`))?.focus();};
+    $$('[data-survey]').forEach(b=>b.onclick=()=>focusTrace(Number(b.dataset.survey)));
     $$('[data-route]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.route);act('route',i);if(!m.done)$(`[data-route="${i}"]`)?.focus();});
     if($('#record-observation'))$('#record-observation').disabled=m.focus===null||!!m.marks[m.focus];
     if($('#record-observation'))$('#record-observation').onclick=async()=>{const index=m.focus;if(photographing)return;if(m.id!=='wait'||!Number.isInteger(index)||index>=3){act('record',index);$(`[data-observe="${index}"]`)?.focus();return;}if(m.marks[index])return;photographing=true;shutter();$('#mission-field').classList.add('taking-photo');$('#record-observation').disabled=true;try{const src=await photo(index);if(disposed)return;m.photos[index]=src;later(()=>{photographing=false;act('record',index);$(`[data-observe="${index}"]`)?.focus();},220);}catch{photographing=false;if(!disposed){m.message='사진을 다시 찍어 주세요.';feedback();$('#record-observation').disabled=false;}}};
@@ -185,28 +197,39 @@ export function mountMission(host,m,onChange){
   }
   function focus(i){
     const site=inspectionSites(m)[i];if(!site||photographing)return;
-    m.focus=i;$('#focus-name').textContent=site.description;const detail=$('.inspection-detail-art');if(detail)detail.innerHTML=cropDetail[i];const cursor=$('#inspection-cursor'),locations=inspectionLocations(m);if(cursor){cursor.style.left=locations[i][0]+'%';cursor.style.top=locations[i][1]+'%';}
+    if(m.id==='care')actMission(m,'observe',i);else m.focus=i;
+    $('#focus-name').textContent=site.description;const cursor=$('#inspection-cursor'),locations=inspectionLocations(m);if(cursor){cursor.style.left=locations[i][0]+'%';cursor.style.top=locations[i][1]+'%';if(m.id==='care')cursor.innerHTML=cropDetail[i];}
     $$('[data-observe]').forEach(b=>{const selected=Number(b.dataset.observe)===i;b.classList.toggle('in-focus',selected);b.setAttribute('aria-pressed',String(selected));});
+    $$('[data-crop-select]').forEach(b=>b.disabled=!m.seen[Number(b.dataset.cropSelect)]);
     const record=$('#record-observation');if(record)record.disabled=!!m.marks[i];
+  }
+  function focusTrace(i){const site=surveySites[i];if(!site)return;const fresh=!m.marks[i];actMission(m,'observe',i);$('#inspection-cursor').innerHTML=traceCloseups[i];$('#inspection-cursor').style.left=site.x+'%';$('#inspection-cursor').style.top='58%';$('#focus-name').textContent=site.description;$$('[data-survey]').forEach(b=>b.classList.toggle('noted',!!m.marks[Number(b.dataset.survey)]));if(m.marks.slice(0,3).every(Boolean)){$$('[data-route]').forEach(b=>b.disabled=false);$('#survey-progress').textContent='동물이 길을 건너는 곳에 통로를 만들어요.';}else $('#survey-progress').textContent='살펴본 곳 '+m.marks.slice(0,3).filter(Boolean).length+'/3';if(fresh)feedback();}
+  function moveLens(e){const field=$('#mission-field');if(!field)return;const r=field.getBoundingClientRect(),cursor=$('#inspection-cursor');if(!cursor)return;const selector=m.kind==='survey'?'[data-survey]':'[data-observe]',item=under(e.clientX,e.clientY,selector);if(item){if(m.kind==='survey')focusTrace(Number(item.dataset.survey));else focus(Number(item.dataset.observe));}else{m.focus=null;cursor.innerHTML='';$('#focus-name').textContent=m.kind==='survey'?'돋보기를 흙길 위로 옮겨 흔적을 찾아요.':'돋보기를 잎에 갖다 대어 상태를 살펴보세요.';if($('#record-observation'))$('#record-observation').disabled=true;}cursor.style.left=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100))+'%';cursor.style.top=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))+'%';}
+  function moveCatcher(x){m.catcherX=Math.max(12,Math.min(88,x));const plate=$('#catching-tray');if(plate)plate.style.left=m.catcherX+'%';if($('#catcher-control'))$('#catcher-control').value=m.catcherX;}
+  function catcherPointer(e){const field=$('#cup-catch-field');if(!field)return;const r=field.getBoundingClientRect();moveCatcher((e.clientX-r.left)/r.width*100);}
+  function animateCups(time){if(disposed||m.done||m.cups>=5)return;const field=$('#cup-catch-field');if(!field)return;const dt=cupLast?Math.min(.06,(time-cupLast)/1000):0;cupLast=time;if(!cupDrop&&time>=cupNext){cupDrop={x:[24,74,42,83,57,18,65][cupNumber++%7],y:-12};}
+    if(cupDrop){cupDrop.y+=dt*30;const cup=$('#falling-cup');if(cup){cup.hidden=false;cup.style.left=cupDrop.x+'%';cup.style.top=cupDrop.y+'%';}const landing=83-m.cups*5;if(cupDrop.y>=landing){const reach=Math.max(10,field.clientWidth?70/field.clientWidth*100:14);if(Math.abs(cupDrop.x-m.catcherX)<=reach){cupDrop=null;cupNext=time+600;act('cup');}else if(cupDrop.y>108){cupDrop=null;cupNext=time+500;notify('컵을 놓쳤어요. 다음 컵 아래로 받침을 옮겨 주세요.','hint');if(cup)cup.hidden=true;}}}
+    if(m.cups<5)cupFrame=requestAnimationFrame(animateCups);
   }
   function under(x,y,selector){return $$(selector).find(b=>{if(b.disabled||getComputedStyle(b).visibility==='hidden')return false;const r=b.getBoundingClientRect();return r.width>0&&r.height>0&&x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;});}
   host.onpointerdown=e=>{
     if(m.done||photographing||e.button!==0)return;
+    if(m.kind==='stack'&&m.cups<5&&e.target.closest('#cup-catch-field')){stroke={x:e.clientX,y:e.clientY};catcherPointer(e);host.setPointerCapture(e.pointerId);return;}
     const carry=e.target.closest('[data-carry],[data-pipe]'),brush=e.target.closest('[data-brush]');
     if(carry&&!m.marks[Number(carry.dataset.carry??carry.dataset.pipe)]){
       drag={id:Number(carry.dataset.carry??carry.dataset.pipe),pipe:carry.hasAttribute('data-pipe'),x:e.clientX,y:e.clientY,moved:false,ghost:document.createElement('div')};drag.ghost.className='mission-drag-ghost'+(m.kind==='haul'?' net-carry':'');if(m.kind==='haul')drag.ghost.innerHTML=netArt;const graphic=carry.querySelector('svg');if(graphic){const copy=graphic.cloneNode(true);copy.classList.add('carried-art');drag.ghost.append(copy);}else drag.ghost.textContent=carry.querySelector('span')?.textContent||carry.textContent;host.append(drag.ghost);host.classList.add('dragging-cargo');drag.ghost.style.left=e.clientX-host.getBoundingClientRect().left+'px';drag.ghost.style.top=e.clientY-host.getBoundingClientRect().top+'px';host.setPointerCapture(e.pointerId);e.preventDefault();
     }else if(brush||(['scrub','spray'].includes(m.kind)&&e.target.closest('#mission-field'))){stroke={x:e.clientX,y:e.clientY,moved:false};cursorPoint=[e.clientX,e.clientY];if(brush)actMission(m,m.kind,Number(brush.dataset.brush));refresh();positionCursor();host.setPointerCapture(e.pointerId);if(m.kind==='spray'){clearInterval(sprayTimer);sprayTimer=setInterval(()=>{if(!stroke||m.done){clearInterval(sprayTimer);return;}const item=under(...cursorPoint,'[data-brush]');if(item){actMission(m,'spray',Number(item.dataset.brush));refresh();}},120);}}
-    else if(m.kind==='inspect'&&e.target.closest('#mission-field')){const item=e.target.closest('[data-observe]');if(item)focus(Number(item.dataset.observe));stroke={x:e.clientX,y:e.clientY,moved:false};host.setPointerCapture(e.pointerId);}
+    else if(['inspect','survey'].includes(m.kind)&&e.target.closest('#mission-field')){moveLens(e);stroke={x:e.clientX,y:e.clientY,moved:false};host.setPointerCapture(e.pointerId);}
   };
   host.onpointermove=e=>{
+    if(m.done||disposed)return;
     if(drag){drag.moved ||= Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>7;drag.ghost.style.left=e.clientX-host.getBoundingClientRect().left+'px';drag.ghost.style.top=e.clientY-host.getBoundingClientRect().top+'px';return;}
+    if(m.kind==='stack'&&m.cups<5&&stroke){catcherPointer(e);return;}
+    if(['inspect','survey'].includes(m.kind)&&(stroke||(e.pointerType==='mouse'&&e.target.closest('#mission-field')))){moveLens(e);return;}
     if(!stroke)return;
     cursorPoint=[e.clientX,e.clientY];positionCursor();
     const distance=Math.hypot(e.clientX-stroke.x,e.clientY-stroke.y);if(distance<9)return;
     stroke.moved=true;stroke.x=e.clientX;stroke.y=e.clientY;
-    if(m.kind==='inspect'){
-      const field=$('#mission-field'),r=field.getBoundingClientRect(),cursor=$('#inspection-cursor');cursor.style.left=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100))+'%';cursor.style.top=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100))+'%';const item=under(e.clientX,e.clientY,'[data-observe]');if(item)focus(Number(item.dataset.observe));else{m.focus=null;$('#record-observation').disabled=true;$('#focus-name').textContent='살펴볼 대상을 렌즈 안에 맞춰요.';}return;
-    }
     const item=under(e.clientX,e.clientY,'[data-brush]');if(item){actMission(m,m.kind,Number(item.dataset.brush));refresh();}
     positionCursor();
   };
@@ -216,6 +239,6 @@ export function mountMission(host,m,onChange){
     stroke=null;clearInterval(sprayTimer);positionCursor();
   };
   host.onpointercancel=()=>{host.classList.remove('dragging-cargo');drag?.ghost.remove();drag=null;stroke=null;clearInterval(sprayTimer);positionCursor();};
-  bind();feedback();if(m.kind==='memory'&&!m.done)preview();
-  return ()=>{disposed=true;timers.forEach(clearTimeout);clearTimeout(noticeTimer);clearInterval(sprayTimer);m.showing=false;drag?.ghost.remove();host.classList.remove('dragging-cargo');host.onpointerdown=host.onpointermove=host.onpointerup=host.onpointercancel=null;};
+  bind();feedback();if(m.kind==='stack'&&m.cups<5)cupFrame=requestAnimationFrame(animateCups);if(m.kind==='memory'&&!m.done)preview();
+  return ()=>{disposed=true;cancelAnimationFrame(cupFrame);timers.forEach(clearTimeout);clearTimeout(noticeTimer);clearInterval(sprayTimer);m.showing=false;drag?.ghost.remove();host.classList.remove('dragging-cargo');host.onpointerdown=host.onpointermove=host.onpointerup=host.onpointercancel=null;};
 }

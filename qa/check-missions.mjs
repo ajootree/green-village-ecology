@@ -18,7 +18,7 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     for(let i=0;i<3;i++)actMission(m,'fit',i,i);
     assert(!m.done);actMission(m,'valve');
   }else if(m.kind==='stack'){
-    actMission(m,'switch',0);assert(!m.lights[0]);
+    actMission(m,'switch',0);assert(m.lights[0],'Lights cannot be turned off before catching the cups.');
     for(let i=0;i<5;i++)actMission(m,'cup');
     assert(!m.done);for(let i=0;i<3;i++)actMission(m,'switch',i);
   }else if(m.kind==='ignite'){
@@ -42,23 +42,27 @@ for(let stage=0;stage<4;stage++)for(const choice of seasons[stage].choices){
     assert(!m.done,'Sown seeds still need water.');
     for(let n=0;n<2;n++)for(let i=0;i<6;i++)actMission(m,'plant',i);
   }else if(m.kind==='survey'){
-    actMission(m,'record',0);assert.equal(m.marks[0],0,'Evidence must be inspected before recording.');
-    actMission(m,'route',1);assert(!m.done,'A lucky guess cannot skip the survey.');
-    for(let i=0;i<3;i++){
-      const other=(i+1)%3,previous=m.marks[other];
-      actMission(m,'observe',i);actMission(m,'record',other);
-      assert.equal(m.marks[other],previous,'A different site cannot be recorded without inspecting it.');
-      actMission(m,'record',i);
-      const progress=missionProgress(m)[0];actMission(m,'record',i);assert.equal(missionProgress(m)[0],progress);
-    }
+    actMission(m,'route',1);assert(!m.done,'A lucky guess cannot skip investigating the traces.');
+    for(let i=0;i<3;i++){actMission(m,'observe',i);assert(m.marks[i]);}
     assert(!m.done,'Observations alone do not identify a crossing.');
     for(const wrong of [0,2]){actMission(m,'route',wrong);assert(!m.done);assert.equal(m.values[0],0);assert(m.message);}
     actMission(m,'route',1);
   }else if(m.kind==='inspect'){
     const targets=inspectionTargets(m);
-    actMission(m,'record',targets[0]);assert.equal(missionProgress(m)[0],0,'Record requires a focused observation.');
-    if(m.id==='care')for(const wrong of [0,2,5]){actMission(m,'observe',wrong);actMission(m,'record',wrong);assert.equal(m.marks[wrong],0,'Healthy leaves and nearby wildlife are not crop damage.');assert(m.message);}
-    for(const i of targets){actMission(m,'observe',i);actMission(m,'record',i);}
+    if(m.id==='care'){
+      actMission(m,'select',1);assert.equal(m.marks[1],0,'A hidden leaf must be inspected first.');
+      actMission(m,'submit');assert(!m.done,'An empty submission cannot complete.');
+      for(let i=0;i<6;i++)actMission(m,'observe',i);
+      for(const wrong of [0,2,5])actMission(m,'select',wrong);
+      actMission(m,'submit');assert(!m.done,'Healthy leaves and wildlife are not crop damage.');assert(m.message);
+      actMission(m,'select',1);assert.equal(m.marks[1],0,'Only three sites can be selected.');
+      for(const wrong of [0,2,5])actMission(m,'select',wrong);
+      for(const i of targets)actMission(m,'select',i);
+      assert(!m.done,'Three selections are provisional until submitted.');actMission(m,'submit');
+    }else{
+      actMission(m,'record',targets[0]);assert.equal(missionProgress(m)[0],0,'Photos require a focused observation.');
+      for(const i of targets){actMission(m,'observe',i);actMission(m,'record',i);}
+    }
   }else if(m.kind==='haul'){
     for(let i=0;i<6;i++)actMission(m,'load',i);
   }else if(m.kind==='paint'){

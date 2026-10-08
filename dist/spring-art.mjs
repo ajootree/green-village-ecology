@@ -25,11 +25,11 @@ export const traceArt=[svg(shoePrint(36,29,-18)+shoePrint(77,65,-18),'0 0 120 11
 // A lens shows one enlarged impression, rather than the whole distant trackway.
 export const traceCloseups=[
   svg(shoePrint(36,29,-18),'13 -3 49 65'),
-  svg(rabbitPrint(37,31),'13 0 48 65'),
+  svg(rabbitPrint(37,31)+'<g fill="#765c3c"><circle cx="55" cy="43" r="3"/><circle cx="59" cy="50" r="3"/><circle cx="51" cy="52" r="3"/></g>','13 0 50 65'),
   traceArt[2].replace('0 0 120 110','30 8 50 64')
 ];
 export const surveySites=[
   {label:'A',x:20,description:'길을 따라 넓은 자국과 네모난 뒤꿈치 자국이 이어져요. 숲 쪽으로 이어지는 흔적은 없어요.'},
-  {label:'B',x:52,description:'작은 앞발 두 개와 긴 뒷발 두 개가 한 묶음이에요. 길 양쪽 풀숲에 같은 모양이 이어져요.'},
+  {label:'B',x:52,description:'작은 앞발 두 개와 긴 뒷발 두 개가 한 묶음이에요. 둥근 배설물도 보여요. 길 양쪽 풀숲에 같은 발자국이 이어져요.'},
   {label:'C',x:83,description:'가로줄이 반복되는 두 줄의 자국이 길을 따라 이어져요. 길 건너 풀숲에는 같은 흔적이 없어요.'}
 ];

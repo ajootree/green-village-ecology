@@ -1,0 +1,79 @@
+/* Touch movement, discovery lenses, cup catching and separate ending pages. */
+.travel-screen .map-dock{background:#173e32e8;border:1px solid #c2c58a80;border-radius:12px;padding:11px 17px;pointer-events:none}
+.travel-screen .movement-tip{display:inline-flex!important;font-size:16px;color:#fff3d1}
+.travel-guide:has(#review-choice){flex-direction:row;align-items:center;max-width:none;gap:10px}
+.travel-guide:has(#review-choice)>small{display:none}
+.travel-guide #review-choice{font-size:15px;padding:13px 18px;background:#254e3ff2;color:#fff2cc;border:1px solid #b7c595;border-radius:10px}
+.start-modes{display:flex;gap:10px;margin:14px 0}
+#start-form label{display:flex;flex-direction:column;gap:7px;font-size:16px;margin:10px 0}
+#start-form input:not([type=radio]){width:100%;font:inherit;padding:10px;border:1px solid #93af81;border-radius:8px;background:#e9eed6;color:#284a36}
+#start-form .start-modes label{flex:1;display:flex;flex-direction:row;align-items:center;padding:10px;background:#e5e9cf;color:#284a36;border-radius:8px;font-size:14px}
+#start-form input[type=radio]{accent-color:#476d42;width:18px;height:18px}
+#start-form #start-submit{width:100%}.flow-prompt .flow-continue{width:100%;font-size:18px;margin-top:16px}.flow-prompt .dialog-head{justify-content:center}.flow-prompt .dialog-body{text-align:center}
+.learning-screen.separate-pages{grid-template-rows:auto minmax(0,1fr) auto}
+.crop-observation-field,.lens-survey #mission-field{touch-action:none}
+.inspection-cursor{pointer-events:none!important;z-index:6}
+.natural-observation .inspection-cursor:not(.camera-cursor),.trace-cursor{width:86px;height:86px;position:absolute;transform:translate(-50%,-50%);border:5px solid #b6995c;border-radius:50%;background:#d4b77fe8;box-shadow:0 0 0 2px #6b6248,0 4px 8px #3e482752;overflow:visible;pointer-events:none}
+.inspection-cursor:not(.camera-cursor)>svg{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#d5b988}
+.trace-cursor:after{content:'';position:absolute;right:-23px;bottom:-12px;width:35px;height:11px;border-radius:6px;rotate:45deg;background:#796442;border:2px solid #b7a473}
+.natural-observation .crop-subject>svg{opacity:.9}
+.damage-selections{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.polished-console .damage-selections button{width:36px;min-width:36px;min-height:40px;max-width:none;padding:5px;font-size:16px}
+.polished-console .damage-selections button[aria-pressed=true]{background:#497044;color:#fff6d6;box-shadow:inset 0 0 0 2px #d9d794}
+.polished-console .damage-selections #submit-damage{width:auto;padding:7px 12px;margin-left:4px;background:#385e42;color:#fff6d6}
+.polished-console .damage-selections button:disabled{opacity:.4}
+.lens-survey .survey-pin{height:64px;width:68px;border:1px dashed #e8d39c80;background:#a98a58aa;box-shadow:none;color:#fff8d5}
+.lens-survey .survey-pin.noted{border-style:solid;background:#a18e64}.lens-survey .survey-observation p{margin:0;font-size:15px;line-height:1.5;min-height:44px}
+.lens-survey .survey-decision>span{font-size:14px}.lens-survey .survey-decision button{font-size:14px}
+.cup-catch-work{display:flex;flex-direction:column;width:100%;height:100%;min-height:0;background:#d2c4a0}
+.cup-catch-field{position:relative;flex:1;min-height:130px;overflow:hidden;touch-action:none}
+.cup-catch-field .season-land{opacity:.7}.cup-catch-field .cup-count{position:absolute;right:12px;top:12px;background:#224a39e8;border-radius:15px;color:#fff3d3;padding:7px 12px;font-size:15px}
+.cup-catch-field .paper-cup{width:42px;height:31px;left:50%;bottom:auto;border-top:3px solid #fff9e7;box-shadow:none}
+.falling-catch-cup{position:absolute;transform:translate(-50%,-50%);z-index:3;animation:none}
+.catching-tray{position:absolute;bottom:10%;width:130px;height:18px;transform:translateX(-50%);z-index:4;transition:left .05s linear}
+.wooden-tray{position:absolute;inset:0;border-radius:7px;background:linear-gradient(#dfbd80,#a88756);border:2px solid #8b714b;box-shadow:0 3px 5px #64563566}
+.catching-tray .caught-cup{top:auto;bottom:calc(16px + var(--cup)*12px);transform:translateX(-50%);z-index:calc(9 - var(--cup));width:47px;height:34px}
+.catcher-slider{padding:7px 14px;display:flex;align-items:center;gap:16px;color:#36583e;font-size:14px;flex-shrink:0;min-height:44px}
+.catcher-slider input{flex:1;min-width:100px;accent-color:#4b7153;cursor:ew-resize}
+.fairy-light-stage{position:relative;flex:1;min-height:0;background:linear-gradient(#647e91,#b6c6aa);color:#fff9d8;overflow:hidden;padding:12px 20px;animation:mission-scene-arrival .65s ease}
+.fairy-sky{position:absolute;inset:0;background:radial-gradient(ellipse at 75% 16%,#fff8cc88,transparent 26%),linear-gradient(transparent 70%,#496e50aa);pointer-events:none}
+.fairy-light-stage>p{position:relative;text-align:center;margin:0;font-size:16px;text-shadow:0 1px 3px #344b46}
+.fairy-strings{position:relative;display:flex;flex-direction:column;height:calc(100% - 30px);justify-content:space-evenly}
+.fairy-string{position:relative;width:100%;flex:1;min-height:50px;border:0;background:none!important;padding:0;color:#f9f4d4;box-shadow:none!important;cursor:pointer}
+.fairy-string svg{width:100%;height:100%;max-height:88px;overflow:visible;pointer-events:none}
+.fairy-bulb{fill:#fff0a4;filter:drop-shadow(0 0 4px #fff0a4) drop-shadow(0 0 12px #ffe093);transition:fill .45s,filter .45s}
+.is-off .fairy-bulb{fill:#a8b6aa;filter:none}.fairy-string span{position:absolute;right:0;bottom:0;background:#284d3dd9;border-radius:12px;padding:3px 9px;font-size:13px}.is-off span{background:#3c6141}
+@keyframes mission-scene-arrival{from{opacity:0}to{opacity:1}}
+@media(max-height:550px){.travel-screen .movement-tip{font-size:13px}.travel-guide #review-choice,.travel-guide #next-season-map{font-size:13px;padding:10px 12px}.natural-observation .inspection-cursor:not(.camera-cursor),.trace-cursor{width:67px;height:67px}.polished-console{flex-wrap:wrap}.polished-console #focus-name{flex-basis:100%;font-size:13px;min-height:20px}.polished-console .damage-selections{margin:auto}.polished-console .damage-selections button{min-height:32px;width:32px;min-width:32px;font-size:14px}.lens-survey .survey-observation p{font-size:13px;min-height:35px}.lens-survey .survey-decision>span,.lens-survey .survey-decision button{font-size:12px}.fairy-light-stage{padding:8px 15px}.fairy-light-stage>p{font-size:14px}.catching-tray{width:100px}.catcher-slider{font-size:12px;min-height:35px;padding:5px 10px}}
+@media(prefers-reduced-motion:reduce){.fairy-light-stage{animation:none}.fairy-bulb,.catching-tray{transition:none}}
+@media(max-height:550px) and (min-width:701px){
+ .chapter-screen .quest.mission-panel.task-only{top:105px;bottom:10px;max-height:none;padding:10px;gap:5px}
+ .task-only .quest-heading h2{font-size:17px;line-height:1.3}
+ .task-only .mission-plan-name{font-size:11px;line-height:1.3}
+ .task-only .mission-feedback{min-height:36px;font-size:13px;line-height:1.35;padding:5px 9px}
+ .polished-console{flex-wrap:nowrap;gap:6px}
+ .polished-console #focus-name{flex-basis:auto;font-size:13px;min-height:0}
+ .polished-console .damage-selections{margin:0}
+ .natural-observation .crop-subject{min-height:42px}
+ .lens-survey .survey-scene{min-height:90px}
+ .lens-survey .survey-observation{padding:5px 9px}
+ .lens-survey .survey-observation p{min-height:0;font-size:13px;line-height:1.4}
+ .lens-survey .survey-decision{padding:4px 9px}
+ .task-only .quest-footer button{padding:7px 4px}
+}
+@media(max-height:600px) and (min-width:701px){
+ #dialog:has(#start-form){width:min(660px,calc(100vw - 24px));max-height:calc(100dvh - 24px)}
+ #dialog:has(#start-form) .dialog-body{padding:10px 18px;max-height:none}
+ #start-form{display:grid;grid-template-columns:1fr 1fr;column-gap:16px;row-gap:3px}
+ #start-form>label{margin:0;font-size:15px}
+ #start-form .start-modes{margin:0;display:flex;flex-direction:column;gap:5px}
+ #start-form .start-modes label{margin:0;padding:8px;font-size:13px}
+ #start-form #online-fields{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:5px 16px}
+ #start-form .login-tabs,#start-form .small-note{grid-column:1/-1;margin:3px 0}
+ #start-form #online-fields>label{font-size:14px;margin:2px 0;gap:4px}
+ #start-form input:not([type=radio]){padding:8px}
+ #start-error,#start-submit{grid-column:1/-1;margin:4px 0}
+ #start-error:empty{display:none}
+ #start-form #start-submit{font-size:15px;padding:10px}
+ #start-nosave{margin-top:5px;padding:7px;font-size:13px}
+}
