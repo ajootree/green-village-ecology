@@ -117,34 +117,59 @@ function boardHTML(m){
   return seasonalBoard(m);
 }
 export function mountMission(host,m,onChange){
-  const info=missionInfo(m.stage,m.id);let disposed=false,timers=[],drag=null,stroke=null,previewing=false,sprayTimer=null,cursorPoint=null,photographing=false;
-  host.innerHTML=`<div class="mission-device ${info.theme}"><div class="mission-device-top"><span>${info.icon} 작업 도구</span><strong id="mission-counter"></strong></div><div class="mission-play-area" id="mission-play-area">${boardHTML(m)}</div><div class="mission-feedback" id="mission-feedback" role="status" aria-live="polite"></div></div>`;
+  const info=missionInfo(m.stage,m.id);let disposed=false,timers=[],drag=null,stroke=null,previewing=false,sprayTimer=null,cursorPoint=null,photographing=false,noticeTimer=null,lastNotice=null,lastMessage='',completionShown=false;
+  host.innerHTML=`<div class="mission-device ${info.theme}"><div class="mission-device-top"><span>${info.icon} 작업 도구</span><span id="mission-sequence-cue" role="status" aria-live="polite" hidden></span><strong id="mission-counter"></strong></div><div class="mission-play-area" id="mission-play-area">${boardHTML(m)}</div><div class="mission-feedback"><p id="mission-feedback"></p><button type="button" id="mission-notice-replay" aria-label="최근 작업 안내 다시 보기" disabled>🔔 알림</button></div><div class="mission-notice" id="mission-notice" role="status" aria-live="polite" aria-atomic="true" hidden><span class="mission-notice-icon" aria-hidden="true"></span><div><strong class="mission-notice-title"></strong><p class="mission-notice-text"></p></div></div></div>`;
   const $=s=>host.querySelector(s),$$=s=>[...host.querySelectorAll(s)],later=(fn,ms)=>{timers.push(setTimeout(()=>{if(!disposed)fn();},ms));};
+  $('#mission-feedback').textContent=info.how;
+  function notify(text,tone='hint'){
+    if(disposed)return;
+    clearTimeout(noticeTimer);lastNotice={text,tone};
+    const notice=$('#mission-notice'),labels={hint:['💬','작업 안내'],error:['!','다시 살펴봐요'],next:['→','다음 작업'],complete:['✓','준비가 끝났어요']},[icon,title]=labels[tone];
+    notice.dataset.tone=tone;notice.querySelector('.mission-notice-icon').textContent=icon;notice.querySelector('.mission-notice-title').textContent=title;notice.querySelector('.mission-notice-text').textContent=text;notice.hidden=false;
+    $('#mission-notice-replay').disabled=false;
+    noticeTimer=setTimeout(()=>{if(!disposed)notice.hidden=true;},Math.min(9000,Math.max(4200,1800+text.length*80)));
+  }
+  $('#mission-notice-replay').onclick=()=>{if(lastNotice)notify(lastNotice.text,lastNotice.tone);};
+  const stepPrompt=()=>{
+    if(m.done)return '';
+    if(m.kind==='plumb'&&m.marks.slice(0,3).every(Boolean))return '배관을 모두 끼웠어요. 이제 물 밸브를 열어 주세요.';
+    if(m.kind==='plant'&&m.marks.slice(0,6).every(Boolean))return '씨앗을 모두 심었어요. 이제 같은 곳에 두 번씩 물을 주세요.';
+    if(m.kind==='sort'&&m.marks.slice(0,6).every(Boolean))return '물건을 모두 분류했어요. 이제 낮 조명 세 개를 꺼 주세요.';
+    if(m.kind==='stack'&&m.cups===5)return '컵 다섯 개를 쌓았어요. 이제 조명 스위치 세 개를 켜 주세요.';
+    if(m.kind==='survey'&&m.marks.slice(0,3).every(Boolean))return '세 지점을 모두 기록했어요. 흔적을 비교해 동물이 길을 건너는 곳에 통로를 표시해 주세요.';
+    return '';
+  };
+  let previousStep=stepPrompt();
   const feedback=()=>{
     const [done,total]=missionProgress(m);$('#mission-counter').textContent=`${done}/${total}`;
-    $('#mission-feedback').textContent=m.done?'✓ 준비가 끝났어요.':m.message||info.how;
+    const nextStep=stepPrompt();
+    if(m.done&&!completionShown){completionShown=true;notify('작업을 모두 마쳤어요. 아래의 「작업 마치기」를 눌러 주세요.','complete');}
+    else if(m.message&&m.message!==lastMessage)notify(m.message,m.message.includes('완료')?'next':'error');
+    else if(nextStep&&nextStep!==previousStep)notify(nextStep,'next');
+    lastMessage=m.message;previousStep=nextStep;
     host.classList.toggle('mission-complete',m.done);onChange(m.done);
     if(m.done)$$('.mission-play-area button,.mission-play-area input').forEach(b=>b.disabled=true);
   };
   function positionCursor(){const cursor=$('#brush-cursor'),field=$('#mission-field');if(cursor&&field&&cursorPoint){const r=field.getBoundingClientRect();cursor.style.left=cursorPoint[0]-r.left+'px';cursor.style.top=cursorPoint[1]-r.top+'px';cursor.style.right='auto';cursor.classList.toggle('active',!!stroke);}}
   const refresh=()=>{if(disposed)return;$('#mission-play-area').innerHTML=boardHTML(m);bind();if(m.kind==='inspect'&&m.focus!==null)focus(m.focus);positionCursor();feedback();};
-  const act=(a,v,e)=>{actMission(m,a,v,e);refresh();};
+  const act=(a,v,e)=>{lastMessage='';actMission(m,a,v,e);refresh();};
   function preview(){
     if(previewing||m.done)return;previewing=true;m.showing=true;m.index=0;
     const seq=sequence(m);$$('[data-lamp]').forEach(b=>b.disabled=true);$('#preview-sequence').disabled=true;
-    $('#mission-feedback').textContent='등이 켜지는 순서를 기억해요.';
-    seq.forEach((v,i)=>{later(()=>{$(`[data-lamp="${v}"]`)?.classList.add('lit');$('#mission-feedback').textContent=['주황','파랑','초록'][v]+' 등';},300+i*750);later(()=>{$(`[data-lamp="${v}"]`)?.classList.remove('lit');},850+i*750);});
-    later(()=>{previewing=false;m.showing=false;$$('[data-lamp]').forEach(b=>b.disabled=false);$('#preview-sequence').disabled=false;$('#mission-feedback').textContent='이제 같은 순서로 스위치를 눌러요.';},400+seq.length*750);
+    notify(m.round?'첫 점검 완료! 이번에는 다음 순서를 기억해요.':'등이 켜지는 순서를 기억해요. 다 보여 준 뒤 스위치를 누를 수 있어요.',m.round?'next':'hint');
+    const cue=$('#mission-sequence-cue');cue.hidden=false;
+    seq.forEach((v,i)=>{later(()=>{$(`[data-lamp="${v}"]`)?.classList.add('lit');cue.textContent=['주황','파랑','초록'][v]+' 등';},300+i*750);later(()=>{$(`[data-lamp="${v}"]`)?.classList.remove('lit');},850+i*750);});
+    later(()=>{previewing=false;m.showing=false;cue.hidden=true;$$('[data-lamp]').forEach(b=>b.disabled=false);$('#preview-sequence').disabled=false;notify('이제 방금 본 순서대로 스위치를 눌러 주세요.','next');},400+seq.length*750);
   }
   function bind(){
-    $$('[data-pipe]').forEach(b=>b.onclick=()=>{m.picked=Number(b.dataset.pipe);$$('[data-pipe]').forEach(el=>el.classList.toggle('carrying',el===b));$('#mission-feedback').textContent='배관을 골랐어요. 같은 모양의 빈 자리를 눌러 주세요.';});
-    $$('[data-fit]').forEach(b=>b.onclick=()=>{if(m.picked!==null)act('fit',m.picked,Number(b.dataset.fit));});
+    $$('[data-pipe]').forEach(b=>b.onclick=()=>{m.picked=Number(b.dataset.pipe);$$('[data-pipe]').forEach(el=>el.classList.toggle('carrying',el===b));notify('배관을 골랐어요. 같은 모양의 빈 자리를 눌러 주세요.');});
+    $$('[data-fit]').forEach(b=>b.onclick=()=>{if(m.picked!==null)act('fit',m.picked,Number(b.dataset.fit));else notify('먼저 아래에서 끼울 배관을 골라 주세요.','error');});
     if($('#water-valve'))$('#water-valve').onclick=()=>act('valve');
     if($('#drop-cup'))$('#drop-cup').onclick=()=>act('cup');
     $$('[data-switch]').forEach(b=>b.onclick=()=>act('switch',Number(b.dataset.switch)));
     $$('[data-watch]').forEach(b=>b.onclick=()=>act('watch',Number(b.dataset.watch)));
     $$('[data-turn]').forEach(b=>b.onclick=()=>act('turn',Number(b.dataset.turn)));
-    $$('[data-lamp]').forEach(b=>b.onclick=()=>{const previous=m.round;actMission(m,'memory',Number(b.dataset.lamp));refresh();if(m.round>previous&&!m.done)preview();});
+    $$('[data-lamp]').forEach(b=>b.onclick=()=>{const previous=m.round;lastMessage='';actMission(m,'memory',Number(b.dataset.lamp));refresh();if(m.round>previous&&!m.done)preview();});
     if($('#preview-sequence'))$('#preview-sequence').onclick=preview;
     $$('[data-tune]').forEach(b=>b.oninput=()=>{actMission(m,'tune',Number(b.dataset.tune),Number(b.value));const i=Number(b.dataset.tune);b.setAttribute('aria-valuetext',`${m.values[i]}, 목표 ${[25,50,75][i]}`);$(`[data-tuning-check="${i}"]`).textContent=Math.abs(m.values[i]-[25,50,75][i])<=5?'✓':'↔';feedback();});
     $$('[data-light]').forEach(b=>b.onclick=()=>act('light',Number(b.dataset.light)));
@@ -155,7 +180,7 @@ export function mountMission(host,m,onChange){
     $$('[data-route]').forEach(b=>b.onclick=()=>{const i=Number(b.dataset.route);act('route',i);if(!m.done)$(`[data-route="${i}"]`)?.focus();});
     if($('#record-observation'))$('#record-observation').disabled=m.focus===null||!!m.marks[m.focus];
     if($('#record-observation'))$('#record-observation').onclick=async()=>{const index=m.focus;if(photographing)return;if(m.id!=='wait'||!Number.isInteger(index)||index>=3){act('record',index);$(`[data-observe="${index}"]`)?.focus();return;}if(m.marks[index])return;photographing=true;shutter();$('#mission-field').classList.add('taking-photo');$('#record-observation').disabled=true;try{const src=await photo(index);if(disposed)return;m.photos[index]=src;later(()=>{photographing=false;act('record',index);$(`[data-observe="${index}"]`)?.focus();},220);}catch{photographing=false;if(!disposed){m.message='사진을 다시 찍어 주세요.';feedback();$('#record-observation').disabled=false;}}};
-    $$('[data-carry]').forEach(b=>b.onclick=()=>{if(drag?.moved)return;m.picked=Number(b.dataset.carry);$$('[data-carry]').forEach(el=>el.classList.toggle('carrying',el===b));$('#mission-feedback').textContent=m.kind==='sort'?'물건을 골랐어요. 넣을 함을 눌러 주세요.':`집었어요. ${m.id==='burn'?'수거차':'수거통'}를 눌러 주세요.`;});
+    $$('[data-carry]').forEach(b=>b.onclick=()=>{if(drag?.moved)return;m.picked=Number(b.dataset.carry);$$('[data-carry]').forEach(el=>el.classList.toggle('carrying',el===b));notify(m.kind==='sort'?'물건을 골랐어요. 넣을 함을 눌러 주세요.':`집었어요. ${m.id==='burn'?'수거차':'수거통'}를 눌러 주세요.`);});
     $$('[data-target]').forEach(b=>b.onclick=()=>{if(m.picked===null){m.message='먼저 옮길 물건을 골라 주세요.';feedback();return;}act(m.kind==='sort'?'sort':'load',m.picked,b.dataset.target);});
   }
   function focus(i){
@@ -187,10 +212,10 @@ export function mountMission(host,m,onChange){
   };
   host.onpointerup=e=>{
     host.classList.remove('dragging-cargo');
-    if(drag){const captured=drag;drag=null;captured.ghost.remove();if(captured.pipe){const target=under(e.clientX,e.clientY,'[data-fit]');if(captured.moved&&target)act('fit',captured.id,Number(target.dataset.fit));else{m.picked=captured.id;refresh();$(`[data-pipe="${captured.id}"]`)?.classList.add('carrying');}return;}if(captured.moved){const target=under(e.clientX,e.clientY,'[data-target]');if(target)act(m.kind==='sort'?'sort':'load',captured.id,target.dataset.target);else{m.picked=captured.id;refresh();$('#mission-feedback').textContent='놓을 곳까지 끌어 주세요. 물건을 고른 뒤 함을 눌러도 돼요.';}}else{m.picked=captured.id;refresh();$(`[data-carry="${captured.id}"]`)?.classList.add('carrying');$('#mission-feedback').textContent='집었어요. 놓을 곳을 눌러 주세요.';}}
+    if(drag){const captured=drag;drag=null;captured.ghost.remove();if(captured.pipe){const target=under(e.clientX,e.clientY,'[data-fit]');if(captured.moved&&target)act('fit',captured.id,Number(target.dataset.fit));else{m.picked=captured.id;refresh();$(`[data-pipe="${captured.id}"]`)?.classList.add('carrying');notify('배관을 골랐어요. 같은 모양의 빈 자리를 눌러 주세요.');}return;}if(captured.moved){const target=under(e.clientX,e.clientY,'[data-target]');if(target)act(m.kind==='sort'?'sort':'load',captured.id,target.dataset.target);else{m.picked=captured.id;refresh();notify('놓을 곳까지 끌어 주세요. 물건을 고른 뒤 함을 눌러도 돼요.','error');}}else{m.picked=captured.id;refresh();$(`[data-carry="${captured.id}"]`)?.classList.add('carrying');notify('집었어요. 놓을 곳을 눌러 주세요.');}}
     stroke=null;clearInterval(sprayTimer);positionCursor();
   };
   host.onpointercancel=()=>{host.classList.remove('dragging-cargo');drag?.ghost.remove();drag=null;stroke=null;clearInterval(sprayTimer);positionCursor();};
   bind();feedback();if(m.kind==='memory'&&!m.done)preview();
-  return ()=>{disposed=true;timers.forEach(clearTimeout);clearInterval(sprayTimer);m.showing=false;drag?.ghost.remove();host.classList.remove('dragging-cargo');host.onpointerdown=host.onpointermove=host.onpointerup=host.onpointercancel=null;};
+  return ()=>{disposed=true;timers.forEach(clearTimeout);clearTimeout(noticeTimer);clearInterval(sprayTimer);m.showing=false;drag?.ghost.remove();host.classList.remove('dragging-cargo');host.onpointerdown=host.onpointermove=host.onpointerup=host.onpointercancel=null;};
 }

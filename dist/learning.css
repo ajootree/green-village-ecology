@@ -7,3 +7,16 @@
 @media(max-height:650px) and (min-width:701px){.effort-form{grid-template-columns:1fr 1fr;align-content:start}.effort-form>label:first-child,.effort-pair,#effort-status{grid-column:1/-1}.effort-guide{gap:4px;padding:8px}.effort-guide>small{font-size:10px}.effort-guide p{font-size:12px;line-height:1.4}.animal-profile p{margin-top:4px}.animal-profile h3{font-size:19px}.animal-profile>span{font-size:27px}.effort-guide label{font-size:11px}.effort-guide select{padding:4px}.effort-guide a{font-size:11px}}
 @media(max-height:550px) and (min-width:701px){.effort-guide{gap:3px;padding:6px}.animal-profile{position:relative;padding:4px 0}.animal-profile>span{position:absolute;right:0;top:0;float:none;font-size:23px}.animal-profile h3{display:inline;font-size:17px;margin-right:6px}.animal-profile small{font-size:10px}.animal-profile p{font-size:11px;line-height:1.35}.effort-guide>p{font-size:11px}.effort-guide label{gap:3px}.effort-guide select{font-size:12px}.effort-guide>small{line-height:1.35}.effort-guide a{font-size:10px}}
 @media(max-height:550px) and (min-width:701px){.report-entry p{display:none}.report-entry strong{font-size:15px}.report-entry>span{line-height:1}.report-group{gap:4px;padding:7px}.report-empty{font-size:13px!important}}
+.effort-grid.campaign-work{grid-template-columns:1fr;width:min(980px,100%);margin:0 auto}
+.effort-form.campaign-form{grid-template-columns:1fr 1fr;gap:18px;align-content:center;padding:20px;background:#15382bbb;border:1px solid #9ab77e70;border-radius:16px}
+.effort-form.campaign-form>label:first-child{grid-column:auto}
+.effort-form.letter-form{grid-template-columns:1fr;align-content:center}
+.effort-form label{font-size:18px;gap:10px}
+.effort-form textarea{font-size:18px;line-height:1.7;padding:14px}
+.effort-form textarea::placeholder{font-size:15px}
+.effort-form #effort-status{grid-column:1/-1;font-size:13px;color:#cad7b7;font-weight:400}
+.campaign-messages{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin:12px 0 18px}
+.campaign-messages h3{font-size:14px;color:#62754f;margin-bottom:7px}
+.effort-card .card-note{margin-top:16px}
+@media(max-height:650px) and (min-width:701px){.effort-form.campaign-form{padding:14px;gap:12px;align-content:center}.effort-form label{font-size:16px;gap:7px}.effort-form textarea{font-size:16px;line-height:1.6;padding:10px}.effort-form textarea::placeholder{font-size:14px}.effort-form.letter-form textarea{height:155px}.effort-form #effort-status{font-size:12px}.campaign-messages{gap:18px;margin:10px 0}.effort-card .card-note{margin-top:10px}}
+@media(max-width:700px) and (orientation:portrait){.effort-form.campaign-form,.campaign-messages{grid-template-columns:1fr}.effort-form label{font-size:16px}.effort-form textarea{font-size:16px}}

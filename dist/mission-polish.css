@@ -1,4 +1,21 @@
 /* Seasonal work scenes and interaction details. */
+.mission-device{position:relative}
+.mission-feedback{display:flex;align-items:center;gap:12px}
+.mission-feedback>p{margin:0;flex:1;min-width:0}
+.mission-feedback>button{flex-shrink:0;padding:8px 10px;border:1px solid #acbf87;border-radius:8px;background:#335e48;color:#fff4d2;font-size:13px;min-height:36px}
+.mission-feedback>button:disabled{opacity:.4}
+.mission-notice{position:absolute;top:52px;left:50%;translate:-50% 0;z-index:12;width:min(560px,calc(100% - 24px));display:flex;align-items:flex-start;gap:12px;padding:15px 18px;background:#173e32;border:2px solid #cfb976;border-radius:13px;box-shadow:0 8px 24px #092a246e;color:#fff5d8;pointer-events:none;animation:mission-notice-in .2s ease-out}
+.mission-notice-icon{width:32px;height:32px;display:grid;place-items:center;flex-shrink:0;border-radius:50%;background:#d6c285;color:#214732;font-size:21px;font-weight:800}
+.mission-notice-title{display:block;color:#ecd991;font-size:15px;line-height:1.4;margin:0 0 5px}
+.mission-notice-text{margin:0;font-size:17px;line-height:1.7;word-break:keep-all}
+.mission-notice[data-tone="error"]{border-color:#e4af84;background:#4e392e}
+.mission-notice[data-tone="error"] .mission-notice-icon{background:#edbf91;color:#593b2b}
+.mission-notice[data-tone="complete"]{border-color:#c2dc9a;background:#284e36}
+.mission-notice[data-tone="complete"] .mission-notice-icon{background:#c5dda3}
+#mission-sequence-cue{color:#ffe19a;font-size:13px}
+@keyframes mission-notice-in{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:none}}
+@media(max-height:600px){.mission-notice{top:42px;padding:11px 14px;gap:10px}.mission-notice-title{font-size:13px;margin-bottom:3px}.mission-notice-text{font-size:15px;line-height:1.65}.mission-notice-icon{height:27px;width:27px;font-size:18px}.mission-feedback{gap:8px}.mission-feedback>button{font-size:12px;padding:6px 8px;min-height:32px}}
+@media(prefers-reduced-motion:reduce){.mission-notice{animation:none}}
 .season-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .scene-caption{position:absolute;left:10px;bottom:8px;background:#335e47e8;color:#fff4d5;border-radius:18px;padding:5px 10px;font-size:11px;pointer-events:none;z-index:2}
 .floating-object,.ground-object,.crop-subject,.photo-zone{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:none;box-shadow:none;color:#365339;cursor:pointer}

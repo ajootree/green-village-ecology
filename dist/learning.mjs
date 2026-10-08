@@ -57,5 +57,5 @@ export function cleanEffort(raw){
  const topic=topics.find(t=>t.id===raw.topic)?.id||'habitat',animal=animals.find(a=>a.id===raw.animal)?.id||'otter';
  return {kind:raw.kind,topic,animal,message:text('message'),reason:text('reason'),action:text('action'),partner:text('partner'),when:text('when')};
 }
-export function effortReady(raw){const d=cleanEffort(raw);return !!d&&['message','reason','action','partner','when'].every(k=>d[k].length>=2);}
-export function effortText(raw){const d=cleanEffort(raw);if(!d)return '';const name=animals.find(a=>a.id===d.animal).name,title=topics.find(t=>t.id===d.topic).name;return [d.kind==='letter'?`${name}에게 보내는 편지`:`${title} 보전 캠페인`,d.message,`왜 필요한가요? ${d.reason}`,`내가 할 일: ${d.action}`,`함께할 사람·기관: ${d.partner}`,`언제부터? ${d.when}`].join('\n\n');}
+export function effortReady(raw){const d=cleanEffort(raw);return !!d&&(d.kind==='letter'?['message']:['action','message']).every(k=>d[k].length>=2);}
+export function effortText(raw){const d=cleanEffort(raw);if(!d)return '';const name=animals.find(a=>a.id===d.animal).name;return (d.kind==='letter'?[`${name}에게 보내는 편지`,d.message]:['초록마을을 지키는 캠페인',`해야 할 노력\n${d.action}`,`나의 다짐\n${d.message}`]).join('\n\n');}
