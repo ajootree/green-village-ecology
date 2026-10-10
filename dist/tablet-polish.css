@@ -43,3 +43,6 @@
 .survey-decision button{min-height:40px;padding:7px 10px}.mission-notice-replay{font-size:15px!important}
 
 .cinema .ending-memory p{text-align:left;font-family:inherit}
+.welcome-actions .restore-note{font-size:12px;color:#afc4ac;line-height:1.5;margin-top:-5px}
+.welcome-actions #login-start{min-height:36px;font-size:14px;text-align:left}
+@media(max-height:550px){.welcome-actions .restore-note{font-size:11px}.welcome-actions #login-start{min-height:30px;font-size:13px}}
