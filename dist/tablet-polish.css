@@ -46,3 +46,9 @@
 .welcome-actions .restore-note{font-size:12px;color:#afc4ac;line-height:1.5;margin-top:-5px}
 .welcome-actions #login-start{min-height:36px;font-size:14px;text-align:left}
 @media(max-height:550px){.welcome-actions .restore-note{font-size:11px}.welcome-actions #login-start{min-height:30px;font-size:13px}}
+.budget-coin{cursor:grab;user-select:none;flex-shrink:0}.budget-coin.in-transit{opacity:.25}
+.budget-pouch{display:flex;align-items:center;justify-content:center;touch-action:none}.budget-pouch .pouch-label{position:absolute;left:50%;top:60%;transform:translate(-50%,-50%);width:90%;display:flex;flex-direction:column;align-items:center;gap:5px;color:#fff8df;font-size:clamp(12px,2.1vw,20px);line-height:1.25;white-space:nowrap;text-shadow:0 1px 2px #34472d;pointer-events:none}.pouch-label span{font-size:1.1em}
+.budget-pouch.drop-ready{filter:drop-shadow(0 0 7px #eff6c3)}.budget-pouch.drop-full{filter:drop-shadow(0 0 6px #a34432)}
+.mission-drag-ghost.coin-carry{width:48px;height:48px}
+@media(max-width:500px){.budget-coins{gap:4px;flex-wrap:wrap}.budget-coin{width:36px;height:36px}.budget-pouches{gap:6px}.coin-budget{padding:8px}}
+.budget-pouch>.pouch-art{position:relative;display:block;width:100%;aspect-ratio:160/140;max-height:100%;top:auto;left:auto;transform:none;font-size:inherit}
