@@ -50,12 +50,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '24'
-      - name: Create renamed Cloudflare Pages project
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: '3375959224884e815872d29033c3ded4'
-          command: pages project create 422-green-village --production-branch=main
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v4
         with:

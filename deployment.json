@@ -1,6 +1,6 @@
 {
-  "url": "https://green-village-ecology.pages.dev/",
-  "dashboard": "https://dash.cloudflare.com/3375959224884e815872d29033c3ded4/pages/view/green-village-ecology",
+  "url": "https://422-green-village.pages.dev/",
+  "dashboard": "https://dash.cloudflare.com/3375959224884e815872d29033c3ded4/pages/view/422-green-village",
   "firebaseProject": "green-village-ecology",
   "firebaseConsole": "https://console.firebase.google.com/project/green-village-ecology/overview",
   "hostingPlan": "Cloudflare Pages Free",
@@ -27,7 +27,7 @@
     "hostingPlan": "Vercel Hobby"
   },
   "published": "2026-10-07",
-  "deploymentUrl": "https://green-village-ecology.pages.dev/",
+  "deploymentUrl": "https://422-green-village.pages.dev/",
   "automation": {
     "repository": "https://github.com/ajootree/green-village-ecology",
     "visibility": "private",
@@ -188,5 +188,23 @@
     "publicConsoleErrors": 0,
     "saveFormatUnchanged": true,
     "firebaseRulesUnchanged": true
+  },
+  "addressChange": {
+    "date": "2026-10-11",
+    "project": "422-green-village",
+    "previousUrl": "https://green-village-ecology.pages.dev/",
+    "previousProjectPreserved": true,
+    "firebaseProjectUnchanged": true,
+    "localRecordsRemainOnPreviousOrigin": true,
+    "workflowRun": "https://github.com/ajootree/green-village-ecology/actions/runs/38137033489",
+    "checksPassed": true,
+    "deploymentSucceeded": true,
+    "verifiedFiles": [
+      "index.html",
+      "app.mjs",
+      "cloud.mjs",
+      "tablet-polish.css",
+      "firebase-config.mjs"
+    ]
   }
 }
