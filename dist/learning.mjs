@@ -78,4 +78,4 @@ export function cleanEffort(raw){
  return {kind:raw.kind,topic,animal,message:text('message'),reason:text('reason'),action:text('action'),partner:text('partner'),when:text('when')};
 }
 export function effortReady(raw){const d=cleanEffort(raw);return !!d&&(d.kind==='letter'?['message']:['action','message']).every(k=>d[k].length>=2);}
-export function effortText(raw){const d=cleanEffort(raw);if(!d)return '';const name=animals.find(a=>a.id===d.animal).name;return (d.kind==='letter'?[`${name}에게 보내는 편지`,d.message]:['초록마을을 지키는 캠페인',`해야 할 노력\n${d.action}`,`나의 다짐\n${d.message}`]).join('\n\n');}
+export function effortText(raw){const d=cleanEffort(raw);if(!d)return '';const name=animals.find(a=>a.id===d.animal).name;return (d.kind==='letter'?[`${name}에게 보내는 편지`,d.message]:['초록마을을 지키는 나의 다짐',`해야 할 노력\n${d.action}`,`나의 다짐\n${d.message}`]).join('\n\n');}
