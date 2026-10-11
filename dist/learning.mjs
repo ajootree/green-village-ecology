@@ -61,14 +61,14 @@ const animalTopics={otter:['water'],spoonbill:['water','habitat'],turtle:['water
 export function animalsFor(choices){const remaining=learningReport(choices).remaining.map(r=>r.id);return [...animals].map(a=>({...a,related:animalTopics[a.id].filter(t=>remaining.includes(t))})).sort((a,b)=>animalTopics[b.id].filter(t=>remaining.includes(t)).length-animalTopics[a.id].filter(t=>remaining.includes(t)).length);}
 export function animalMessage(id,choices){
  const [s,w,f,l]=choices;
- if(id==='earthworm')return f==='spray'?'흙에 농약이 너무 많이 남으면, 그 흙 속에 사는 내가 피해를 받아.':'나는 흙 속에서 살아서, 쓰레기와 해로운 물질이 흙에 쌓이면 살기 어려워져.';
- if(id==='bee')return f==='spray'?'밭 전체에 뿌린 많은 농약은 꽃을 찾아다니는 벌인 나에게도 피해를 줘.':'여러 꽃이 사라지면 꽃을 찾아다니는 나는 먹이를 구하기 어려워져.';
- if(id==='bird')return l==='burn'?'쓰레기 연기가 퍼져 우리가 숨 쉬는 공기가 오염됐어.':'나무와 덤불이 사라져 둥지를 짓고 쉴 곳이 줄었어.';
- if(id==='rabbit')return s==='cut'?'새 도로가 내가 오가던 길을 끊어서 풀밭과 쉼터를 안전하게 오가기 어려워.':'숲과 풀밭이 사라지면 먹이와 숨을 곳을 잃어.';
- if(id==='frog')return w!=='treat'||f==='spray'?'더러운 물이나 빗물에 섞인 농약이 물가로 들어와, 그곳에 사는 내가 피해를 받아.':'나는 물가와 풀밭을 오가며 살아서, 두 곳이 사라지면 살기 어려워져.';
- if(id==='otter')return w!=='treat'||f==='spray'?'물이 오염돼 물고기가 줄면, 나는 먹이를 구하기 어려워져.':'나는 물가에서 살며 먹이를 구해서, 하천과 물가의 집이 사라지면 살기 어려워져.';
- if(id==='spoonbill')return '물가가 오염되거나 갯벌이 사라지면, 나는 먹이를 구하기 어려워져.';
- return '나는 물가와 풀밭을 오가서, 물이 오염되거나 집이 사라지면 살기 어려워져.';
+ if(id==='earthworm')return f==='spray'?'흙에 농약이 너무 많이 남으면, 그 흙 속에 사는 제가 피해를 받아요.':'저는 흙 속에서 살아서, 쓰레기와 해로운 물질이 흙에 쌓이면 살기 어려워져요.';
+ if(id==='bee')return f==='spray'?'밭 전체에 뿌린 많은 농약은 꽃을 찾아다니는 벌인 저에게도 피해를 줘요.':'여러 꽃이 사라지면 꽃을 찾아다니는 저는 먹이를 구하기 어려워져요.';
+ if(id==='bird')return l==='burn'?'쓰레기 연기가 퍼져 우리가 숨 쉬는 공기가 오염됐어요.':'나무와 덤불이 사라져 둥지를 짓고 쉴 곳이 줄었어요.';
+ if(id==='rabbit')return s==='cut'?'새 도로가 제가 오가던 길을 끊어서 풀밭과 쉼터를 안전하게 오가기 어려워요.':'숲과 풀밭이 사라지면 먹이와 숨을 곳을 잃어요.';
+ if(id==='frog')return w!=='treat'||f==='spray'?'더러운 물이나 빗물에 섞인 농약이 물가로 들어와, 그곳에 사는 제가 피해를 받아요.':'저는 물가와 풀밭을 오가며 살아서, 두 곳이 사라지면 살기 어려워져요.';
+ if(id==='otter')return w!=='treat'||f==='spray'?'물이 오염돼 물고기가 줄면, 저는 먹이를 구하기 어려워져요.':'저는 물가에서 살며 먹이를 구해서, 하천과 물가의 집이 사라지면 살기 어려워져요.';
+ if(id==='spoonbill')return '물가가 오염되거나 갯벌이 사라지면, 저는 먹이를 구하기 어려워져요.';
+ return '저는 물가와 풀밭을 오가서, 물이 오염되거나 집이 사라지면 살기 어려워져요.';
 }
 
 export function cleanEffort(raw){

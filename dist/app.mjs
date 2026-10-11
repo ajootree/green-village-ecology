@@ -96,7 +96,7 @@ function friendLine(speaker,line,nextLabel,onNext){
   const q=$('#quest');q.classList.add('dialogue-panel');q.setAttribute('aria-label',speaker+'의 말');
   q.innerHTML=`<img class="friend-character" src="${villagerImage(speaker)}" alt="${H(speaker)}" draggable="false"><span class="friend-name">${H(speaker)}</span><p id="villager-line" aria-live="polite"></p><button class="primary" id="read-line">대사 펼치기 →</button>`;
   const text=$('#villager-line'),button=$('#read-line');
-  const name=myName(),last=name.charCodeAt(name.length-1),called=name==='나'?'새 친구야':last>=44032&&last<=55203?name+((last-44032)%28?'아':'야'):name+'님';
+  const name=myName(),called=name==='나'?'새 친구님':name+'님';
   dialogueTyping=typeText(text,called+', '+line,()=>{button.textContent=nextLabel;});
   button.onclick=()=>{if(text.classList.contains('typewriter'))dialogueTyping.finish();else onNext();};
   button.focus();

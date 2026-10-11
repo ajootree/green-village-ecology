@@ -17,7 +17,7 @@ for(const s of seasons[0].choices)for(const w of seasons[1].choices)for(const f 
  assert(related.every(an=>an.related.every(id=>r.remaining.some(t=>t.id===id))));
  assert(related.every((an,i)=>i===0||related[i-1].related.length>=an.related.length));
  assert(related.every(an=>animalMessage(an.id,a).length>0&&effortReady({kind:'letter',animal:an.id,message:'살 곳을 함께 지킬게.'})));
- const memories=endingMemories(a,'별빛');assert.equal(memories.length,4);assert(memories.every(m=>m.text.startsWith('별빛, ')&&!m.text.includes('undefined')));
+ const memories=endingMemories(a,'별빛');assert.equal(memories.length,4);assert(memories.every(m=>m.text.startsWith('별빛님, ')&&!m.text.includes('undefined')));
  assert.equal(Boolean(r.repairNote),repair);assert(humanConsequences(a).length>0);
  if(repair)assert.deepEqual(r.results,learningReport(a,false).results,'Late promises do not erase the observed harm.');
 }

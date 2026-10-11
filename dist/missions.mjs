@@ -14,7 +14,7 @@ const definitions = [
   {
     treat:{kind:'plumb',title:'처리 시설 배관 정비',icon:'🔧',goal:'새 배관 세 개를 빈 곳에 끼우고 물 밸브를 열어 주세요.',how:'아래 배관을 같은 모양의 빈 자리에 끌어 놓아요. 다 끼우면 밸브를 열어요.',theme:'water'},
     clean:{kind:'haul',title:'뜰채로 쓰레기 건지기',icon:'🪣',goal:'하천에 떠 있는 쓰레기 여섯 개를 수거통에 담아 주세요.',how:'쓰레기를 끌어 수거통에 놓아요. 쓰레기 → 수거통 순서로 눌러도 돼요.',theme:'river'},
-    hide:{kind:'memory',title:'가림막 조명 점검',icon:'🏮',goal:'작업자가 알려 주는 순서대로 조명 스위치를 점검해 주세요.',how:'등이 켜지는 순서를 보고 똑같이 눌러요. 두 번 점검하면 끝!',theme:'lanterns'},
+    hide:{kind:'memory',title:'가림막 조명 점검',icon:'🏮',goal:'작업자가 알려 주는 순서대로 조명 스위치를 점검해 주세요.',how:'등이 켜지는 순서를 보고 똑같이 눌러요. 두 번 점검하면 끝나요.',theme:'lanterns'},
     share:{kind:'tune',title:'세 작업에 예산 나누기',icon:'🪙',goal:'동전 아홉 개를 시설·청소·꾸미기 주머니에 세 개씩 나누어 담아 주세요.',how:'동전을 잡고 주머니 안으로 끌어 놓아요. 각 주머니에 세 개씩 담아요.',theme:'partial'}
   },
   {
@@ -107,7 +107,7 @@ export function actMission(m,action,value,extra){
   }else if(action==='coin'&&m.kind==='tune'&&Number.isInteger(value)&&value>=0&&value<9&&Number.isInteger(extra)&&extra>=0&&extra<3&&!m.marks[value]){if(m.values[extra]<3){m.marks[value]=1;m.values[extra]++;m.picked=null;valid=true;}else m.message='이 주머니에는 세 개를 담았어요. 다른 주머니에 나누어 주세요.';
   }else if(action==='memory'&&m.kind==='memory'&&!m.showing&&Number.isInteger(value)&&value>=0&&value<3){
     valid=true;
-    if(value===sequence(m)[m.index]){m.index++;if(m.index===sequence(m).length){m.round++;m.index=0;m.message=m.round===2?'점검 완료!':'첫 점검 완료! 다음 순서를 확인해요.';}}
+    if(value===sequence(m)[m.index]){m.index++;if(m.index===sequence(m).length){m.round++;m.index=0;m.message=m.round===2?'점검을 마쳤어요.':'첫 점검을 마쳤어요. 다음 순서를 확인해요.';}}
     else{m.index=0;m.message='순서가 달랐어요. 처음부터 다시 눌러요. 「순서 보기」로 확인할 수 있어요.';}
   }
   if(valid){m.revision++;const [done,total]=missionProgress(m);if(m.kind!=='connect'&&!(m.kind==='inspect'&&m.id==='care'))m.done=done===total;}
@@ -171,7 +171,7 @@ export function mountMission(host,m,onChange){
   function preview(){
     if(previewing||m.done)return;previewing=true;m.showing=true;m.index=0;
     const seq=sequence(m);$$('[data-lamp]').forEach(b=>b.disabled=true);$('#preview-sequence').disabled=true;
-    notify(m.round?'첫 점검 완료! 이번에는 다음 순서를 기억해요.':'등이 켜지는 순서를 기억해요. 다 보여 준 뒤 스위치를 누를 수 있어요.',m.round?'next':'hint');
+    notify(m.round?'첫 점검을 마쳤어요. 이번에는 다음 순서를 기억해요.':'등이 켜지는 순서를 기억해요. 다 보여 준 뒤 스위치를 누를 수 있어요.',m.round?'next':'hint');
     const cue=$('#mission-sequence-cue');cue.hidden=false;
     seq.forEach((v,i)=>{later(()=>{$(`[data-lamp="${v}"]`)?.classList.add('lit');cue.textContent=['주황','파랑','초록'][v]+' 등';},300+i*750);later(()=>{$(`[data-lamp="${v}"]`)?.classList.remove('lit');},850+i*750);});
     later(()=>{previewing=false;m.showing=false;cue.hidden=true;$$('[data-lamp]').forEach(b=>b.disabled=false);$('#preview-sequence').disabled=false;notify('이제 방금 본 순서대로 스위치를 눌러 주세요.','next');},400+seq.length*750);
