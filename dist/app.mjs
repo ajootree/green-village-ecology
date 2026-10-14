@@ -2,7 +2,7 @@ import {playBonus} from './bonus.mjs';
 import {explorerImage,villagerImage} from './characters.mjs';
 import {endingMemories} from './ending-memories.mjs';
 import {seasons,endings,choiceLabel,resolveEnding,endingText,statusFor} from './model.mjs';
-import {cleanState,freshState} from './state.mjs';
+import {cleanState,freshState,canChooseRegret} from './state.mjs';
 import * as cloud from './cloud.mjs';
 import * as music from './music.mjs';
 import {regions,worldSVG,paintedWorldAssets} from './world.mjs';
@@ -140,13 +140,14 @@ function final(){
     q.classList.remove('meeting-records','final-panel');
     friendLine(seasons[3].speaker,'네 계절 동안 함께 준비해 주어서 고마워요. 우리가 고른 방법을 앞으로도 이어 갈까요?','계획 고르기 →',()=>{
       dialogueTyping?.stop();q.classList.remove('dialogue-panel');q.classList.add('choice-panel');q.setAttribute('aria-label','다음 봄의 계획 고르기');
-      q.innerHTML='<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair"><strong>담당 어른들과 문제가 된 방법을 고친다.</strong></button></div>';
+      const regretAvailable=canChooseRegret(state,g().choices);
+      q.innerHTML=`<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair" ${regretAvailable?'':'disabled'}><strong>담당 어른들과 문제가 된 방법을 고친다.</strong><small>${regretAvailable?'이 선택은 모험 기록마다 한 번만 할 수 있어요.':state.album.E10?'후회 선택은 이미 한 번 사용했어요.':'지금 계획에는 고칠 문제가 없어요.'}</small></button></div>`;
       $('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#keep').focus();
     });
   };
 }
 
-function finish(repair){const choices=[...g().choices],id=resolveEnding(choices,repair),fresh=!state.album[id];state.album[id]={choices,repair};state.last={choices,repair};state.game=null;save();cinema({id,choices,repair},fresh);}
+function finish(repair){if(!g())return;if(repair&&!canChooseRegret(state,g().choices)){toast(state.album.E10?'후회 선택은 이미 한 번 사용했어요. 다른 선택으로 이어가 주세요.':'지금 계획은 그대로 이어갈 수 있어요.');return;}const choices=[...g().choices],id=resolveEnding(choices,repair),fresh=!state.album[id];state.album[id]={choices,repair};state.last={choices,repair};state.game=null;save();cinema({id,choices,repair},fresh);}
 function modal(title,html){const d=$('#dialog');d.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button id="close" aria-label="닫기">×</button></div><div class="dialog-body">${html}</div>`;$('#close').onclick=()=>d.close();if(!d.open)d.showModal();return d;}
 function recordDialog(i){if(!g()?.choices[i])return;const s=seasons[i],c=s.choices.find(c=>c.id===g().choices[i]);modal(`${icons[i]} ${s.name}의 기록`,`<p class="record-date">${s.month} · ${s.area}</p><h3>${c.name}</h3><p>${c.result}</p>`);if(c.id==='wait')savedPhotos();}
 function savedPhotos(){const d=$('#dialog'),strip=document.createElement('div');strip.className='saved-photos';strip.setAttribute('aria-label','작물 관찰 사진');d.querySelector('.dialog-body').append(strip);for(let i=0;i<3;i++)photo(i).then(src=>{if(!strip.isConnected)return;const image=document.createElement('img');image.src=src;image.alt='가을에 남긴 작물 사진 '+(i+1);strip.append(image);}).catch(()=>{});}

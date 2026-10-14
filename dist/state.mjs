@@ -9,6 +9,8 @@ export function cleanState(raw){
   s.updatedAt=Number(raw.updatedAt)||0;return s;
 }
 export function mergeAlbum(a,b){return {...cleanState(a).album,...cleanState(b).album};}
+// E10 is an existing, persistent record, including for saves made before this limit.
+export function canChooseRegret(state,choices){return !cleanState(state).album.E10&&(choices===undefined||resolveEnding(choices,true)==='E10');}
 export function normalIdentity(school,nickname){
   const norm=v=>String(v).normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('ko');
   const s=norm(school),n=norm(nickname);if(s.length<2||s.length>60||n.length<2||n.length>16||/[\u0000-\u001f]/.test(s+n))throw new Error('학교는 2~60자, 닉네임은 2~16자로 입력해 주세요.');return [s,n];
