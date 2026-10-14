@@ -141,7 +141,7 @@ function final(){
     friendLine(seasons[3].speaker,'네 계절 동안 함께 준비해 주어서 고마워요. 우리가 고른 방법을 앞으로도 이어 갈까요?','계획 고르기 →',()=>{
       dialogueTyping?.stop();q.classList.remove('dialogue-panel');q.classList.add('choice-panel');q.setAttribute('aria-label','다음 봄의 계획 고르기');
       const regretAvailable=canChooseRegret(state,g().choices);
-      q.innerHTML=`<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair" ${regretAvailable?'':'disabled'}><strong>담당 어른들과 문제가 된 방법을 고친다.</strong><small>${regretAvailable?'이 선택은 모험 기록마다 한 번만 할 수 있어요.':state.album.E10?'후회 선택은 이미 한 번 사용했어요.':'지금 계획에는 고칠 문제가 없어요.'}</small></button></div>`;
+      q.innerHTML=`<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair" ${regretAvailable?'':'disabled'}><strong>담당 어른들과 문제가 된 방법을 고친다.</strong></button></div>`;
       $('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#keep').focus();
     });
   };

@@ -74,7 +74,6 @@
 #dialog[open]:has(#start-form){display:flex;flex-direction:column;max-height:calc(100dvh - 24px)}#dialog:has(#start-form) .dialog-head{flex-shrink:0}#dialog:has(#start-form) .dialog-body{min-height:0;overflow:auto;max-height:none}
 
 #dialog:has(#start-confirm) .entry-intro{display:none}
-.final-choices #repair small{display:block;font-size:15px;line-height:1.4;margin-top:6px;color:#d7dfc2}
 .final-choices #repair:disabled{opacity:1;background:#19372d;color:#b7c6ac;border-color:#81977e}
 
 /* Notices belong to the tool header and never cover the working scene. */
