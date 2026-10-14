@@ -74,3 +74,48 @@
 #dialog[open]:has(#start-form){display:flex;flex-direction:column;max-height:calc(100dvh - 24px)}#dialog:has(#start-form) .dialog-head{flex-shrink:0}#dialog:has(#start-form) .dialog-body{min-height:0;overflow:auto;max-height:none}
 
 #dialog:has(#start-confirm) .entry-intro{display:none}
+
+/* Keep the workbench within the available tablet viewport, including its controls. */
+.chapter-screen .quest.mission-panel.task-only{
+ top:clamp(86px,12dvh,104px);bottom:max(10px,env(safe-area-inset-bottom));
+ max-height:none;height:auto;overflow:hidden;padding:12px;gap:8px;
+ grid-template-rows:auto minmax(0,1fr) auto;
+}
+.task-only .task-area,.task-only #work,.task-only .mission-device{min-height:0}
+.task-only .quest-footer button{min-height:44px}
+.lens-survey{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.38fr);grid-template-rows:minmax(0,1fr) auto;min-height:0}
+.lens-survey .survey-scene{grid-column:1;grid-row:1;min-height:0;overflow:hidden}
+.lens-survey .survey-observation{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:10px;border-top:0;border-left:2px solid #c6bd95}
+.lens-survey .survey-observation p{min-height:0;line-height:1.4}
+.lens-survey .survey-help{font-size:16px;line-height:1.4;color:#50674a}
+.lens-survey .survey-decision{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:6px 10px}
+.lens-survey .survey-decision>div{display:flex;gap:8px}
+.lens-survey .survey-decision button{min-height:44px;font-size:16px!important;padding:8px 12px}
+.mission-device:has(.lens-survey) .mission-feedback{display:none}
+.task-only .mission-feedback{flex-shrink:0}
+.cinema-top{flex-wrap:wrap;padding:8px 12px;gap:6px}
+.cinema .cinema-top>span{display:block!important;width:100%;font-size:18px;line-height:1.4;color:#f3dfab}
+.cinema-top>div{flex-wrap:wrap;gap:6px}
+.cinema .reading-hint{font-size:15px;line-height:1.5;color:#d7dfc2}
+.cinema.rolling .reading-hint{display:none}
+.cinema .cinema-bottom{overflow-y:auto;overscroll-behavior:contain}
+.cinema.reading-all .credits-window{overflow-y:auto;touch-action:pan-y;scrollbar-width:thin;scroll-behavior:auto;mask-image:none}
+.cinema.reading-all .credits{transform:none;will-change:auto}
+@media(max-height:550px) and (min-width:701px){
+ .cinema .cinema-bottom>div>small{display:none}
+ .cinema .cinema-bottom strong{font-size:17px;line-height:1.35}
+ .chapter-screen .quest.mission-panel.task-only{top:78px;padding:8px;gap:6px}
+ .task-only .mission-device-top{padding:4px 10px}
+ .task-only .quest-heading h2{font-size:19px;line-height:1.3}
+ .task-only .mission-feedback{min-height:0;padding:5px 9px}
+ .task-only .mission-feedback p{font-size:15px!important;line-height:1.35}
+ .lens-survey .survey-observation{padding:4px 10px}
+ .lens-survey .survey-decision{padding:4px 10px}
+}
+@media(max-width:700px){
+ .lens-survey{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto auto}
+ .lens-survey .survey-observation{grid-column:1;grid-row:2;border-left:0;border-top:2px solid #c6bd95;gap:6px}
+ .lens-survey .survey-decision{grid-row:3}
+ .lens-survey .survey-decision{grid-template-columns:1fr}
+ .lens-survey .survey-decision button{flex:1;padding:8px 6px}
+}
