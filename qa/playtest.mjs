@@ -1,5 +1,6 @@
 import {seasons} from '/model.mjs';
 import {createMission,missionInfo,mountMission} from '/missions.mjs';
+import '/_qa/crop-layout.mjs';
 const select=document.querySelector('#review-plan'),quest=document.querySelector('#review-quest');
 select.innerHTML=seasons.flatMap((s,stage)=>s.choices.map(c=>`<option value="${stage}:${c.id}">${s.name} · ${missionInfo(stage,c.id).title}</option>`)).join('');
 let dispose=()=>{};
