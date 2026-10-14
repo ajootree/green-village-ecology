@@ -77,6 +77,25 @@
 .final-choices #repair small{display:block;font-size:15px;line-height:1.4;margin-top:6px;color:#d7dfc2}
 .final-choices #repair:disabled{opacity:1;background:#19372d;color:#b7c6ac;border-color:#81977e}
 
+/* Notices belong to the tool header and never cover the working scene. */
+.task-only .mission-device-top{min-height:60px;gap:10px}
+.mission-device-top .mission-notice{
+ position:static;top:auto;left:auto;translate:none;transform:none;width:auto;min-width:0;flex:1;
+ padding:0;border:0;border-radius:0;box-shadow:none;background:none;animation:none;
+ align-items:center;gap:8px;pointer-events:auto;
+}
+.mission-device-top .mission-notice[hidden]{display:none}
+.mission-device-top:has(.mission-notice:not([hidden])) .mission-tool-label{display:none}
+.mission-device-top .mission-notice>div{min-width:0}
+.mission-device-top .mission-notice-title{display:inline;font-size:16px;line-height:1.4;margin:0 8px 0 0}
+.mission-device-top .mission-notice-text{display:inline;font-size:16px!important;line-height:1.4;word-break:keep-all}
+.mission-device-top .mission-notice-icon{width:26px;height:26px;font-size:18px}
+.mission-device-top #mission-sequence-cue,.mission-device-top #mission-counter{flex-shrink:0}
+.hanging-lanterns{display:grid;grid-template-rows:minmax(0,1fr) auto auto;justify-items:center;gap:6px;padding:6px 10px}
+.hanging-lanterns .mission-lamps{min-height:0;height:100%;align-items:center}
+.hanging-lanterns .mission-lamp{height:100%;max-height:140px;min-height:64px}
+.hanging-lanterns .preview-sequence{min-height:44px;padding:7px 14px}
+
 /* Keep the workbench within the available tablet viewport, including its controls. */
 .chapter-screen .quest.mission-panel.task-only{
  top:clamp(86px,12dvh,104px);bottom:max(10px,env(safe-area-inset-bottom));
