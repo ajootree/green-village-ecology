@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {freshState,cleanState,identityEmail,mergeAlbum,canChooseRegret} from '../dist/state.mjs';
+import {freshState,cleanState,cleanLocalState,identityEmail,mergeAlbum,canChooseRegret} from '../dist/state.mjs';
+import {seasons} from '../dist/model.mjs';
 const a=await identityEmail(' 광주 초록초등학교 ', '새싹');
 assert.equal(a,await identityEmail('광주  초록초등학교','새싹'));
 assert.notEqual(a,await identityEmail('서울 초록초등학교','새싹'));
@@ -22,4 +23,15 @@ restored.game={stage:0,phase:'explore',choices:[null,null,null,null],player:[50,
 assert.equal(canChooseRegret(restored),false,'Starting another playthrough cannot restore regret.');
 assert.equal(canChooseRegret({...one,album:mergeAlbum(one,two)}),false,'Merged device and account records preserve the limit.');
 assert.equal(canChooseRegret(cleanState({album:{E10:one.album.E08}})),true,'An invalid E10 entry cannot lock a new player.');
-console.log('Identity isolation, normalization, save validation and album merging: passed');
+for(const [stage,season] of seasons.entries())for(const choice of season.choices){
+  const game={stage,phase:'task',choices:seasons.map((s,i)=>i<stage?s.choices[0].id:null),player:[50,65],pendingPlan:choice.id};
+  const raw=JSON.parse(JSON.stringify({...freshState(),game}));
+  const restored=cleanLocalState(raw);
+  assert.equal(restored.game.pendingPlan,choice.id,'Every selected plan survives a device reload.');
+  assert.equal(restored.game.choices[stage],null,'Selecting a plan does not execute its outcome.');
+  assert.equal(cleanState(restored).game.pendingPlan,undefined,'Device checkpoints do not change the online schema.');
+  assert.equal(cleanLocalState({...raw,game:{...game,pendingPlan:'invalid'}}).game.pendingPlan,undefined);
+  assert.equal(cleanLocalState({...raw,game:{...game,phase:'explore'}}).game.pendingPlan,undefined);
+  assert.equal(cleanLocalState({...raw,game:{...game,phase:'result',choices:game.choices.map((c,i)=>i===stage?choice.id:c)}}).game.pendingPlan,undefined);
+}
+console.log('Identity isolation, normalization, device choice checkpoints, save validation and album merging: passed');

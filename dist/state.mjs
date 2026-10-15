@@ -1,4 +1,4 @@
-import {endings,isValidChoices,resolveEnding} from './model.mjs';
+import {endings,seasons,isValidChoices,resolveEnding} from './model.mjs';
 export const freshState=()=>({schema:2,album:{},game:null,last:null,updatedAt:0});
 export function cleanState(raw){
   const s=freshState();if(!raw||typeof raw!=='object')return s;
@@ -9,6 +9,13 @@ export function cleanState(raw){
   s.updatedAt=Number(raw.updatedAt)||0;return s;
 }
 export function mergeAlbum(a,b){return {...cleanState(a).album,...cleanState(b).album};}
+// An uncompleted plan is a device checkpoint, not an executed story choice.
+// Keep it out of cleanState's online save format.
+export function cleanLocalState(raw){
+  const state=cleanState(raw),game=state.game,plan=raw?.game?.pendingPlan;
+  if(game?.phase==='task'&&seasons[game.stage]?.choices.some(c=>c.id===plan))game.pendingPlan=plan;
+  return state;
+}
 // E10 is an existing, persistent record, including for saves made before this limit.
 export function canChooseRegret(state,choices){return !cleanState(state).album.E10&&(choices===undefined||resolveEnding(choices,true)==='E10');}
 export function normalIdentity(school,nickname){
