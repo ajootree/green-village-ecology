@@ -85,18 +85,11 @@
 .album-dialog .ending-guide-copy{font-size:18px;line-height:1.7;margin-bottom:16px;word-break:keep-all}
 .album-dialog #album-back,.album-dialog #rewatch,.album-dialog #album-new-run,.album-dialog #guide-new-run{min-height:44px;padding:10px 14px;font-size:17px;margin:6px 8px 6px 0}
 .cinema #cinema-return{min-height:44px;font-size:16px;background:#efcf80;color:#163b2d;border-radius:8px}
-.choice-guidance{display:flex;align-items:center;gap:12px;margin-top:12px}
-.choice-guidance button{flex-shrink:0;min-height:44px;padding:8px 12px;font-size:16px}
-.choice-guidance #choice-recommend{position:relative;padding-left:34px;background:linear-gradient(135deg,#ffebaf,#efcf80);border:2px solid #ffe8a0;color:#173b2c;font-weight:800;animation:recommendation-glow 2.8s ease-in-out infinite}
-.choice-guidance #choice-recommend:before{content:'✦';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#566d32;font-size:20px;pointer-events:none;animation:recommendation-sparkle 2.8s ease-in-out infinite}
-.choice-guidance p{font-size:16px;line-height:1.4;color:#e3e7c8}
-.choice-guidance p:empty{display:none}
 .quest .recommended-choice{border:2px solid #ffe39b;background:linear-gradient(135deg,#46643c,#38583a);position:relative;animation:recommendation-glow 3.2s ease-in-out infinite}
 .recommendation-badge{display:block;font-size:15px;line-height:1.35;font-style:normal;color:#ffe3a0;margin-top:4px}
 @keyframes recommendation-glow{0%,100%{box-shadow:0 0 0 1px #ffe39b55,0 0 7px #f6d37d26}50%{box-shadow:0 0 0 2px #ffe39b88,0 0 17px #f6d37d55}}
-@keyframes recommendation-sparkle{0%,100%{opacity:.55}50%{opacity:1}}
-@media(prefers-reduced-motion:reduce){.choice-guidance #choice-recommend,.choice-guidance #choice-recommend:before,.quest .recommended-choice{animation:none;box-shadow:0 0 0 1px #ffe39b88}}
-@media(max-height:550px){.album-dialog .dialog-head{padding:10px 16px}.album-dialog .dialog-body{padding:12px 16px}.album-actions{padding:8px 12px}.choice-guidance{margin-top:8px;gap:8px}}
+@media(prefers-reduced-motion:reduce){.quest .recommended-choice{animation:none;box-shadow:0 0 0 1px #ffe39b88}}
+@media(max-height:550px){.album-dialog .dialog-head{padding:10px 16px}.album-dialog .dialog-body{padding:12px 16px}.album-actions{padding:8px 12px}}
 
 /* Notices belong to the tool header and never cover the working scene. */
 .task-only .mission-device-top{min-height:60px;gap:10px}

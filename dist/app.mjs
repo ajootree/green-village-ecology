@@ -172,14 +172,9 @@ function recommendationText(r){
   return `${g()?'':'다음 모험의 '}${seasons[r.stage].name}에는 「${planText(r.stage,r.choice)}」를 골라 보세요. 이어지는 계절에서도 추천을 확인해 보세요.`;
 }
 function choiceGuidance(q){
-  const guide=document.createElement('div');guide.className='choice-guidance';
-  guide.innerHTML='<button class="secondary" id="choice-recommend">새 엔딩 선택 추천</button><p id="choice-guide-text" role="status"></p>';q.append(guide);
-  $('#choice-recommend').onclick=()=>{
-    const r=recommendEnding(state);$$('.recommended-choice').forEach(b=>b.classList.remove('recommended-choice'));$$('.recommendation-badge').forEach(b=>b.remove());
-    const button=r?$(r.stage===4?'#'+r.choice:`[data-plan="${r.choice}"]`):null;
-    if(button&&!button.disabled){button.classList.add('recommended-choice');const badge=document.createElement('em');badge.className='recommendation-badge';badge.textContent='새 엔딩 추천';button.append(badge);}
-    $('#choice-guide-text').textContent=r?(r.stage===4?'표시한 방법으로 아직 못 본 엔딩에 도전해 보세요.':'표시한 방법으로 새 엔딩에 도전해 보세요. 다음 계절에서도 추천을 확인해요.'):recommendationText(null);
-  };
+  const r=recommendEnding(state);
+  const button=r?q.querySelector(r.stage===4?'#'+r.choice:`[data-plan="${r.choice}"]`):null;
+  if(button&&!button.disabled){button.classList.add('recommended-choice');const badge=document.createElement('em');badge.className='recommendation-badge';badge.textContent='새 엔딩 추천';button.append(badge);}
 }
 function albumRecommendation(page){
   const r=recommendEnding(state);
