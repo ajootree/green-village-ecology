@@ -1,0 +1,11 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>앨범 복귀·추천 검수</title><body style="background:#123c31;color:#fff4d3;font:20px sans-serif;padding:24px"><h1>앨범 복귀·추천 검수</h1><p>검수 이름의 기기 기록만 사용합니다.</p><button id="task">진행 중인 사진 작업 열기</button><button id="final">마을 회의 열기</button><script>
+const name='앨범복귀검수',key='eco-village-local-v2-'+encodeURIComponent(name);
+function open(final){
+ if(location.hostname!=='127.0.0.1'||location.port!=='8778')return;
+ const album={E01:{choices:['corridor','treat','care','reuse'],repair:false},E08:{choices:['cut','treat','care','reuse'],repair:false},E10:{choices:['cut','treat','care','reuse'],repair:true}};
+ const game=final?{stage:4,phase:'final',choices:['detour','treat','care','reuse'],player:[62,67]}:{stage:2,phase:'task',choices:['detour','treat',null,null],player:[62,67],pendingPlan:'wait'};
+ const state={schema:2,album,last:album.E08,updatedAt:Date.now(),game};
+ localStorage.setItem('eco-village-local-name',name);localStorage.setItem(key,JSON.stringify(state));location.href='/';
+}
+document.querySelector('#task').onclick=()=>open(false);document.querySelector('#final').onclick=()=>open(true);
+</script></body></html>

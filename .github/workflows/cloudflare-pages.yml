@@ -35,6 +35,7 @@ jobs:
           node --check dist/ending-memories.mjs
           node qa/check-learning.mjs
           node qa/check-model.mjs
+          node qa/check-ending-guide.mjs
           node qa/check-state.mjs
           node qa/check-world.mjs
           node qa/check-missions.mjs

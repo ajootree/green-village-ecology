@@ -76,6 +76,23 @@
 #dialog:has(#start-confirm) .entry-intro{display:none}
 .final-choices #repair:disabled{opacity:1;background:#19372d;color:#b7c6ac;border-color:#81977e}
 
+/* Keep album navigation visible while its pages scroll. */
+#dialog.album-dialog[open]{display:flex;flex-direction:column;width:min(820px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0}
+.album-dialog .dialog-head,.album-dialog .album-actions{flex-shrink:0}
+.album-dialog .dialog-body{min-height:0;overflow-y:auto;max-height:none}
+.album-actions{display:flex;gap:10px;padding:12px 20px;border-top:1px solid var(--line);background:#133c31}
+.album-actions button{flex:1;min-height:44px;font-size:17px;padding:10px;border-radius:10px}
+.album-dialog .ending-guide-copy{font-size:18px;line-height:1.7;margin-bottom:16px;word-break:keep-all}
+.album-dialog #album-back,.album-dialog #rewatch,.album-dialog #album-new-run,.album-dialog #guide-new-run{min-height:44px;padding:10px 14px;font-size:17px;margin:6px 8px 6px 0}
+.cinema #cinema-return{min-height:44px;font-size:16px;background:#efcf80;color:#163b2d;border-radius:8px}
+.choice-guidance{display:flex;align-items:center;gap:12px;margin-top:12px}
+.choice-guidance button{flex-shrink:0;min-height:44px;padding:8px 12px;font-size:16px}
+.choice-guidance p{font-size:16px;line-height:1.4;color:#e3e7c8}
+.choice-guidance p:empty{display:none}
+.quest .recommended-choice{border:2px solid #f6d37d;background:#38583a;position:relative}
+.recommendation-badge{display:block;font-size:15px;line-height:1.35;font-style:normal;color:#ffe3a0;margin-top:4px}
+@media(max-height:550px){.album-dialog .dialog-head{padding:10px 16px}.album-dialog .dialog-body{padding:12px 16px}.album-actions{padding:8px 12px}.choice-guidance{margin-top:8px;gap:8px}}
+
 /* Notices belong to the tool header and never cover the working scene. */
 .task-only .mission-device-top{min-height:60px;gap:10px}
 .mission-device-top .mission-notice{

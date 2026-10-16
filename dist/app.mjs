@@ -3,6 +3,7 @@ import {explorerImage,villagerImage} from './characters.mjs';
 import {endingMemories} from './ending-memories.mjs';
 import {seasons,endings,choiceLabel,resolveEnding,endingText,statusFor} from './model.mjs';
 import {cleanState,cleanLocalState,freshState,canChooseRegret} from './state.mjs';
+import {recommendEnding} from './ending-guide.mjs';
 import * as cloud from './cloud.mjs';
 import * as music from './music.mjs';
 import {regions,worldSVG,paintedWorldAssets} from './world.mjs';
@@ -127,6 +128,7 @@ function renderQuest(){
   q.innerHTML=`<div class="choices">${s.choices.map((c,j)=>`<button class="choice" data-plan="${c.id}"><span>${j+1}</span><strong>${planSentences[i][j]}</strong></button>`).join('')}</div>`;
   $$('[data-plan]').forEach(b=>b.onclick=()=>{const id=b.dataset.plan;for(const asset of [paintedWorldAssets[i],...(i===2&&id==='spray'?[paintedWorldAssets[4]]:[])]){const painting=new Image();painting.src=asset;}choosePlan(i,id);});
   $('[data-plan]')?.focus();
+  choiceGuidance(q);
 
 }
 function commit(){
@@ -142,25 +144,58 @@ function final(){
       dialogueTyping?.stop();q.classList.remove('dialogue-panel');q.classList.add('choice-panel');q.setAttribute('aria-label','다음 봄의 계획 고르기');
       const regretAvailable=canChooseRegret(state,g().choices);
       q.innerHTML=`<div class="final-choices"><button id="keep"><strong>지금 계획대로 진행한다.</strong></button><button id="repair" ${regretAvailable?'':'disabled'}><strong>담당 어른들과 문제가 된 방법을 고친다.</strong></button></div>`;
-      $('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#keep').focus();
+      $('#keep').onclick=()=>finish(false);$('#repair').onclick=()=>finish(true);$('#keep').focus();choiceGuidance(q);
     });
   };
 }
 
 function finish(repair){if(!g())return;if(repair&&!canChooseRegret(state,g().choices)){toast(state.album.E10?'후회 선택은 이미 한 번 사용했어요. 다른 선택으로 이어가 주세요.':'지금 계획은 그대로 이어갈 수 있어요.');return;}const choices=[...g().choices],id=resolveEnding(choices,repair),fresh=!state.album[id];state.album[id]={choices,repair};state.last={choices,repair};state.game=null;save();cinema({id,choices,repair},fresh);}
-function modal(title,html){const d=$('#dialog');d.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button id="close" aria-label="닫기">×</button></div><div class="dialog-body">${html}</div>`;$('#close').onclick=()=>d.close();if(!d.open)d.showModal();return d;}
+function modal(title,html){const d=$('#dialog');d.classList.remove('album-dialog');d.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button id="close" aria-label="닫기">×</button></div><div class="dialog-body">${html}</div>`;$('#close').onclick=()=>d.close();if(!d.open)d.showModal();return d;}
 function recordDialog(i){if(!g()?.choices[i])return;const s=seasons[i],c=s.choices.find(c=>c.id===g().choices[i]);modal(`${icons[i]} ${s.name}의 기록`,`<p class="record-date">${s.month} · ${s.area}</p><h3>${c.name}</h3><p>${c.result}</p>`);if(c.id==='wait')savedPhotos();}
 function savedPhotos(){const d=$('#dialog'),strip=document.createElement('div');strip.className='saved-photos';strip.setAttribute('aria-label','작물 관찰 사진');d.querySelector('.dialog-body').append(strip);for(let i=0;i<3;i++)photo(i).then(src=>{if(!strip.isConnected)return;const image=document.createElement('img');image.src=src;image.alt='가을에 남긴 작물 사진 '+(i+1);strip.append(image);}).catch(()=>{});}
 function journal(){const a=g()?.choices||state.last?.choices||[null,null,null,null];modal('🎒 내 모험 기록',`<div class="journal-pages">${seasons.map((s,i)=>`<button class="journal-entry ${a[i]?'written':''}" data-record="${i}"><span>${icons[i]}</span><div><strong>${s.name} · ${s.area}</strong><p>${a[i]?planText(i,a[i]):'아직 기록하지 않았어요.'}</p></div></button>`).join('')}</div>`);$$('[data-record]').forEach(b=>b.onclick=()=>{if(g()?.choices[b.dataset.record])recordDialog(Number(b.dataset.record));else if(a[b.dataset.record]){const i=Number(b.dataset.record),c=seasons[i].choices.find(c=>c.id===a[i]);modal(`${icons[i]} ${seasons[i].name}의 기록`,`<h3>${c.name}</h3><p>${c.result}</p>`);if(c.id==='wait')savedPhotos();}});}
-function openAlbum(page=0){page=page===1?1:0;modal(`📖 엔딩 앨범 ${count()}/10`,`<p class="album-lead">다른 선택으로 새로운 이야기를 찾아보세요.</p><div class="album-grid">${endings.slice(page*5,page*5+5).map(e=>`<button class="ending-card ${state.album[e.id]?'found':'locked'}" data-ending="${e.id}"><span>${state.album[e.id]?'✦':'🔒'}</span><small>${e.id}</small><strong>${state.album[e.id]?e.title:'아직 펼치지 않은 이야기'}</strong></button>`).join('')}</div><div class="album-nav"><button id="prev" ${page===0?'disabled':''}>◀ 앞장</button><span>${page+1}/2</span><button id="next-page" ${page===1?'disabled':''}>다음 장 ▶</button></div>${count()===10?'<button class="primary album-bonus" id="album-bonus">✦ 보너스 이야기 · 열 개의 봄을 지나</button>':''}`);if($('#album-bonus'))$('#album-bonus').onclick=()=>{$('#dialog').close();playBonus(myName(),()=>openAlbum(page));};$('#prev').onclick=()=>openAlbum(0);$('#next-page').onclick=()=>openAlbum(1);$$('[data-ending]').forEach(b=>b.onclick=()=>albumDetail(b.dataset.ending));}
-function albumDetail(id){const e=endings.find(e=>e.id===id),r=state.album[id];modal(`${id} · ${r?e.title:'새 엔딩의 단서'}`,`<p>${r?'이 이야기를 이미 발견했어요. 제목과 내용을 한 번에 펼쳐 다시 읽을 수 있어요.':state.last?e.hint:'첫 모험을 마치면 새 이야기의 단서를 볼 수 있어요.'}</p>${r?'<button class="primary" id="rewatch">엔딩 다시 보기</button>':''}${state.last?'<button id="album-new-run" class="primary">처음부터 다른 선택 해보기</button>':''}<button class="text-button" id="album-back">앨범으로 돌아가기</button>`);if(r)$('#rewatch').onclick=()=>cinema({id,...r});$('#album-back').onclick=()=>openAlbum(id>'E05'?1:0);if($('#album-new-run'))$('#album-new-run').onclick=()=>start(0);}
-function cinema(r,fresh=false){
+function albumReturnLabel(){return g()?'플레이로 돌아가기':$('.cinema')?'엔딩 화면으로 돌아가기':'처음 화면으로 돌아가기';}
+function returnFromAlbum(){
+  $('#dialog').close();
+  if(g()&&$('.cinema')){clearInterval(cinemaTimer);$('.cinema').remove();endingLocked=false;$('#app').inert=false;music.setScene('village');}
+  if(g()&&document.body.dataset.screen==='home'){$('#continue')?.click();}
+}
+function albumActions(page){
+  const d=$('#dialog');d.classList.add('album-dialog');
+  const footer=document.createElement('div');footer.className='album-actions';
+  footer.innerHTML=`<button class="secondary" id="album-recommend">새 엔딩 선택 추천</button><button class="primary" id="album-return">${albumReturnLabel()}</button>`;
+  d.append(footer);$('#album-return').onclick=returnFromAlbum;$('#album-recommend').onclick=()=>albumRecommendation(page);
+}
+function recommendationText(r){
+  if(!r)return count()===10?'10개 엔딩을 모두 발견했어요. 이제 원하는 방법을 골라 보세요.':'지금까지 고른 방법으로 갈 수 있는 엔딩은 이미 봤어요. 다음 모험에서 봄의 선택을 바꿔 보세요.';
+  if(r.stage===4)return `마을 회의에서 「${r.repair?'담당 어른들과 문제가 된 방법을 고친다.':'지금 계획대로 진행한다.'}」를 골라 보세요.`;
+  return `${g()?'':'다음 모험의 '}${seasons[r.stage].name}에는 「${planText(r.stage,r.choice)}」를 골라 보세요. 이어지는 계절에서도 추천을 확인해 보세요.`;
+}
+function choiceGuidance(q){
+  const guide=document.createElement('div');guide.className='choice-guidance';
+  guide.innerHTML='<button class="secondary" id="choice-recommend">새 엔딩 선택 추천</button><p id="choice-guide-text" role="status"></p>';q.append(guide);
+  $('#choice-recommend').onclick=()=>{
+    const r=recommendEnding(state);$$('.recommended-choice').forEach(b=>b.classList.remove('recommended-choice'));$$('.recommendation-badge').forEach(b=>b.remove());
+    const button=r?$(r.stage===4?'#'+r.choice:`[data-plan="${r.choice}"]`):null;
+    if(button&&!button.disabled){button.classList.add('recommended-choice');const badge=document.createElement('em');badge.className='recommendation-badge';badge.textContent='새 엔딩 추천';button.append(badge);}
+    $('#choice-guide-text').textContent=r?(r.stage===4?'표시한 방법으로 아직 못 본 엔딩에 도전해 보세요.':'표시한 방법으로 새 엔딩에 도전해 보세요. 다음 계절에서도 추천을 확인해요.'):recommendationText(null);
+  };
+}
+function albumRecommendation(page){
+  const r=recommendEnding(state);
+  modal('아직 못 본 엔딩을 찾아봐요',`<p class="ending-guide-copy">${H(recommendationText(r))}</p>${!g()&&r?'<button class="primary" id="guide-new-run">새 모험 시작하기</button>':''}<button class="secondary" id="album-back">앨범으로 돌아가기</button>`);
+  $('#album-back').onclick=()=>openAlbum(page);if($('#guide-new-run'))$('#guide-new-run').onclick=()=>start(0);albumActions(page);
+}
+function openAlbum(page=0){page=page===1?1:0;modal(`📖 엔딩 앨범 ${count()}/10`,`<p class="album-lead">다른 선택으로 새로운 이야기를 찾아보세요.</p><div class="album-grid">${endings.slice(page*5,page*5+5).map(e=>`<button class="ending-card ${state.album[e.id]?'found':'locked'}" data-ending="${e.id}"><span>${state.album[e.id]?'✦':'🔒'}</span><small>${e.id}</small><strong>${state.album[e.id]?e.title:'아직 펼치지 않은 이야기'}</strong></button>`).join('')}</div><div class="album-nav"><button id="prev" ${page===0?'disabled':''}>◀ 앞장</button><span>${page+1}/2</span><button id="next-page" ${page===1?'disabled':''}>다음 장 ▶</button></div>${count()===10?'<button class="primary album-bonus" id="album-bonus">✦ 보너스 이야기 · 열 개의 봄을 지나</button>':''}`);if($('#album-bonus'))$('#album-bonus').onclick=()=>{$('#dialog').close();playBonus(myName(),()=>openAlbum(page));};$('#prev').onclick=()=>openAlbum(0);$('#next-page').onclick=()=>openAlbum(1);$$('[data-ending]').forEach(b=>b.onclick=()=>albumDetail(b.dataset.ending));albumActions(page);}
+function albumDetail(id){const e=endings.find(e=>e.id===id),r=state.album[id],page=id>'E05'?1:0;modal(`${id} · ${r?e.title:'새 엔딩의 단서'}`,`<p>${r?'이 이야기를 이미 발견했어요. 제목과 내용을 한 번에 펼쳐 다시 읽을 수 있어요.':state.last?e.hint:'첫 모험을 마치면 새 이야기의 단서를 볼 수 있어요.'}</p>${r?'<button class="primary" id="rewatch">엔딩 다시 보기</button>':''}${state.last?'<button id="album-new-run" class="primary">처음부터 다른 선택 해보기</button>':''}<button class="text-button" id="album-back">앨범으로 돌아가기</button>`);if(r)$('#rewatch').onclick=()=>cinema({id,...r},false,true);$('#album-back').onclick=()=>openAlbum(page);if($('#album-new-run'))$('#album-new-run').onclick=()=>start(0);albumActions(page);}
+function cinema(r,fresh=false,fromAlbum=false){
   clearInterval(cinemaTimer);$('#dialog').close();$('.cinema')?.remove();
   const e=endings.find(e=>e.id===r.id),guided=fresh,baseLines=endingText(r.id,r.choices),lines=[...baseLines.slice(0,-1),...humanConsequences(r.choices),baseLines.at(-1)].map(endingLine);music.setScene(e.tone);
   const creditLines=()=>lines.slice(0,-1).map(s=>`<p>${H(s)}</p>`).join('')+`<section class="ending-memories" aria-label="주민들과 나누는 네 계절의 기억"><h2>함께 보낸 네 계절</h2>${endingMemories(r.choices,myName()).map(m=>`<article class="ending-memory"><img src="${villagerImage(m.speaker)}" alt="${H(m.speaker)}" draggable="false"><div><strong>${H(m.speaker)}</strong><p>${H(m.text)}</p></div></article>`).join('')}</section><p class="ending-last-line">${H(lines.at(-1))}</p>`;
   const c=document.createElement('section');c.className='cinema '+e.tone;
   c.innerHTML=`<div class="cinema-top"><span>엔딩 ${r.id.slice(1)} · ${H(e.title)}</span><div>${musicUI()}${r.choices[2]==='wait'?'<button id="ending-photos">관찰 사진</button>':''}<button id="cinema-save" data-cloud-status title="다른 기기로 이동하기 전에 눌러 주세요">${cloudLabel()}</button><button id="pause">잠깐 멈춤</button><button id="speed">빠르게</button><button id="all">전체 보기</button><button id="type">크레딧 다시 보기</button></div></div><div class="cinema-body"><section class="ending-world" aria-label="이 엔딩에서 내가 만든 마을"><div class="ending-world-label"><strong>내 선택이 남긴 초록마을</strong><small>${r.repair?'뒤늦은 대책도 피해를 모두 지우지는 못해요':'네 계절 동안 바뀐 풍경'}</small></div><div class="ending-world-map"><div class="world-plane">${worldSVG({choices:r.choices,ending:true,repair:r.repair,stage:4})}</div></div><div class="ending-world-records">${seasons.map((s,i)=>`<span><strong>${icons[i]} ${s.area}</strong>${choiceLabel(i,r.choices[i])}</span>`).join('')}</div></section><div class="credits-window" id="credits-window"><div class="credits"><small>ENDING ${r.id.slice(1)} / 10</small><h1>${e.title}</h1><div id="lines"></div></div></div></div><div class="cinema-bottom"><div><strong>${fresh?'새 엔딩':'엔딩 기록'} · ${count()}/10</strong><small>${saveMode==='none'?'저장 없이 플레이 중이에요.':playerAccount()?'기기를 바꾸기 전 ☁ 저장 버튼을 눌러 주세요.':'이 기기에 모험을 기록했어요.'}</small></div><button class="ending-learning" id="ending-learning" disabled>내 선택 돌아보기</button>${e.tone==='dark'?'<button class="ending-effort" id="ending-effort" disabled>생태계를 위해 노력하기</button>':''}<button id="cinema-album">📖 엔딩 앨범</button><button class="primary" id="replay" ${guided?'disabled':''}>처음부터 다른 선택 해보기</button></div>`;
   document.body.append(c);$('#app').inert=true;endingLocked=guided;$('#cinema-album').disabled=guided;$('#cinema-save').disabled=guided;bindMusic();if($('#ending-photos'))$('#ending-photos').onclick=()=>{modal('가을에 남긴 관찰 사진','<p>관리를 기다리며 기록한 세 곳의 모습이에요.</p>');savedPhotos();};$('#cinema-save').onclick=()=>$('#save-cloud').click();
+  if(fromAlbum){const back=document.createElement('button');back.id='cinema-return';back.textContent=g()?'플레이로 돌아가기':'앨범으로 돌아가기';back.onclick=()=>g()?returnFromAlbum():openAlbum(r.id>'E05'?1:0);c.querySelector('.cinema-top>div').prepend(back);}
   let paused=false,speed=1,lastTime=0,position=0;
   const unlock=()=>{endingLocked=false;for(const b of $$('#replay,#cinema-album,#cinema-save,#ending-learning,#ending-effort'))b.disabled=false;if(fresh&&count()===10&&!bonusOffered){bonusOffered=true;flowPrompt('열 개의 이야기를 모두 모았어요',myName()+'의 수첩에 모든 봄이 남았어요. 마지막 편지를 읽어 볼까요?','보너스 이야기 보기',()=>playBonus(myName()));}};
   const effortPrompt=()=>flowPrompt('다음 봄을 위해', '마을에 남길 노력이나 동물에게 전할 마음을 적어 볼까요?', '생태계를 위해 노력하기',()=>learn('effort',true));
